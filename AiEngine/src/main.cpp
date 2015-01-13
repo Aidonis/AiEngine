@@ -11,14 +11,13 @@
 #include <string>
 #include <fstream>
 #include <time.h>
+#include "player.h"
 
 #define GLEW_STATIC
 
 GLuint CreateShader(GLenum a_ShaderType, const char* a_strShaderFile);
 
 GLuint CreateProgram(const char* a_vertex, const char* a_frag);
-
-unsigned int loadTexture(const char* a_filename, int& a_width, int& a_height, int& a_bpp);
 
 float* getOrtho(float left, float right, float bottom, float top, float a_fNear, float a_fFar);
 
@@ -42,10 +41,48 @@ int main()
 	//make the window's context current
 	glfwMakeContextCurrent(window);
 
+	//start GLEW
+	if (glewInit() != GLEW_OK)
+	{
+		//openGL didn't start shutdown GLFW and return error code
+		glfwTerminate();
+		return -1;
+	}
+
+	Player spaceShip;
+	spaceShip.Initialize();
+
+	//create shader program
+	GLuint programFlat = CreateProgram(".\\src\\VertexShader.glsl", ".\\src\\FlatFragmentShader.glsl");
+
+	//create textured shader program
+	GLuint programTexture = CreateProgram(".\\src\\VertexShader.glsl", ".\\src\\TexturedFragmentShader.glsl");
+
+	//find the position of the matrix variable int the shader program
+	GLuint IDFlat = glGetUniformLocation(programFlat, "MVP");
+
+	//set up mapping to the screen to pixel coordinates
+	float* orthographicProjection = getOrtho(0, 1024, 0, 720, 0, 100);
+
 	//loop until the user closes the window
 	while (!glfwWindowShouldClose(window))
 	{
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		////enable shaders
+		glUseProgram(programTexture);
+
+		//send ortho projection info to shader
+		glUniformMatrix4fv(IDFlat, 1, GL_FALSE, orthographicProjection);
+
+		//enable the vertex array states
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+
 		//draw code goes here
+		spaceShip.Draw();
 
 		//swap front and back buffers
 		glfwSwapBuffers(window);
@@ -180,33 +217,4 @@ float* getOrtho(float left, float right, float bottom, float top, float a_fNear,
 	toReturn[14] = -1 * ((a_fFar + a_fNear) / (a_fFar - a_fNear));
 	toReturn[15] = 1;
 	return toReturn;
-}
-
-//Load texture via SOIL
-unsigned int loadTexture(const char* a_pFilename, int & a_iWidth, int & a_iHeight, int & a_iBPP)
-{
-	unsigned int uiTextureID = 0;
-	//check file exists
-	if (a_pFilename != nullptr)
-	{
-		//read in image data from file
-		unsigned char* pImageData = SOIL_load_image(a_pFilename, &a_iWidth, &a_iHeight, &a_iBPP, SOIL_LOAD_AUTO);
-
-		//check for successful read
-		if (pImageData)
-		{
-			//create opengl texture handle
-			uiTextureID = SOIL_create_OGL_texture(pImageData, a_iWidth, a_iHeight, a_iBPP,
-				SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
-			//clear what was read in from file now that it is stored in the handle
-			SOIL_free_image_data(pImageData);
-		}
-
-		//check for errors
-		if (uiTextureID == 0)
-		{
-			std::cerr << "SOIL loading error: " << SOIL_last_result() << std::endl;
-		}
-		return uiTextureID;
-	}
 }
