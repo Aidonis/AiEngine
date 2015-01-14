@@ -13,9 +13,15 @@
 #include <fstream>
 #include <string>
 
+typedef GLuint uint;
+
 namespace AIF{
 	class Framework{
 	public:
+
+		GLFWwindow* windowHandle;
+		GLuint programFlat;
+		GLuint programTexture;
 
 		int Initialize(int a_screenWidth, int a_screenHeight, const char* a_title){
 			//Initialise GLFW
@@ -42,6 +48,13 @@ namespace AIF{
 				glfwTerminate();
 				return -1;
 			}
+
+			//create shader program
+			programFlat = CreateProgram(".\\src\\VertexShader.glsl", ".\\src\\FlatFragmentShader.glsl");
+
+			//create textured shader program
+			programTexture = CreateProgram(".\\src\\VertexShader.glsl", ".\\src\\TexturedFragmentShader.glsl");
+
 		}
 
 		bool FrameworkUpdate(){
@@ -63,11 +76,6 @@ namespace AIF{
 			glfwTerminate();
 		}
 
-		GLFWwindow* windowHandle;
-
-	protected:
-
-	private:
 		GLuint CreateShader(GLenum a_ShaderType, const char* a_ShaderFile)
 		{
 			std::string shaderCode;
@@ -82,6 +90,9 @@ namespace AIF{
 					shaderCode += "\n" + line;
 				}
 				shaderStream.close();
+			}
+			else{
+				std::cout << "error stuff" << std::endl;
 			}
 
 			//convert to cstring
@@ -170,6 +181,12 @@ namespace AIF{
 			}
 			return program;
 		}
+
+
+	protected:
+
+	private:
+		
 	};
 }
 
