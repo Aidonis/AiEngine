@@ -11,7 +11,9 @@
 #include <string>
 #include <fstream>
 #include <time.h>
-#include "player.h"
+
+#include "Application.h"
+#include "Player.h"
 
 #define GLEW_STATIC
 
@@ -23,31 +25,34 @@ float* getOrtho(float left, float right, float bottom, float top, float a_fNear,
 
 int main()
 {
-	//Initialise GLFW
-	if (!glfwInit())
-	{
-		return -1;
-	}
+	////Initialise GLFW
+	//if (!glfwInit())
+	//{
+	//	return -1;
+	//}
 
-	//create a windowed mode window and it's OpenGL context
-	GLFWwindow* window;
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-	if (!window)
-	{
-		glfwTerminate();
-		return -1;
-	}
+	////create a windowed mode window and it's OpenGL context
+	//GLFWwindow* window;
+	//window = glfwCreateWindow(1024, 768, "Hello World", NULL, NULL);
+	//if (!window)
+	//{
+	//	glfwTerminate();
+	//	return -1;
+	//}
 
-	//make the window's context current
-	glfwMakeContextCurrent(window);
+	////make the window's context current
+	//glfwMakeContextCurrent(window);
 
-	//start GLEW
-	if (glewInit() != GLEW_OK)
-	{
-		//openGL didn't start shutdown GLFW and return error code
-		glfwTerminate();
-		return -1;
-	}
+	////start GLEW
+	//if (glewInit() != GLEW_OK)
+	//{
+	//	//openGL didn't start shutdown GLFW and return error code
+	//	glfwTerminate();
+	//	return -1;
+	//}
+	Application appInstance;
+	appInstance.Initialize(MNF::Globals::SCREEN_WIDTH, MNF::Globals::SCREEN_HEIGHT, "Hello World");
+
 
 	Player spaceShip;
 	spaceShip.Initialize(vec4(680/2, 480/2 , 0 , 0));
@@ -65,10 +70,37 @@ int main()
 	float* orthographicProjection = getOrtho(0, 1024, 0, 720, 0, 100);
 
 	//loop until the user closes the window
-	while (!glfwWindowShouldClose(window))
-	{
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+	//while (!glfwWindowShouldClose(appInstance.windowHandle))
+	//{
+	//	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	//	glClear(GL_COLOR_BUFFER_BIT);
+
+	//	////enable shaders
+	//	glUseProgram(programTexture);
+
+	//	//send ortho projection info to shader
+	//	glUniformMatrix4fv(IDFlat, 1, GL_FALSE, orthographicProjection);
+
+	//	//enable the vertex array states
+	//	glEnableVertexAttribArray(0);
+	//	glEnableVertexAttribArray(1);
+	//	glEnableVertexAttribArray(2);
+
+	//	//draw code goes here
+	//	spaceShip.Draw();
+
+	//	//swap front and back buffers
+	//	glfwSwapBuffers(appInstance.windowHandle);
+
+	//	//poll for and process events
+	//	glfwPollEvents();
+	//}
+
+	//glfwTerminate();
+	//return 0;
+
+	do{
+		appInstance.ClearScreen();
 
 		////enable shaders
 		glUseProgram(programTexture);
@@ -84,14 +116,9 @@ int main()
 		//draw code goes here
 		spaceShip.Draw();
 
-		//swap front and back buffers
-		glfwSwapBuffers(window);
+	} while (appInstance.FrameworkUpdate());
 
-		//poll for and process events
-		glfwPollEvents();
-	}
-
-	glfwTerminate();
+	appInstance.Shutdown();
 	return 0;
 }
 
