@@ -50,7 +50,7 @@ int main()
 	}
 
 	Player spaceShip;
-	spaceShip.Initialize();
+	spaceShip.Initialize(vec4(680/2, 480/2 , 0 , 0));
 
 	//create shader program
 	GLuint programFlat = CreateProgram(".\\src\\VertexShader.glsl", ".\\src\\FlatFragmentShader.glsl");
