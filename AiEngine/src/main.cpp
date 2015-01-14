@@ -1,15 +1,5 @@
-#include <GL\glew.h>
-#include <GL\wglew.h>
-
-//GLEW includes must be first!
-#include <GLFW\glfw3.h>
-#include <glm\glm.hpp>
 #include <soil\SOIL.h>
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
 #include <time.h>
 
 #include "Application.h"
