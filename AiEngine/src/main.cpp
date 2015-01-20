@@ -18,12 +18,15 @@ int main()
 	Player spaceShip;
 //	spaceShip.Initialize();
 
-	unsigned int texID = appInstance.CreateSprite(".\\assets\\test2.png", 50, 50);
+	//unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32);
+	unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32, vec4(0,0,1,1));
+
+	appInstance.MoveSprite(texID, 1, 1);
 
 
 	//find the position of the matrix variable int the shader program
 	GLuint IDFlat = glGetUniformLocation(appInstance.programFlat, "MVP");
-
+	
 	//set up mapping to the screen to pixel coordinates
 	float* orthographicProjection = getOrtho(0, 1024, 0, 720, 0, 100);
 
@@ -42,7 +45,6 @@ int main()
 		glEnableVertexAttribArray(2);
 
 		//draw code goes here
-		appInstance.MoveSprite(texID, 50, 50);
 		appInstance.DrawSprite(texID);
 
 	} while (appInstance.FrameworkUpdate());
