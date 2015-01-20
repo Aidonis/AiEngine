@@ -16,7 +16,7 @@ int main()
 
 
 	Player spaceShip;
-	spaceShip.Initialize(vec4(680/2, 480/2 , 0 , 0));
+	spaceShip.Initialize();
 
 
 	//find the position of the matrix variable int the shader program
