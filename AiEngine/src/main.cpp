@@ -16,7 +16,9 @@ int main()
 
 
 	Player spaceShip;
-	spaceShip.Initialize();
+//	spaceShip.Initialize();
+
+	unsigned int texID = appInstance.CreateSprite(".\\assets\\test2.png", 50, 50);
 
 
 	//find the position of the matrix variable int the shader program
@@ -40,7 +42,8 @@ int main()
 		glEnableVertexAttribArray(2);
 
 		//draw code goes here
-		spaceShip.Draw();
+		appInstance.MoveSprite(texID, 50, 50);
+		appInstance.DrawSprite(texID);
 
 	} while (appInstance.FrameworkUpdate());
 
