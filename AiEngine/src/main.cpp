@@ -19,7 +19,7 @@ int main()
 //	spaceShip.Initialize();
 
 	//unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32);
-	unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32, vec4(0,0,1,1));
+	unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32, vec4(.6,.6,1,1));
 
 	appInstance.MoveSprite(texID, 1, 1);
 

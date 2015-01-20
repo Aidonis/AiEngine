@@ -183,7 +183,7 @@ namespace AIF{
 			}
 			return program;
 		}
-
+		//Create a sprite ID from given file the size of a_width x a_height
 		unsigned int CreateSprite(const char* a_TextureName, int a_Width, int a_Height){
 			int height = 32, width = 32, bpp = 4;
 			textureID = loadTexture(a_TextureName, width, height, bpp);
@@ -196,6 +196,8 @@ namespace AIF{
 			return modelTextures[modelTextures.size() - 1];
 		}
 
+		//Create sprite ID from given file and given UVs.
+		//UV given as (x1,y1,x2,y2) where (x1,y1) is the bottom left and (x2,y2) is the top right
 		unsigned int CreateSprite(const char* a_TextureName, int a_Width, int a_Height, vec4 a_UVs){
 			int height = 32, width = 32, bpp = 4;
 			textureID = loadTexture(a_TextureName, width, height, bpp);
@@ -208,12 +210,13 @@ namespace AIF{
 			return modelTextures[modelTextures.size() - 1];
 		}
 
-
+		//Move given sprite ID to x,y
 		void MoveSprite(unsigned int a_textureID, float a_XPos, float a_YPos){
 			origin = vec4(a_XPos, a_YPos, 0, 0);
 			UpdateVertices();
 		}
 
+		//Draw the given sprite ID
 		void DrawSprite(unsigned int a_textureID){
 				glBindTexture(GL_TEXTURE_2D, a_textureID);
 				glBindBuffer(GL_ARRAY_BUFFER, uiVBO);
@@ -305,9 +308,6 @@ namespace AIF{
 		modelVertices.push_back(vec4(a_Width, 0.0f, 0, 1));
 		modelVertices.push_back(vec4(a_Width, a_Height, 0, 1));
 		modelVertices.push_back(vec4(0, a_Height, 0, 1));
-
-
-
 		}
 
 		void LoadModelUVs(){
@@ -318,11 +318,10 @@ namespace AIF{
 		}
 
 		void LoadModelUVs(vec4 a_UVs){
-			modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.y));
-			modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.y));
-			modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.w));
-			modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.w));
-			
+		modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.y));
+		modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.y));
+		modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.w));
+		modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.w));	
 		}
 
 		unsigned int loadTexture(const char* a_pFilename, int & a_iWidth, int & a_iHeight, int & a_iBPP){

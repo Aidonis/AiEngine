@@ -1,5 +1,5 @@
-#ifndef _PLAYER_H_
-#define _PLAYER_H_
+#ifndef _SPRITE_H_
+#define _SPRITE_H_
 
 #include <GL\glew.h>
 #include <GL\wglew.h>
@@ -18,7 +18,7 @@ struct Vertex{
 	vec2 uvs;
 };
 
-class Player
+class Sprite
 {
 
 public:
@@ -30,6 +30,14 @@ public:
 	Vertices - 1 Vertex contains a position/color/uv
 	Pointer to an Array of Vertices - Array containing Vertices
 	*/
+
+	~Sprite(){
+		delete verticesBuffer;
+	}
+
+	void Initialize(GLuint& a_ShaderProgram, int width, int height){
+
+	}
 
 	//Player(){
 	//	verticesBuffer = new Vertex[4];
@@ -78,6 +86,9 @@ public:
 	//	return modelTextures[modelTextures.size() -1];
 	//	
 	//}
+
+	Vertex* verticesBuffer;
+
 
 protected:
 	//GLuint uiVBO;
@@ -187,6 +198,9 @@ protected:
 	//	}
 	//}
 
+private:
+	std::vector<vec4> modelVertices;
+	std::vector<vec2> modelUVs;
 };
 
 #endif //_PLAYER_H_
