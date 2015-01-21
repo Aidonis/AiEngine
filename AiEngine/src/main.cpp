@@ -3,7 +3,7 @@
 #include <time.h>
 
 #include "Application.h"
-#include "Player.h"
+#include "Sprite.h"
 
 #define GLEW_STATIC
 
@@ -15,7 +15,7 @@ int main()
 	appInstance.Initialize(MNF::Globals::SCREEN_WIDTH, MNF::Globals::SCREEN_HEIGHT, "Hello World");
 
 
-	Player spaceShip;
+//	Player spaceShip;
 //	spaceShip.Initialize();
 
 	//unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32);
