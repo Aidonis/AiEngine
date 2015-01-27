@@ -1,7 +1,7 @@
 #ifndef _GLOBALS_H_
 #define _GLOBALS_H_
 
-namespace MNF{
+namespace AIF{
 	class Globals{
 	public:
 		static const int SCREEN_WIDTH = 1024;

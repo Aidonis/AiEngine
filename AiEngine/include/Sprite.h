@@ -35,44 +35,28 @@ public:
 		delete verticesBuffer;
 	}
 
-	void Initialize(GLuint& a_ShaderProgram, int width, int height){
-
-	}
-
-	//Player(){
-	//	verticesBuffer = new Vertex[4];
-	//	int width = 32, height = 32, bpp = 4;
-	//	textureID = loadTexture(".\\assets\\test2.png", width, height, bpp);
-	//}
-
-	//void Initialize(vec4& a_origin){
-	//	origin = a_origin;
-	//	glGenBuffers(1, &uiVBO);
-	//	glGenBuffers(1, &uiIBO);
-	//	loadModelVertices();
-	//	LoadModelUVs();
-	//	UpdateVertices();
-	//}
-
 	void Initialize(GLuint& a_ShaderProgram, int a_Width, int a_Height){
 		width = a_Width;
 		height = a_Height;
-		position = vec4(0,0,0,0);
-		glGenBuffers(1, &uiVBO);
-		glGenBuffers(1, &uiIBO);
+		this->fileName = fileName;
 		loadModelVertices();
+		verticesBuffer = new Vertex[modelVertices.size()];
+		position = vec4();
+		UVCoordinates = vec4(0, 1, 1, 0);
 		LoadModelUVs();
 		UpdateVertices();
 	}
 
-	//unsigned int CreateSprite(const char* a_TextureName, int a_Width, int a_Height){
-	//	int bpp = 4;
-	//	textureID = loadTexture(a_TextureName, a_Width, a_Height, bpp);
-	//	modelTextures.push_back(textureID);
-	//	return modelTextures[modelTextures.size() -1];
-	//	
-	//}
+	void SetUVCoordinates(vec4& a_UVCoordinates){
+		UVCoordinates = a_UVCoordinates;
+		LoadModelUVs();
+		UpdateVertices();
+	}
 
+	GLuint uiTextureID;
+	GLuint uiVBO;
+	GLuint uiIBO;
+	vec4 UVCoordinates;
 	Vertex* verticesBuffer;
 
 private:
@@ -82,7 +66,7 @@ private:
 
 	int width;
 	int height;
-	char* filename;
+	char* fileName;
 
 	void UpdateVertices(){
 		verticesBuffer[0].positions = position + modelVertices[0];//some vector or shit;
@@ -102,11 +86,14 @@ private:
 		verticesBuffer[3].uvs = modelUVs[3];//UV shit
 
 	}
-	void loadModelVertices(int a_Width, int a_Height){
+	void loadModelVertices(){
+		float hWidth = width * .5f;
+		float hHeight = height * .5f;
+
 		modelVertices.push_back(vec4(0, 0, 0, 1));
-		modelVertices.push_back(vec4(a_Width, 0.0f, 0, 1));
-		modelVertices.push_back(vec4(a_Width, a_Height, 0, 1));
-		modelVertices.push_back(vec4(0, a_Height, 0, 1));
+		modelVertices.push_back(vec4(hWidth, 0.0f, 0, 1));
+		modelVertices.push_back(vec4(hWidth, hHeight, 0, 1));
+		modelVertices.push_back(vec4(0, hHeight, 0, 1));
 	}
 
 	void LoadModelUVs(){

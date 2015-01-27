@@ -9,6 +9,9 @@
 #include "glm\glm.hpp"
 #include <soil\SOIL.h>
 
+#include "Sprite.h"
+#include "Globals.h"
+
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -23,10 +26,9 @@ namespace AIF{
 	public:
 
 		GLFWwindow* windowHandle;
-		GLuint programFlat;
-		GLuint programTexture;
+		GLuint shaderProgram;
 
-		int Initialize(int a_screenWidth, int a_screenHeight, const char* a_title){
+		int Initialize(int a_screenWidth, int a_screenHeight, const char* a_title, vec4 a_backgroundColor){
 			//Initialise GLFW
 			if (!glfwInit())
 			{
@@ -41,9 +43,6 @@ namespace AIF{
 				return -1;
 			}
 
-			//make the window's context current
-			glfwMakeContextCurrent(windowHandle);
-
 			//start GLEW
 			if (glewInit() != GLEW_OK)
 			{
@@ -52,13 +51,16 @@ namespace AIF{
 				return -1;
 			}
 
-			//create shader program
-			programFlat = CreateProgram(".\\src\\VertexShader.glsl", ".\\src\\FlatFragmentShader.glsl");
+			CreateShaderProgram();
 
-			//create textured shader program
-			programTexture = CreateProgram(".\\src\\VertexShader.glsl", ".\\src\\TexturedFragmentShader.glsl");
-
-			verticesBuffer = new Vertex[4];
+			//make the window's context current
+			glfwMakeContextCurrent(windowHandle);
+			IDTexture = glGetUniformLocation(shaderProgram, "MVP");
+			orthographicProjection = getOrtho(0, AIF::Globals::SCREEN_WIDTH, 0, AIF::Globals::SCREEN_HEIGHT, 0, 100);
+			backgroundColor = a_backgroundColor;
+			// Enable blending
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		}
 
@@ -77,7 +79,15 @@ namespace AIF{
 			glClear(GL_COLOR_BUFFER_BIT);
 		}
 
-		static void Shutdown(){
+		void Shutdown(){
+			//glDeleteBuffers(1, &mySprite.uiVBO);
+			for (Sprite* s : spriteList)
+			{
+				glDeleteBuffers(1, &s->uiVBO);
+				delete s;
+			}
+			spriteList.clear();
+
 			glfwTerminate();
 		}
 
@@ -141,6 +151,12 @@ namespace AIF{
 
 		}
 
+		//create textured shader program
+		void CreateShaderProgram()
+		{
+			shaderProgram = CreateProgram(".\\src\\VertexShader.glsl", ".\\src\\TexturedFragmentShader.glsl");
+		}
+
 		GLuint CreateProgram(const char* a_vertex, const char* a_frag){
 
 
@@ -183,96 +199,110 @@ namespace AIF{
 			}
 			return program;
 		}
-		//Create a sprite ID from given file the size of a_width x a_height
-		unsigned int CreateSprite(const char* a_TextureName, int a_Width, int a_Height){
-			int height = 32, width = 32, bpp = 4;
-			textureID = loadTexture(a_TextureName, width, height, bpp);
-			origin = vec4(0, 0, 0, 0);
-			glGenBuffers(1, &uiVBO);
-			glGenBuffers(1, &uiIBO);
-			loadModelVertices(a_Width, a_Height);
-			LoadModelUVs();
-			modelTextures.push_back(textureID);
-			return modelTextures[modelTextures.size() - 1];
-		}
 
 		//Create sprite ID from given file and given UVs.
 		//UV given as (x1,y1,x2,y2) where (x1,y1) is the bottom left and (x2,y2) is the top right
-		unsigned int CreateSprite(const char* a_TextureName, int a_Width, int a_Height, vec4 a_UVs){
-			int height = 32, width = 32, bpp = 4;
-			textureID = loadTexture(a_TextureName, width, height, bpp);
-			origin = vec4(0, 0, 0, 0);
-			glGenBuffers(1, &uiVBO);
-			glGenBuffers(1, &uiIBO);
-			loadModelVertices(a_Width, a_Height);
-			LoadModelUVs(a_UVs);
-			modelTextures.push_back(textureID);
-			return modelTextures[modelTextures.size() - 1];
+		unsigned int CreateSprite(const char* a_FileName, int a_Width, int a_Height){
+			Sprite* newSprite = new Sprite();
+
+			glGenBuffers(1, &newSprite->uiVBO);
+			glGenBuffers(1, &newSprite->uiIBO);
+			int textureWidth = 50, textureHeight = 50, textureBPP = 4;
+
+			newSprite->Initialize(shaderProgram, a_Width, a_Height);
+			newSprite->uiTextureID = loadTexture(a_FileName, textureWidth, textureHeight, textureBPP);
+			spriteList.push_back(newSprite);
+
+			return spriteList.size() - 1;
+
+		}
+
+		unsigned int CreateSprite(const char* a_FileName, int a_Width, int a_Height, vec4& a_UVCoordinates){
+			Sprite* newSprite = new Sprite;
+
+			glGenBuffers(1, &newSprite->uiVBO);
+			glGenBuffers(1, &newSprite->uiIBO);
+			int textureWidth = 50, textureHeight = 50, textureBPP = 4;
+			
+			newSprite->Initialize(shaderProgram, a_Width, a_Height);
+			newSprite->uiTextureID = loadTexture(a_FileName, textureWidth, textureHeight, textureBPP);
+			newSprite->SetUVCoordinates(a_UVCoordinates);
+			spriteList.push_back(newSprite);
+
+			return spriteList.size() - 1;
+
 		}
 
 		//Move given sprite ID to x,y
-		void MoveSprite(unsigned int a_textureID, float a_XPos, float a_YPos){
+		void MoveSprite(unsigned int a_SpriteID, float a_XPos, float a_YPos){
+			Sprite* list = spriteList[a_SpriteID];
+			
 			origin = vec4(a_XPos, a_YPos, 0, 0);
-			UpdateVertices();
+			UpdateVBO(list->uiVBO, list->verticesBuffer, 4);
 		}
 
 		//Draw the given sprite ID
-		void DrawSprite(unsigned int a_textureID){
-				glBindTexture(GL_TEXTURE_2D, a_textureID);
-				glBindBuffer(GL_ARRAY_BUFFER, uiVBO);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uiIBO);
+		void DrawSprite(unsigned int a_SpriteID){
+			////enable shaders
+			glUseProgram(shaderProgram);
 
-				glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-				glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)));
-				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)* 2));
+			//send ortho projection info to shader
+			glUniformMatrix4fv(IDTexture, 1, GL_FALSE, orthographicProjection);
 
-				glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, NULL);
+			//enable the vertex array states
+			glEnableVertexAttribArray(0);
+			glEnableVertexAttribArray(1);
+			glEnableVertexAttribArray(2);
 
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindTexture(GL_TEXTURE_2D, a_SpriteID);
+			glBindBuffer(GL_ARRAY_BUFFER, spriteList[a_SpriteID]->uiTextureID);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, spriteList[a_SpriteID]->uiVBO);
+
+			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)));
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)* 2));
+
+			// Enable blending
+			glEnable(GL_BLEND);
+			glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, NULL);
+
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 
 	protected:
-		struct Vertex{
-			vec4 positions;
-			vec4 colors;
-			vec2 uvs;
-		};
-		GLuint uiVBO;
-		GLuint uiIBO;
-		GLuint textureID;
-		Vertex* verticesBuffer;
-		std::vector<vec4> modelVertices;
-		std::vector<vec2> modelUVs;
-		std::vector<unsigned int> modelTextures;
+		GLuint IDTexture;
+
+		std::vector<Sprite*> spriteList;
+		Vertex* testVertex;
 		vec4 origin;
 
-		void UpdateVBO(){
+		void UpdateVBO(GLuint a_VBO, Vertex* a_VerticeBuffer, int a_size){
 			//bind vbo
-			glBindBuffer(GL_ARRAY_BUFFER, uiVBO);
+			glBindBuffer(GL_ARRAY_BUFFER, a_VBO);
 			//allocate space for vertices on the graphics card
 			//size of buffer needs to be 3 vec4 for vertices and 3 vec4 for 
-			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)* sizeof(verticesBuffer), NULL, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)* sizeof(a_VerticeBuffer), NULL, GL_STATIC_DRAW);
 			//get pointer to allocated space on the graphics card
 			GLvoid* vBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 
 			//copy data to graphics card
-			memcpy(vBuffer, verticesBuffer, sizeof(Vertex)* sizeof(verticesBuffer));
+			memcpy(vBuffer, a_VerticeBuffer, sizeof(Vertex)* sizeof(a_VerticeBuffer));
 			//unmap and unbind buffer
 			glUnmapBuffer(GL_ARRAY_BUFFER);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
-		void UpdateIBO(){
+		void UpdateIBO(GLuint a_IBO, Vertex* a_VerticeBuffer, int a_size){
 			//bind IBO
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uiIBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, a_IBO);
 			//allocate space for index info on  the graphics card
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(verticesBuffer)* sizeof(char), NULL, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(a_VerticeBuffer)* sizeof(char), NULL, GL_STATIC_DRAW);
 			//get pointer to newly allocated space on GPU
 			GLvoid* iBuffer = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY);
 			//specify order to draw vertices
 			//in this case it's in sequential order
-			for (int i = 0; i < sizeof(verticesBuffer); i++)
+			for (int i = 0; i < sizeof(a_VerticeBuffer); i++)
 			{
 				((char*)iBuffer)[i] = i;
 			}
@@ -282,47 +312,49 @@ namespace AIF{
 
 		}
 
-		void UpdateVertices(){
-			verticesBuffer[0].positions = origin + modelVertices[0];//some vector or shit;
-			verticesBuffer[0].colors = vec4(1, 1, 1, 1);//some color vector shit;
-			verticesBuffer[0].uvs = modelUVs[0];//UV shit
+		//Too be removed with when Sprite.H is finished//
 
-			verticesBuffer[1].positions = origin + modelVertices[1];//some vector or shit;
-			verticesBuffer[1].colors = vec4(1, 1, 1, 1);//some color vector shit;
-			verticesBuffer[1].uvs = modelUVs[1];//UV shit
+		//void UpdateVertices(){
+		//	verticesBuffer[0].positions = origin + modelVertices[0];//some vector or shit;
+		//	verticesBuffer[0].colors = vec4(1, 1, 1, 1);//some color vector shit;
+		//	verticesBuffer[0].uvs = modelUVs[0];//UV shit
 
-			verticesBuffer[2].positions = origin + modelVertices[2];//some vector or shit;
-			verticesBuffer[2].colors = vec4(1, 1, 1, 1);//some color vector shit;
-			verticesBuffer[2].uvs = modelUVs[2];//UV shit
+		//	verticesBuffer[1].positions = origin + modelVertices[1];//some vector or shit;
+		//	verticesBuffer[1].colors = vec4(1, 1, 1, 1);//some color vector shit;
+		//	verticesBuffer[1].uvs = modelUVs[1];//UV shit
 
-			verticesBuffer[3].positions = origin + modelVertices[3];//some vector or shit;
-			verticesBuffer[3].colors = vec4(1, 1, 1, 1);//some color vector shit;
-			verticesBuffer[3].uvs = modelUVs[3];//UV shit
+		//	verticesBuffer[2].positions = origin + modelVertices[2];//some vector or shit;
+		//	verticesBuffer[2].colors = vec4(1, 1, 1, 1);//some color vector shit;
+		//	verticesBuffer[2].uvs = modelUVs[2];//UV shit
 
-			UpdateVBO();
-			UpdateIBO();
-		}
+		//	verticesBuffer[3].positions = origin + modelVertices[3];//some vector or shit;
+		//	verticesBuffer[3].colors = vec4(1, 1, 1, 1);//some color vector shit;
+		//	verticesBuffer[3].uvs = modelUVs[3];//UV shit
 
-		void loadModelVertices(int a_Width, int a_Height){
-		modelVertices.push_back(vec4(0, 0, 0, 1));
-		modelVertices.push_back(vec4(a_Width, 0.0f, 0, 1));
-		modelVertices.push_back(vec4(a_Width, a_Height, 0, 1));
-		modelVertices.push_back(vec4(0, a_Height, 0, 1));
-		}
+		//	UpdateVBO();
+		//	UpdateIBO();
+		//}
 
-		void LoadModelUVs(){
-		modelUVs.push_back(glm::vec2(0.0f, 0.0f));
-		modelUVs.push_back(glm::vec2(.5f, 0.0f));
-		modelUVs.push_back(glm::vec2(.5f, 1.0f));
-		modelUVs.push_back(glm::vec2(0.0f, 1.0f));
-		}
+		//void loadModelVertices(int a_Width, int a_Height){
+		//modelVertices.push_back(vec4(0, 0, 0, 1));
+		//modelVertices.push_back(vec4(a_Width, 0.0f, 0, 1));
+		//modelVertices.push_back(vec4(a_Width, a_Height, 0, 1));
+		//modelVertices.push_back(vec4(0, a_Height, 0, 1));
+		//}
 
-		void LoadModelUVs(vec4 a_UVs){
-		modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.y));
-		modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.y));
-		modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.w));
-		modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.w));	
-		}
+		//void LoadModelUVs(){
+		//modelUVs.push_back(glm::vec2(0.0f, 0.0f));
+		//modelUVs.push_back(glm::vec2(.5f, 0.0f));
+		//modelUVs.push_back(glm::vec2(.5f, 1.0f));
+		//modelUVs.push_back(glm::vec2(0.0f, 1.0f));
+		//}
+
+		//void LoadModelUVs(vec4 a_UVs){
+		//modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.y));
+		//modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.y));
+		//modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.w));
+		//modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.w));	
+		//}
 
 		unsigned int loadTexture(const char* a_pFilename, int & a_iWidth, int & a_iHeight, int & a_iBPP){
 			unsigned int uiTextureID = 0;
@@ -351,7 +383,29 @@ namespace AIF{
 			}
 		}
 	private:
-		
+		float* orthographicProjection;
+		vec4 backgroundColor;
+
+		float* getOrtho(float left, float right, float bottom, float top, float a_fNear, float a_fFar)
+		{
+			//to correspond with mat4 in the shader
+			//ideally this function would be part of your matrix class
+			//however I wasn't willing to write your matrix class for you just to show you this
+			//so here we are in array format!
+			//add this to your matrix class as a challenge if you like!
+			float* toReturn = new float[12];
+			toReturn[0] = 2.0 / (right - left);;
+			toReturn[1] = toReturn[2] = toReturn[3] = toReturn[4] = 0;
+			toReturn[5] = 2.0 / (top - bottom);
+			toReturn[6] = toReturn[7] = toReturn[8] = toReturn[9] = 0;
+			toReturn[10] = 2.0 / (a_fFar - a_fNear);
+			toReturn[11] = 0;
+			toReturn[12] = -1 * ((right + left) / (right - left));
+			toReturn[13] = -1 * ((top + bottom) / (top - bottom));
+			toReturn[14] = -1 * ((a_fFar + a_fNear) / (a_fFar - a_fNear));
+			toReturn[15] = 1;
+			return toReturn;
+		}
 	};
 }
 
