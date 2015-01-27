@@ -17,8 +17,6 @@
 #include <fstream>
 #include <string>
 
-typedef GLuint uint;
-
 using namespace glm;
 
 namespace AIF{
@@ -43,6 +41,9 @@ namespace AIF{
 				return -1;
 			}
 
+			//make the window's context current
+			glfwMakeContextCurrent(windowHandle);
+
 			//start GLEW
 			if (glewInit() != GLEW_OK)
 			{
@@ -53,8 +54,6 @@ namespace AIF{
 
 			CreateShaderProgram();
 
-			//make the window's context current
-			glfwMakeContextCurrent(windowHandle);
 			IDTexture = glGetUniformLocation(shaderProgram, "MVP");
 			orthographicProjection = getOrtho(0, AIF::Globals::SCREEN_WIDTH, 0, AIF::Globals::SCREEN_HEIGHT, 0, 100);
 			backgroundColor = a_backgroundColor;
@@ -81,12 +80,12 @@ namespace AIF{
 
 		void Shutdown(){
 			//glDeleteBuffers(1, &mySprite.uiVBO);
-			for (Sprite* s : spriteList)
+	/*		for (Sprite* s : spriteList)
 			{
 				glDeleteBuffers(1, &s->uiVBO);
 				delete s;
 			}
-			spriteList.clear();
+			spriteList.clear();*/
 
 			glfwTerminate();
 		}
@@ -203,7 +202,7 @@ namespace AIF{
 		//Create sprite ID from given file and given UVs.
 		//UV given as (x1,y1,x2,y2) where (x1,y1) is the bottom left and (x2,y2) is the top right
 		unsigned int CreateSprite(const char* a_FileName, int a_Width, int a_Height){
-			Sprite* newSprite = new Sprite();
+			Sprite* newSprite = new Sprite;
 
 			glGenBuffers(1, &newSprite->uiVBO);
 			glGenBuffers(1, &newSprite->uiIBO);
@@ -220,7 +219,7 @@ namespace AIF{
 		unsigned int CreateSprite(const char* a_FileName, int a_Width, int a_Height, vec4& a_UVCoordinates){
 			Sprite* newSprite = new Sprite;
 
-			glGenBuffers(1, &newSprite->uiVBO);
+			glGenBuffers(1, &(newSprite->uiVBO));
 			glGenBuffers(1, &newSprite->uiIBO);
 			int textureWidth = 50, textureHeight = 50, textureBPP = 4;
 			
@@ -233,11 +232,16 @@ namespace AIF{
 
 		}
 
+		void SetSpriteUVCoordinates(const uint spriteID, vec4 a_UVCoordinates){
+			spriteList[spriteID]->SetUVCoordinates(a_UVCoordinates);
+			UpdateVBO(spriteList[spriteID]->uiVBO, spriteList[spriteID]->verticesBuffer, 4);
+		}
+
 		//Move given sprite ID to x,y
 		void MoveSprite(unsigned int a_SpriteID, float a_XPos, float a_YPos){
 			Sprite* list = spriteList[a_SpriteID];
 			
-			origin = vec4(a_XPos, a_YPos, 0, 0);
+			list->SetPosition(vec4(a_XPos, a_YPos, 0, 0));
 			UpdateVBO(list->uiVBO, list->verticesBuffer, 4);
 		}
 
@@ -272,7 +276,6 @@ namespace AIF{
 
 	protected:
 		GLuint IDTexture;
-
 		std::vector<Sprite*> spriteList;
 		Vertex* testVertex;
 		vec4 origin;

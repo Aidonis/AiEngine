@@ -1,10 +1,10 @@
 #ifndef _SPRITE_H_
 #define _SPRITE_H_
 
-#include <GL\glew.h>
-#include <GL\wglew.h>
-#include <glm\glm.hpp>
-#include <soil\SOIL.h>
+//#include <GL\glew.h>
+//#include <GL\wglew.h>
+//#include <glm\glm.hpp>
+//#include <soil\SOIL.h>
 
 #include <vector>
 
@@ -50,6 +50,11 @@ public:
 	void SetUVCoordinates(vec4& a_UVCoordinates){
 		UVCoordinates = a_UVCoordinates;
 		LoadModelUVs();
+		UpdateVertices();
+	}
+
+	void SetPosition(const vec4& a_position){
+		position = a_position;
 		UpdateVertices();
 	}
 

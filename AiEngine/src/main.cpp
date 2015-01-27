@@ -1,11 +1,5 @@
-#include <soil\SOIL.h>
-
-#include <time.h>
-
-#include "Application.h"
-#include "Sprite.h"
-
-#define GLEW_STATIC
+#include <iostream>
+#include "Framework.h"
 
 AIF::Framework fk;
 
@@ -17,10 +11,9 @@ int main()
 
 
 	//unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32);
-	texID = fk.CreateSprite(".\\assets\\test4.png", 32, 32);
+	texID = fk.CreateSprite(".\\assets\\test4.png", 32, 32, vec4(.6f, .6f, 1.0f, 1.0f));
 
 	fk.MoveSprite(texID, 1, 1);
-
 
 	do{
 		fk.ClearScreen();
@@ -35,4 +28,3 @@ int main()
 	fk.Shutdown();
 	return 0;
 }
-
