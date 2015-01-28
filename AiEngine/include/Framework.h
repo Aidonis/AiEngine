@@ -312,50 +312,6 @@ namespace AIF{
 
 		//}
 
-		//Too be removed with when Sprite.H is finished//
-
-		//void UpdateVertices(){
-		//	verticesBuffer[0].positions = origin + modelVertices[0];//some vector or shit;
-		//	verticesBuffer[0].colors = vec4(1, 1, 1, 1);//some color vector shit;
-		//	verticesBuffer[0].uvs = modelUVs[0];//UV shit
-
-		//	verticesBuffer[1].positions = origin + modelVertices[1];//some vector or shit;
-		//	verticesBuffer[1].colors = vec4(1, 1, 1, 1);//some color vector shit;
-		//	verticesBuffer[1].uvs = modelUVs[1];//UV shit
-
-		//	verticesBuffer[2].positions = origin + modelVertices[2];//some vector or shit;
-		//	verticesBuffer[2].colors = vec4(1, 1, 1, 1);//some color vector shit;
-		//	verticesBuffer[2].uvs = modelUVs[2];//UV shit
-
-		//	verticesBuffer[3].positions = origin + modelVertices[3];//some vector or shit;
-		//	verticesBuffer[3].colors = vec4(1, 1, 1, 1);//some color vector shit;
-		//	verticesBuffer[3].uvs = modelUVs[3];//UV shit
-
-		//	UpdateVBO();
-		//	UpdateIBO();
-		//}
-
-		//void loadModelVertices(int a_Width, int a_Height){
-		//modelVertices.push_back(vec4(0, 0, 0, 1));
-		//modelVertices.push_back(vec4(a_Width, 0.0f, 0, 1));
-		//modelVertices.push_back(vec4(a_Width, a_Height, 0, 1));
-		//modelVertices.push_back(vec4(0, a_Height, 0, 1));
-		//}
-
-		//void LoadModelUVs(){
-		//modelUVs.push_back(glm::vec2(0.0f, 0.0f));
-		//modelUVs.push_back(glm::vec2(.5f, 0.0f));
-		//modelUVs.push_back(glm::vec2(.5f, 1.0f));
-		//modelUVs.push_back(glm::vec2(0.0f, 1.0f));
-		//}
-
-		//void LoadModelUVs(vec4 a_UVs){
-		//modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.y));
-		//modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.y));
-		//modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.w));
-		//modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.w));	
-		//}
-
 		unsigned int loadTexture(const char* a_pFilename, int & a_iWidth, int & a_iHeight, int & a_iBPP){
 			unsigned int uiTextureID = 0;
 			//check file exists
