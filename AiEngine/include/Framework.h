@@ -279,7 +279,7 @@ namespace AIF{
 
 			glEnable(GL_BLEND);
 
-			glDrawArrays(GL_QUADS, 0, sizeof(Vertex));
+			glDrawArrays(GL_TRIANGLE_FAN, 0, sizeof(Vertex));
 			//glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, NULL);
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
