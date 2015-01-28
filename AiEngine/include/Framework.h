@@ -54,12 +54,13 @@ namespace AIF{
 
 			CreateShaderProgram();
 
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 			IDTexture = glGetUniformLocation(shaderProgram, "MVP");
 			orthographicProjection = getOrtho(0, AIF::Globals::SCREEN_WIDTH, 0, AIF::Globals::SCREEN_HEIGHT, 0, 100);
 			backgroundColor = a_backgroundColor;
+
+			//Enable Blending
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		}
 
@@ -261,18 +262,22 @@ namespace AIF{
 			glEnableVertexAttribArray(2);
 
 
-			glEnable(GL_BLEND);
-			glEnable(GL_ALPHA_TEST);
-			glAlphaFunc(GL_GREATER, .5f);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			//glEnable(GL_BLEND);
+			//glEnable(GL_ALPHA_TEST);
+			//glAlphaFunc(GL_GREATER, .5f);
+			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 			glBindTexture(GL_TEXTURE_2D, spriteList[a_SpriteID]->uiTextureID);
+
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
 			glBindBuffer(GL_ARRAY_BUFFER, spriteList[a_SpriteID]->uiVBO);
 			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, spriteList[a_SpriteID]->uiIBO);
 
 			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)));
 			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)* 2));
+
+			glEnable(GL_BLEND);
 
 			glDrawArrays(GL_QUADS, 0, sizeof(Vertex));
 			//glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, NULL);
@@ -327,17 +332,21 @@ namespace AIF{
 			if (a_pFilename != nullptr)
 			{
 				//read in image data from file
-				unsigned char* pImageData = SOIL_load_image(a_pFilename, &a_iWidth, &a_iHeight, &a_iBPP, SOIL_LOAD_AUTO);
+				//unsigned char* pImageData = SOIL_load_image(a_pFilename, &a_iWidth, &a_iHeight, &a_iBPP, SOIL_LOAD_RGBA);
 
-				//check for successful read
-				if (pImageData)
-				{
-					//create opengl texture handle
-					uiTextureID = SOIL_create_OGL_texture(pImageData, a_iWidth, a_iHeight, a_iBPP,
-						SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
-					//clear what was read in from file now that it is stored in the handle
-					SOIL_free_image_data(pImageData);
-				}
+				////check for successful read
+				//if (pImageData)
+				//{
+				//	//create opengl texture handle
+				//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, a_iWidth, a_iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pImageData)
+
+				//	//uiTextureID = SOIL_create_OGL_texture(pImageData, a_iWidth, a_iHeight, a_iBPP,
+				//		//SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT);
+				//	//clear what was read in from file now that it is stored in the handle
+				//	SOIL_free_image_data(pImageData);
+				//}
+
+				uiTextureID = SOIL_load_OGL_texture(a_pFilename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_COMPRESS_TO_DXT);
 
 				//check for errors
 				if (uiTextureID == 0)
