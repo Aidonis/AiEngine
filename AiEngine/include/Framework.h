@@ -57,9 +57,6 @@ namespace AIF{
 			IDTexture = glGetUniformLocation(shaderProgram, "MVP");
 			orthographicProjection = getOrtho(0, AIF::Globals::SCREEN_WIDTH, 0, AIF::Globals::SCREEN_HEIGHT, 0, 100);
 			backgroundColor = a_backgroundColor;
-			// Enable blending
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		}
 
@@ -235,6 +232,7 @@ namespace AIF{
 		void SetSpriteUVCoordinates(const uint spriteID, vec4 a_UVCoordinates){
 			spriteList[spriteID]->SetUVCoordinates(a_UVCoordinates);
 			UpdateVBO(spriteList[spriteID]->uiVBO, spriteList[spriteID]->verticesBuffer, 4);
+			UpdateIBO(spriteList[spriteID]->uiVBO, spriteList[spriteID]->verticesBuffer, 4);
 		}
 
 		//Move given sprite ID to x,y
@@ -243,6 +241,7 @@ namespace AIF{
 			
 			list->SetPosition(vec4(a_XPos, a_YPos, 0, 0));
 			UpdateVBO(list->uiVBO, list->verticesBuffer, 4);
+			UpdateIBO(list->uiVBO, list->verticesBuffer, 4);
 		}
 
 		//Draw the given sprite ID
@@ -260,37 +259,34 @@ namespace AIF{
 
 			glBindTexture(GL_TEXTURE_2D, a_SpriteID);
 			glBindBuffer(GL_ARRAY_BUFFER, spriteList[a_SpriteID]->uiTextureID);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, spriteList[a_SpriteID]->uiVBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, spriteList[a_SpriteID]->uiIBO);
 
 			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)));
 			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)* 2));
 
-			// Enable blending
-			glEnable(GL_BLEND);
 			glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, NULL);
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_TEXTURE_2D, 0);
 		}
 
 	protected:
 		GLuint IDTexture;
 		std::vector<Sprite*> spriteList;
-		Vertex* testVertex;
-		vec4 origin;
 
 		void UpdateVBO(GLuint a_VBO, Vertex* a_VerticeBuffer, int a_size){
 			//bind vbo
 			glBindBuffer(GL_ARRAY_BUFFER, a_VBO);
 			//allocate space for vertices on the graphics card
 			//size of buffer needs to be 3 vec4 for vertices and 3 vec4 for 
-			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)* sizeof(a_VerticeBuffer), NULL, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)* a_size, a_VerticeBuffer, GL_STATIC_DRAW);
 			//get pointer to allocated space on the graphics card
-			GLvoid* vBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+			//GLvoid* vBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 
-			//copy data to graphics card
-			memcpy(vBuffer, a_VerticeBuffer, sizeof(Vertex)* sizeof(a_VerticeBuffer));
+			////copy data to graphics card
+			//memcpy(vBuffer, a_VerticeBuffer, sizeof(Vertex)* sizeof(a_VerticeBuffer));
 			//unmap and unbind buffer
 			glUnmapBuffer(GL_ARRAY_BUFFER);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -300,12 +296,12 @@ namespace AIF{
 			//bind IBO
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, a_IBO);
 			//allocate space for index info on  the graphics card
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(a_VerticeBuffer)* sizeof(char), NULL, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(a_VerticeBuffer)* a_size, a_VerticeBuffer, GL_STATIC_DRAW);
 			//get pointer to newly allocated space on GPU
 			GLvoid* iBuffer = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY);
 			//specify order to draw vertices
 			//in this case it's in sequential order
-			for (int i = 0; i < sizeof(a_VerticeBuffer); i++)
+			for (int i = 0; i < a_size; i++)
 			{
 				((char*)iBuffer)[i] = i;
 			}

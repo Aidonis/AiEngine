@@ -4,6 +4,7 @@
 AIF::Framework fk;
 
 GLuint texID;
+GLuint texID2;
 
 int main()
 {
@@ -11,17 +12,18 @@ int main()
 
 
 	//unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32);
-	texID = fk.CreateSprite(".\\assets\\test4.png", 32, 32, vec4(.6f, .6f, 1.0f, 1.0f));
+	texID = fk.CreateSprite(".\\assets\\test4.png", 50, 50, vec4(.6f, .6f, 1.0f, 1.0f));
+	texID2 = fk.CreateSprite(".\\assets\\test2.png", 100, 100, vec4(.6f, .6f, 1.0f, 1.0f));
 
-	fk.MoveSprite(texID, 1, 1);
 
 	do{
 		fk.ClearScreen();
 
 
 
+		fk.MoveSprite(texID2, 10, 10);
 		//draw code goes here
-		fk.DrawSprite(texID);
+		fk.DrawSprite(texID2);
 
 	} while (fk.FrameworkUpdate());
 

@@ -75,7 +75,7 @@ private:
 
 	void UpdateVertices(){
 		verticesBuffer[0].positions = position + modelVertices[0];//some vector or shit;
-		verticesBuffer[0].colors = vec4(1, 1, 1, 1);//some color vector shit;
+		verticesBuffer[0].colors = vec4(1, 0, 1, 1);//some color vector shit;
 		verticesBuffer[0].uvs = modelUVs[0];//UV shit
 
 		verticesBuffer[1].positions = position + modelVertices[1];//some vector or shit;
