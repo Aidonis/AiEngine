@@ -54,6 +54,9 @@ namespace AIF{
 
 			CreateShaderProgram();
 
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 			IDTexture = glGetUniformLocation(shaderProgram, "MVP");
 			orthographicProjection = getOrtho(0, AIF::Globals::SCREEN_WIDTH, 0, AIF::Globals::SCREEN_HEIGHT, 0, 100);
 			backgroundColor = a_backgroundColor;
@@ -256,6 +259,12 @@ namespace AIF{
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);
 			glEnableVertexAttribArray(2);
+
+
+			glEnable(GL_BLEND);
+			glEnable(GL_ALPHA_TEST);
+			glAlphaFunc(GL_GREATER, .5f);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 			glBindTexture(GL_TEXTURE_2D, spriteList[a_SpriteID]->uiTextureID);
 			glBindBuffer(GL_ARRAY_BUFFER, spriteList[a_SpriteID]->uiVBO);

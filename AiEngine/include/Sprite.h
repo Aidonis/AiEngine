@@ -75,7 +75,7 @@ private:
 
 	void UpdateVertices(){
 		verticesBuffer[0].positions = position + modelVertices[0];//some vector or shit;
-		verticesBuffer[0].colors = vec4(1, 0, 1, 1);//some color vector shit;
+		verticesBuffer[0].colors = vec4(1, 1, 1, 1);//some color vector shit;
 		verticesBuffer[0].uvs = modelUVs[0];//UV shit
 
 		verticesBuffer[1].positions = position + modelVertices[1];//some vector or shit;
@@ -102,17 +102,18 @@ private:
 	}
 
 	void LoadModelUVs(){
-		modelUVs.push_back(glm::vec2(0.0f, 0.0f));
-		modelUVs.push_back(glm::vec2(.5f, 0.0f));
-		modelUVs.push_back(glm::vec2(.5f, 1.0f));
-		modelUVs.push_back(glm::vec2(0.0f, 1.0f));
+		modelUVs.clear();
+		modelUVs.push_back(glm::vec2(UVCoordinates.x, UVCoordinates.y));
+		modelUVs.push_back(glm::vec2(UVCoordinates.z, UVCoordinates.y));
+		modelUVs.push_back(glm::vec2(UVCoordinates.z, UVCoordinates.w));
+		modelUVs.push_back(glm::vec2(UVCoordinates.x, UVCoordinates.w));
 	}
 
 	void LoadModelUVs(vec4 a_UVs){
-		modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.y));
-		modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.y));
-		modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.w));
-		modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.w));
+		modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.y));	//minX, maxY
+		modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.y));	//maxX, maxY
+		modelUVs.push_back(glm::vec2(a_UVs.z, a_UVs.w));	//maxX, minY
+		modelUVs.push_back(glm::vec2(a_UVs.x, a_UVs.w));	//minX, minY
 	}
 };
 

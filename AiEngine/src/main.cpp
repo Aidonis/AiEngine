@@ -5,34 +5,34 @@ AIF::Framework fk;
 
 GLuint texID;
 GLuint texID2;
+GLuint texID3;
 
 int main()
 {
 	fk.Initialize(AIF::Globals::SCREEN_WIDTH, AIF::Globals::SCREEN_HEIGHT, "Hello World", vec4(0, 0, 0, 0));
 
-	//unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32);
-	texID = fk.CreateSprite(".\\assets\\test4.png", 50, 50, vec4(.6f, .6f, 1.0f, 1.0f));
-	texID2 = fk.CreateSprite(".\\assets\\test2.png", 100, 100, vec4(.6f, .6f, 1.0f, 1.0f));
+	int texID[12];
 
-	int a = 20;
-	int b = 20;
+	//unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32);
+	texID[0] = fk.CreateSprite(".\\assets\\oakSprite.png", 100, 100, vec4(0.0f, 0.0f, .33f, 0.25f));
+	//texID[1] = fk.CreateSprite(".\\assets\\oakSprite.png", 150, 150, vec4(.6f, .6f, 1.0f, 1.0f));
+	//texID[2] = fk.CreateSprite(".\\assets\\oakSprite.png", 100, 100, vec4(.6f, .6f, 1.0f, 1.0f));
+
+	int a = 220;
+	int b = 220;
 
 
 	do{
 		fk.ClearScreen();
 
-		if (a < 700){
-			a += 1;
-		}
-		if (a > 400){
-			if (b < 700)
-			b += 1;
-		}
-		fk.MoveSprite(texID, a, b);
-		fk.MoveSprite(texID2, 10, 10);
+		fk.MoveSprite(texID[0], a, b);
+		//fk.MoveSprite(texID[1], 10, 10);
+		//fk.MoveSprite(texID[2], 110, 110);
 		//draw code goes here
-		fk.DrawSprite(texID2);
-		fk.DrawSprite(texID);
+		fk.DrawSprite(texID[0]);
+		//fk.DrawSprite(texID[1]);
+		//fk.DrawSprite(texID[2]);
+		
 
 	} while (fk.FrameworkUpdate());
 
