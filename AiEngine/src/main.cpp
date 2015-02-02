@@ -14,12 +14,12 @@ int main()
 	int texID[12];
 
 	//unsigned int texID = appInstance.CreateSprite(".\\assets\\test4.png", 32, 32);
-	texID[0] = fk.CreateSprite(".\\assets\\oakSprite.png", 100, 100, vec4(0.0f, 0.0f, .33f, 0.25f));
+	texID[0] = fk.CreateSprite(".\\assets\\oaksprite.png", 150, 150, vec4(0.0f, 0.0f, .33f, 0.25f));
 	//texID[1] = fk.CreateSprite(".\\assets\\oakSprite.png", 150, 150, vec4(.6f, .6f, 1.0f, 1.0f));
 	//texID[2] = fk.CreateSprite(".\\assets\\oakSprite.png", 100, 100, vec4(.6f, .6f, 1.0f, 1.0f));
 
-	int a = 220;
-	int b = 220;
+	int a = 1024/2;
+	int b = 768/2;
 
 
 	do{
