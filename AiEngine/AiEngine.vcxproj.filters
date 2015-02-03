@@ -26,10 +26,10 @@
     <ClInclude Include="include\Framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Application.h">
+    <ClInclude Include="include\Sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Sprite.h">
+    <ClInclude Include="include\Quad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

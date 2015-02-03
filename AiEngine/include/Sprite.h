@@ -1,11 +1,6 @@
 #ifndef _SPRITE_H_
 #define _SPRITE_H_
 
-//#include <GL\glew.h>
-//#include <GL\wglew.h>
-//#include <glm\glm.hpp>
-//#include <soil\SOIL.h>
-
 #include <vector>
 
 #define GLEW_STATIC

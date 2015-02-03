@@ -80,14 +80,6 @@ namespace AIF{
 		}
 
 		void Shutdown(){
-			//glDeleteBuffers(1, &mySprite.uiVBO);
-	/*		for (Sprite* s : spriteList)
-			{
-				glDeleteBuffers(1, &s->uiVBO);
-				delete s;
-			}
-			spriteList.clear();*/
-
 			glfwTerminate();
 		}
 
@@ -261,28 +253,16 @@ namespace AIF{
 			glEnableVertexAttribArray(1);
 			glEnableVertexAttribArray(2);
 
-
-			//glEnable(GL_BLEND);
-			//glEnable(GL_ALPHA_TEST);
-			//glAlphaFunc(GL_GREATER, .5f);
-			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 			glBindTexture(GL_TEXTURE_2D, spriteList[a_SpriteID]->uiTextureID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
 			glBindBuffer(GL_ARRAY_BUFFER, spriteList[a_SpriteID]->uiVBO);
-			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, spriteList[a_SpriteID]->uiIBO);
 
 			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)));
 			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)* 2));
 
 			glDrawArrays(GL_TRIANGLE_FAN, 0, sizeof(Vertex));
-			//glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, NULL);
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_TEXTURE_2D, 0);
 		}
 
@@ -305,25 +285,6 @@ namespace AIF{
 			glUnmapBuffer(GL_ARRAY_BUFFER);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-
-		//void UpdateIBO(GLuint a_IBO, Vertex* a_VerticeBuffer, int a_size){
-		//	//bind IBO
-		//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, a_IBO);
-		//	//allocate space for index info on  the graphics card
-		//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(a_VerticeBuffer)* a_size, a_VerticeBuffer, GL_STATIC_DRAW);
-		//	//get pointer to newly allocated space on GPU
-		//	GLvoid* iBuffer = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY);
-		//	//specify order to draw vertices
-		//	//in this case it's in sequential order
-		//	for (int i = 0; i < a_size; i++)
-		//	{
-		//		((char*)iBuffer)[i] = i;
-		//	}
-		//	//unmap and unbind 
-		//	glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
-		//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-		//}
 
 		unsigned int loadTexture(const char* a_pFilename, int & a_iWidth, int & a_iHeight, int & a_iBPP){
 			unsigned int uiTextureID = 0;
