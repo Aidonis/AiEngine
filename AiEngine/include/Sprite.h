@@ -7,12 +7,6 @@
 
 using namespace glm;
 
-struct Vertex{
-	vec4 positions;
-	vec4 colors;
-	vec2 uvs;
-};
-
 class Sprite
 {
 
@@ -25,7 +19,9 @@ public:
 	Vertices - 1 Vertex contains a position/color/uv
 	Pointer to an Array of Vertices - Array containing Vertices
 	*/
+	Sprite(){
 
+	}
 	~Sprite(){
 		delete verticesBuffer;
 	}
@@ -69,21 +65,21 @@ private:
 	char* fileName;
 
 	void UpdateVertices(){
-		verticesBuffer[0].positions = position + modelVertices[0];//some vector or shit;
-		verticesBuffer[0].colors = vec4(1, 1, 1, 1);//some color vector shit;
-		verticesBuffer[0].uvs = modelUVs[0];//UV shit
+		verticesBuffer[0].Pos = position + modelVertices[0];//some vector or shit;
+		verticesBuffer[0].Color = vec4(1, 1, 1, 1);//some color vector shit;
+		verticesBuffer[0].UV = modelUVs[0];//UV shit
 
-		verticesBuffer[1].positions = position + modelVertices[1];//some vector or shit;
-		verticesBuffer[1].colors = vec4(1, 1, 1, 1);//some color vector shit;
-		verticesBuffer[1].uvs = modelUVs[1];//UV shit
+		verticesBuffer[1].Pos = position + modelVertices[1];//some vector or shit;
+		verticesBuffer[1].Color = vec4(1, 1, 1, 1);//some color vector shit;
+		verticesBuffer[1].UV = modelUVs[1];//UV shit
 
-		verticesBuffer[2].positions = position + modelVertices[2];//some vector or shit;
-		verticesBuffer[2].colors = vec4(1, 1, 1, 1);//some color vector shit;
-		verticesBuffer[2].uvs = modelUVs[2];//UV shit
+		verticesBuffer[2].Pos = position + modelVertices[2];//some vector or shit;
+		verticesBuffer[2].Color = vec4(1, 1, 1, 1);//some color vector shit;
+		verticesBuffer[2].UV = modelUVs[2];//UV shit
 
-		verticesBuffer[3].positions = position + modelVertices[3];//some vector or shit;
-		verticesBuffer[3].colors = vec4(1, 1, 1, 1);//some color vector shit;
-		verticesBuffer[3].uvs = modelUVs[3];//UV shit
+		verticesBuffer[3].Pos = position + modelVertices[3];//some vector or shit;
+		verticesBuffer[3].Color = vec4(1, 1, 1, 1);//some color vector shit;
+		verticesBuffer[3].UV = modelUVs[3];//UV shit
 
 	}
 	void loadModelVertices(){

@@ -10,7 +10,7 @@
 #include <soil\SOIL.h>
 
 #include "Sprite.h"
-#include "Globals.h"
+#include "ToolBox.h"
 
 #include <iostream>
 #include <vector>
@@ -55,7 +55,7 @@ namespace AIF{
 			CreateShaderProgram();
 
 			IDTexture = glGetUniformLocation(shaderProgram, "MVP");
-			orthographicProjection = getOrtho(0, AIF::Globals::SCREEN_WIDTH, 0, AIF::Globals::SCREEN_HEIGHT, 0, 100);
+			orthographicProjection = getOrtho(0, g_WIDTH, 0, g_HEIGHT, 0, 100);
 			backgroundColor = a_backgroundColor;
 
 			//Enable Blending
