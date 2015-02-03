@@ -1,9 +1,33 @@
 #include "ToolBox.h"
 
 
-glm::mat4   Ortho;
+glm::mat4 Ortho;
 int g_WIDTH = 640;
 int g_HEIGHT = 480;
+double deltaTime = 0;
+double fps, elapsedTime;
+int frames;
+
+double getDeltaTime()
+{
+	return deltaTime;
+}
+
+void resetDeltaTime()
+{
+
+	deltaTime = glfwGetTime();
+	elapsedTime += deltaTime;
+	frames++;
+	if (elapsedTime > 0.25)
+	{
+		fps = (double)frames / elapsedTime;
+		elapsedTime = 0;
+		frames = 0;
+	}
+	glfwSetTime(0);
+
+}
 
 
 void Orthographic(float a_fLeft, float a_fRight, float a_fTop, float a_fBottom, float a_fNear, float a_fFar, glm::mat4 & mat)

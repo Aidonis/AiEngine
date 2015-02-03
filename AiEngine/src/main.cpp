@@ -1,21 +1,51 @@
-#include <iostream>
-#include "Framework.h"
+#define GLEW_STATIC
+#include "GL/glew.h"
 
-AIF::Framework fk;
+#include "GLFW/glfw3.h"
+#include <stdio.h>
 
-GLuint texID;
-GLuint texID2;
-GLuint texID3;
+
+#include "Sprite.h"
+#include "Quad.h"
+
 
 int main()
 {
-	fk.Initialize(g_WIDTH, g_HEIGHT, "Hello World", vec4(0, 0, 0, 0));
+	//open an OS window using GLFW
 
-	do{
-		fk.ClearScreen();
+	if (!glfwInit())
+	{
+		fprintf(stderr, "ERROR: could not start GLFW3!\n");
+		return 1;
+	}
 
-	} while (fk.FrameworkUpdate());
+	GLFWwindow * window = glfwCreateWindow(g_WIDTH, g_HEIGHT, "Hello Triangle", NULL, NULL);
 
-	fk.Shutdown();
-	return 0;
+	if (!window)
+	{
+		fprintf(stderr, "ERROR: could not open window with GLFW3!\n");
+		glfwTerminate();
+		return 1;
+	}
+
+	glfwMakeContextCurrent(window);
+
+	//start Glew
+	//glewExperimental = GLU_TRUE;
+	glewInit();
+
+	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
+
+	Quad theSquare;
+
+	while (!glfwWindowShouldClose(window)){
+		glViewport(0, 0, g_WIDTH, g_HEIGHT);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		theSquare.Draw();
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
 }
