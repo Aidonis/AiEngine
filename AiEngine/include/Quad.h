@@ -3,7 +3,7 @@
 
 #include "GL\glew.h"
 #include "GL\wglew.h"
-#include "glm/gtc/type_ptr.hpp"
+#include "glm\gtc\type_ptr.hpp"
 //glew must be included first
 #include "ToolBox.h"
 

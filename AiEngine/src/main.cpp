@@ -37,6 +37,9 @@ int main()
 	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
 
 	Quad theSquare;
+	Sprite theSprite;
+
+	theSprite.LoadTexture("./assets/oakSprite.png");
 
 	while (!glfwWindowShouldClose(window)){
 		glViewport(0, 0, g_WIDTH, g_HEIGHT);
@@ -44,6 +47,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		theSquare.Draw();
+		theSprite.Draw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

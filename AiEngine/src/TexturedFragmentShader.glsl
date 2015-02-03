@@ -1,14 +1,10 @@
-#version 400
-
-smooth in vec4 vertColor;
+#version 330
+in vec4 vColor;
 in vec2 UV;
+out vec4 outColour;
+uniform sampler2D diffuseTexture;
+void main () {
 
-out vec4 outputColor;
-
-uniform sampler2D myTextureSampler;
-
-void main()
-{
-	outputColor = texture(myTextureSampler, UV).rgba * vertColor;
-	//outputColor = vertColor;
+//outColour =  vColor;
+outColour =  texture2D(diffuseTexture, UV) *vColor;
 }

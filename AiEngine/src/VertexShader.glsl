@@ -1,20 +1,12 @@
-#version 400
-
-layout(location = 0) in vec4 position;
+#version 330
+layout(location = 0) in vec3 position;
 layout(location = 1) in vec4 color;
-layout(location = 2) in vec2 vertexUV;
-
-uniform mat4 MVP;
-
-smooth out vec4 vertColor;
+layout(location = 2) in vec2 texcoord;
+uniform mat4 mvp_matrix;
+out vec4 vColor;
 out vec2 UV;
-
-void main()
-{
-	vertColor = color;
-	UV = vertexUV;
-
-	vec4 scaledPosition = MVP * position;
-
-	gl_Position = scaledPosition;
+void main() {
+	vColor = color;
+	UV = texcoord;
+	gl_Position = mvp_matrix *( vec4 (position, 1.0));
 }

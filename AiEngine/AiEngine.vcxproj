@@ -74,10 +74,12 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Quad.cpp" />
+    <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\ToolBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Framework.h" />
+    <ClInclude Include="include\TextFileReader.h" />
     <ClInclude Include="include\ToolBox.h" />
     <ClInclude Include="include\Quad.h" />
     <ClInclude Include="include\Sprite.h" />

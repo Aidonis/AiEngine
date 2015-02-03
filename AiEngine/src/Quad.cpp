@@ -89,7 +89,7 @@ Quad::Quad(){
 	glm::mat4 m_ModelView = glm::mat4(1.0);
 
 	glm::mat4 viewTranslate = glm::translate(glm::mat4(), glm::vec3((float)g_WIDTH / 2, (float)g_HEIGHT / 2, 1));
-	glm::mat4 Model = glm::scale(glm::mat4(), glm::vec3(50, 50, 1));
+	glm::mat4 Model = glm::scale(glm::mat4(), glm::vec3(150, 150, 1));
 
 	q_MVP = Ortho * viewTranslate * Model;
 
