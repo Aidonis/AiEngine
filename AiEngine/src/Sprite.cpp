@@ -32,15 +32,11 @@ Sprite::Sprite(){
 	glUseProgram(s_Quad.q_ShaderProgram);
 
 	//Basic UV Data
-	s_UVData[0].x = 0.0f;
-	s_UVData[0].y = 0.0f;
-	s_UVData[1].x = 0.5f;
-	s_UVData[1].y = 0.0f;
-	s_UVData[2].x = 0.0f;
-	s_UVData[2].y = 0.5f;
-	s_UVData[3].x = 0.5f;
-	s_UVData[3].y = 0.5f;
-
+	s_UVData[0] = glm::vec2(0.66f, 0.25f);
+	s_UVData[1] = glm::vec2(1.00f, 0.25f);
+	s_UVData[2] = glm::vec2(0.66f, 0.50f);
+	s_UVData[3] = glm::vec2(1.00f, 0.50f);
+	
 	//Bind VAO
 	glBindVertexArray(s_Quad.q_VAO);
 	//GEN/BIND/BUFFER UVO
@@ -63,14 +59,20 @@ Sprite::Sprite(){
 	s_Position = glm::vec3((float)g_WIDTH / 2, (float)g_HEIGHT / 2, 1);
 	s_Scale = glm::vec2(50, 50);
 
+
 }
 
 Sprite::~Sprite(){
-	glBindBuffer(GL_ARRAY_BUFFER, s_UVO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ARRAY_BUFFER, s_UVO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
 }
 
 void Sprite::SetUVData(){
+	//Back side
+	s_UVData[0] = glm::vec2(0.0f, 0.0f);
+	s_UVData[1] = glm::vec2(0.33f, 0.0f);
+	s_UVData[2] = glm::vec2(0.00f, 0.25f);
+	s_UVData[3] = glm::vec2(.33f, 0.25f);
 	glBindBuffer(GL_ARRAY_BUFFER, s_UVO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
 

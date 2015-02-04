@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas width= "96" height="128" sheet="./assets/oakSprite.png" animations="./assets/oakAnimations.xml">
+
+
+<sprite name = "back0" x0 = "0.0f" x1 = "32.0f" y0 ="0.0f" y1 ="32.0f"/>
+<sprite name = "right0" x0 = "32.0f" x1 = "64.0f" y0 ="0.0f" y1 ="32.0f"/>
+<sprite name = "back1" x0 = "64.0f" x1 = "96.0f" y0 ="0.0f" y1 ="32.0f"/>
+
+<sprite name = "left1" x0 = "0.0f" x1 = "32.0f" y0 ="32.0f" y1 ="64.0f"/>
+<sprite name = "right1" x0 = "32.0f" x1 = "64.0f" y0 ="32.0f" y1 ="64.0f"/>
+<sprite name = "front0" x0 = "64.0f" x1 = "96.0f" y0 ="32.0f" y1 ="64.0f"/>
+
+<sprite name = "left0" x0 = "0.0f" x1 = "32.0f" y0 ="64.0f" y1 ="96.0f"/>
+<sprite name = "right2" x0 = "32.0f" x1 = "64.0f" y0 ="64.0f" y1 ="96.0f"/>
+<sprite name = "front1" x0 = "64.0f" x1 = "96.0f" y0 ="64.0f" y1 ="96.0f"/>
+
+<sprite name = "left2" x0 = "0.0f" x1 = "32.0f" y0 ="96.0f" y1 ="128.0f"/>
+<sprite name = "back2" x0 = "32.0f" x1 = "64.0f" y0 ="96.0f" y1 ="128.0f"/>
+<sprite name = "front2" x0 = "64.0f" x1 = "96.0f" y0 ="96.0f" y1 ="128.0f"/>
