@@ -80,7 +80,8 @@ void Sprite::Update(float a_DeltaTime){
 	//s_Transform.modelScale = glm::scale(glm::mat4(), glm::vec3(s_Scale, 1));
 	//s_Transform.MVP = Ortho * s_Transform.viewTranslate * s_Transform.modelScale;
 	//s_Quad.q_MVP = s_Transform.MVP;
-
+	s_Animator.SetUVData(s_UVData);
+	SetUVData();
 	Draw();
 
 }

@@ -1,6 +1,14 @@
+#ifndef _ANIMATOR_H_
+#define _ANIMATOR_H_
+
 #include <string>
+#include <vector>
 #include <map>
 #include "tinyxml2\tinyxml2.h"
+#include "ToolBox.h"
+
+
+typedef std::vector<std::string> frame;
 
 struct AniSprite
 {
@@ -17,55 +25,23 @@ struct Atlas{
 class Animator{
 public:
 
+	Animator();
+	~Animator();
 
-	std::map<std::string, AniSprite> mSprites;
+	void Update();
+	void ImportSheet();
+
 	Atlas atlas;
 
-	void Animator::LoadSprites(const char* a_pSpriteSheet)
-	{
-		/*
-		XML structure
-		- Element "atlas"			the root element
-		- - Attribute "width"		attribute of atlas Element
-		- - Attribute "height"		attribute of atlas Element
-		- - Attribute "sheet"		attribute of atlas Element
-		- - Attribute "animations"	attribute of atlas Element
+	void SetUVData(glm::vec2 * a_data);
+	std::map<std::string, AniSprite> mSprites;
+	std::map<std::string, frame> mAnimations;
 
-		- -	Element "sprite"		child of atlas Element
-		- - - Attribute "name"		attribute of sprite Element
-		- - - Attribute "x"			attribute of sprite Element
-		- - - Attribute "y"			attribute of sprite Element
-		- - - Attribute "width"		attribute of sprite Element
-		- - - Attribute "height"	attribute of sprite Element
-		*/
-		tinyxml2::XMLDocument doc;
-		tinyxml2::XMLNode *rootNode, *currentNode;
-		tinyxml2::XMLElement *childElement;
-		std::string str;
-		doc.LoadFile(a_pSpriteSheet); // load the document
-		rootNode = doc.FirstChildElement("atlas");// set the root node
-		currentNode = rootNode;
+	void SetSprite(std::string a_Sprite);
+	void LoadSprites(const char* a_SpriteSheet);
+	glm::vec2 m_UVData[2];
+	glm::vec2 m_SpriteScale;
 
-		//currentNode = rootNode->FirstChild(); // set the current node to the root nodes first child
-		childElement = currentNode->ToElement();
-		atlas.width = (float)childElement->IntAttribute("width");
-		atlas.height = (float)childElement->IntAttribute("height");
-		atlas.sSheet = childElement->Attribute("sheet");
-		atlas.sAnimations = childElement->Attribute("animations");
-
-
-		for (childElement = currentNode->FirstChildElement();
-			childElement != NULL; childElement = childElement->NextSiblingElement())
-		{
-			str = childElement->Attribute("name");
-			mSprites[str].Name = str;
-			mSprites[str].x0 = childElement->IntAttribute("x0");
-			mSprites[str].x1 = childElement->IntAttribute("x1");
-			mSprites[str].y0 = childElement->IntAttribute("y0");
-			mSprites[str].y1 = childElement->IntAttribute("y1");
-			mSprites[str].height = mSprites[str].y1 - mSprites[str].y0;
-			mSprites[str].width = mSprites[str].x1 - mSprites[str].x0;
-		}
-	std:printf("Sprite load done!\n");
-	}
 };
+
+#endif //_ANIMATOR_H_

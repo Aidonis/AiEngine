@@ -5,6 +5,7 @@
 #include "ToolBox.h"
 #include "SOIL\SOIL.h"
 #include "TextFileReader.h"
+#include "Animator.h"
 
 class Sprite{
 public:
@@ -23,12 +24,14 @@ public:
 	GLuint s_UVO;
 	glm::vec2 s_UVData[4];
 
+	Animator s_Animator;
+
 	void Update(float a_DeltaTime);
 	void Draw();
 	void LoadTexture(const char* a_Texture);
 
 	void SetUVData();
-	void SetUVData(glm::vec2 * s_UVData);
+
 
 private:
 

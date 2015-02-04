@@ -14,7 +14,6 @@ not claim that you wrote the original software. If you use this
 software in a product, an acknowledgment in the product documentation
 would be appreciated but is not required.
 
-
 2. Altered source versions must be plainly marked as such, and
 must not be misrepresented as being the original software.
 
@@ -25,7 +24,7 @@ distribution.
 #ifndef TINYXML2_INCLUDED
 #define TINYXML2_INCLUDED
 
-#if defined(ANDROID_NDK) || defined(__BORLANDC__)
+#if defined(ANDROID_NDK) || defined(__BORLANDC__) || defined(__QNXNTO__)
 #   include <ctype.h>
 #   include <limits.h>
 #   include <stdio.h>
@@ -78,7 +77,8 @@ distribution.
 
 #if defined(DEBUG)
 #   if defined(_MSC_VER)
-#       define TIXMLASSERT( x )           if ( !(x)) { __debugbreak(); } //if ( !(x)) WinDebugBreak()
+#       // "(void)0," is for suppressing C4127 warning in "assert(false)", "assert(true)" and the like
+#       define TIXMLASSERT( x )           if ( !((void)0,(x))) { __debugbreak(); } //if ( !(x)) WinDebugBreak()
 #   elif defined (ANDROID_NDK)
 #       include <android/log.h>
 #       define TIXMLASSERT( x )           if ( !(x)) { __android_log_assert( "assert", "grinliz", "ASSERT in '%s' at %d.", __FILE__, __LINE__ ); }
@@ -91,7 +91,7 @@ distribution.
 #endif
 
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1400 )
+#if defined(_MSC_VER) && (_MSC_VER >= 1400 ) && (!defined WINCE)
 // Microsoft visual studio, version 2005 and higher.
 /*int _snprintf_s(
    char *buffer,
@@ -109,6 +109,9 @@ inline int TIXML_SNPRINTF( char* buffer, size_t size, const char* format, ... )
     return result;
 }
 #define TIXML_SSCANF   sscanf_s
+#elif defined WINCE
+#define TIXML_SNPRINTF _snprintf
+#define TIXML_SSCANF   sscanf
 #else
 // GCC version 3 and higher
 //#warning( "Using sn* functions." )
@@ -116,9 +119,12 @@ inline int TIXML_SNPRINTF( char* buffer, size_t size, const char* format, ... )
 #define TIXML_SSCANF   sscanf
 #endif
 
-static const int TIXML2_MAJOR_VERSION = 1;
-static const int TIXML2_MINOR_VERSION = 0;
-static const int TIXML2_PATCH_VERSION = 14;
+/* Versioning, past 1.0.14:
+	http://semver.org/
+*/
+static const int TIXML2_MAJOR_VERSION = 2;
+static const int TIXML2_MINOR_VERSION = 2;
+static const int TIXML2_PATCH_VERSION = 0;
 
 namespace tinyxml2
 {
@@ -179,6 +185,8 @@ public:
     char* ParseText( char* in, const char* endTag, int strFlags );
     char* ParseName( char* in );
 
+    void TransferTo( StrPair* other );
+
 private:
     void Reset();
     void CollapseWhitespace();
@@ -192,6 +200,9 @@ private:
     int     _flags;
     char*   _start;
     char*   _end;
+
+    StrPair( const StrPair& other );	// not supported
+    void operator=( StrPair& other );	// not supported, use TransferTo()
 };
 
 
@@ -204,7 +215,7 @@ template <class T, int INIT>
 class DynArray
 {
 public:
-    DynArray< T, INIT >() {
+    DynArray() {
         _mem = _pool;
         _allocated = INIT;
         _size = 0;
@@ -221,11 +232,14 @@ public:
     }
 
     void Push( T t ) {
+        TIXMLASSERT( _size < INT_MAX );
         EnsureCapacity( _size+1 );
         _mem[_size++] = t;
     }
 
     T* PushArr( int count ) {
+        TIXMLASSERT( count >= 0 );
+        TIXMLASSERT( _size <= INT_MAX - count );
         EnsureCapacity( _size+count );
         T* ret = &_mem[_size];
         _size += count;
@@ -233,6 +247,7 @@ public:
     }
 
     T Pop() {
+        TIXMLASSERT( _size > 0 );
         return _mem[--_size];
     }
 
@@ -255,12 +270,13 @@ public:
         return _mem[i];
     }
 
-    const T& PeekTop() const                            {
+    const T& PeekTop() const            {
         TIXMLASSERT( _size > 0 );
         return _mem[ _size - 1];
     }
 
     int Size() const					{
+        TIXMLASSERT( _size >= 0 );
         return _size;
     }
 
@@ -277,8 +293,13 @@ public:
     }
 
 private:
+    DynArray( const DynArray& ); // not supported
+    void operator=( const DynArray& ); // not supported
+
     void EnsureCapacity( int cap ) {
+        TIXMLASSERT( cap > 0 );
         if ( cap > _allocated ) {
+            TIXMLASSERT( cap <= INT_MAX / 2 );
             int newAllocated = cap * 2;
             T* newMem = new T[newAllocated];
             memcpy( newMem, _mem, sizeof(T)*_size );	// warning: not using constructors, only works for PODs
@@ -311,6 +332,7 @@ public:
     virtual void* Alloc() = 0;
     virtual void Free( void* ) = 0;
     virtual void SetTracked() = 0;
+    virtual void Clear() = 0;
 };
 
 
@@ -323,10 +345,20 @@ class MemPoolT : public MemPool
 public:
     MemPoolT() : _root(0), _currentAllocs(0), _nAllocs(0), _maxAllocs(0), _nUntracked(0)	{}
     ~MemPoolT() {
+        Clear();
+    }
+    
+    void Clear() {
         // Delete the blocks.
-        for( int i=0; i<_blockPtrs.Size(); ++i ) {
-            delete _blockPtrs[i];
+        while( !_blockPtrs.Empty()) {
+            Block* b  = _blockPtrs.Pop();
+            delete b;
         }
+        _root = 0;
+        _currentAllocs = 0;
+        _nAllocs = 0;
+        _maxAllocs = 0;
+        _nUntracked = 0;
     }
 
     virtual int ItemSize() const	{
@@ -359,12 +391,13 @@ public:
         _nUntracked++;
         return result;
     }
+    
     virtual void Free( void* mem ) {
         if ( !mem ) {
             return;
         }
         --_currentAllocs;
-        Chunk* chunk = (Chunk*)mem;
+        Chunk* chunk = static_cast<Chunk*>( mem );
 #ifdef DEBUG
         memset( chunk, 0xfe, sizeof(Chunk) );
 #endif
@@ -396,6 +429,9 @@ public:
     enum { COUNT = (4*1024)/SIZE }; // Some compilers do not accept to use COUNT in private part if COUNT is private
 
 private:
+    MemPoolT( const MemPoolT& ); // not supported
+    void operator=( const MemPoolT& ); // not supported
+
     union Chunk {
         Chunk*  next;
         char    mem[SIZE];
@@ -474,6 +510,33 @@ public:
     }
 };
 
+// WARNING: must match XMLDocument::_errorNames[]
+enum XMLError {
+    XML_SUCCESS = 0,
+    XML_NO_ERROR = 0,
+    XML_NO_ATTRIBUTE,
+    XML_WRONG_ATTRIBUTE_TYPE,
+    XML_ERROR_FILE_NOT_FOUND,
+    XML_ERROR_FILE_COULD_NOT_BE_OPENED,
+    XML_ERROR_FILE_READ_ERROR,
+    XML_ERROR_ELEMENT_MISMATCH,
+    XML_ERROR_PARSING_ELEMENT,
+    XML_ERROR_PARSING_ATTRIBUTE,
+    XML_ERROR_IDENTIFYING_TAG,
+    XML_ERROR_PARSING_TEXT,
+    XML_ERROR_PARSING_CDATA,
+    XML_ERROR_PARSING_COMMENT,
+    XML_ERROR_PARSING_DECLARATION,
+    XML_ERROR_PARSING_UNKNOWN,
+    XML_ERROR_EMPTY_DOCUMENT,
+    XML_ERROR_MISMATCHED_ELEMENT,
+    XML_ERROR_PARSING,
+    XML_CAN_NOT_CONVERT_TEXT,
+    XML_NO_TEXT_NODE,
+
+	XML_ERROR_COUNT
+};
+
 
 /*
 	Utility functionality.
@@ -481,28 +544,33 @@ public:
 class XMLUtil
 {
 public:
-    // Anything in the high order range of UTF-8 is assumed to not be whitespace. This isn't
-    // correct, but simple, and usually works.
     static const char* SkipWhiteSpace( const char* p )	{
-        while( !IsUTF8Continuation(*p) && isspace( *reinterpret_cast<const unsigned char*>(p) ) ) {
+        TIXMLASSERT( p );
+        while( IsWhiteSpace(*p) ) {
             ++p;
         }
+        TIXMLASSERT( p );
         return p;
     }
     static char* SkipWhiteSpace( char* p )				{
-        while( !IsUTF8Continuation(*p) && isspace( *reinterpret_cast<unsigned char*>(p) ) )		{
-            ++p;
-        }
-        return p;
+        return const_cast<char*>( SkipWhiteSpace( const_cast<const char*>(p) ) );
     }
+
+    // Anything in the high order range of UTF-8 is assumed to not be whitespace. This isn't
+    // correct, but simple, and usually works.
     static bool IsWhiteSpace( char p )					{
         return !IsUTF8Continuation(p) && isspace( static_cast<unsigned char>(p) );
     }
     
     inline static bool IsNameStartChar( unsigned char ch ) {
-        return ( ( ch < 128 ) ? isalpha( ch ) : 1 )
-               || ch == ':'
-               || ch == '_';
+        if ( ch >= 128 ) {
+            // This is a heuristic guess in attempt to not implement Unicode-aware isalpha()
+            return true;
+        }
+        if ( isalpha( ch ) ) {
+            return true;
+        }
+        return ch == ':' || ch == '_';
     }
     
     inline static bool IsNameChar( unsigned char ch ) {
@@ -513,10 +581,10 @@ public:
     }
 
     inline static bool StringEqual( const char* p, const char* q, int nChar=INT_MAX )  {
-        int n = 0;
         if ( p == q ) {
             return true;
         }
+        int n = 0;
         while( *p && *q && *p == *q && n<nChar ) {
             ++p;
             ++q;
@@ -528,8 +596,8 @@ public:
         return false;
     }
     
-    inline static int IsUTF8Continuation( const char p ) {
-        return p & 0x80;
+    inline static bool IsUTF8Continuation( const char p ) {
+        return ( p & 0x80 ) != 0;
     }
 
     static const char* ReadBOM( const char* p, bool* hasBOM );
@@ -825,8 +893,6 @@ public:
 protected:
     XMLNode( XMLDocument* );
     virtual ~XMLNode();
-    XMLNode( const XMLNode& );	// not supported
-    XMLNode& operator=( const XMLNode& );	// not supported
 
     XMLDocument*	_document;
     XMLNode*		_parent;
@@ -841,6 +907,11 @@ protected:
 private:
     MemPool*		_memPool;
     void Unlink( XMLNode* child );
+    static void DeleteNode( XMLNode* node );
+    void InsertChildPreamble( XMLNode* insertThis ) const;
+
+    XMLNode( const XMLNode& );	// not supported
+    XMLNode& operator=( const XMLNode& );	// not supported
 };
 
 
@@ -886,11 +957,12 @@ public:
 protected:
     XMLText( XMLDocument* doc )	: XMLNode( doc ), _isCData( false )	{}
     virtual ~XMLText()												{}
-    XMLText( const XMLText& );	// not supported
-    XMLText& operator=( const XMLText& );	// not supported
 
 private:
     bool _isCData;
+
+    XMLText( const XMLText& );	// not supported
+    XMLText& operator=( const XMLText& );	// not supported
 };
 
 
@@ -915,10 +987,10 @@ public:
 protected:
     XMLComment( XMLDocument* doc );
     virtual ~XMLComment();
-    XMLComment( const XMLComment& );	// not supported
-    XMLComment& operator=( const XMLComment& );	// not supported
 
 private:
+    XMLComment( const XMLComment& );	// not supported
+    XMLComment& operator=( const XMLComment& );	// not supported
 };
 
 
@@ -953,6 +1025,8 @@ public:
 protected:
     XMLDeclaration( XMLDocument* doc );
     virtual ~XMLDeclaration();
+
+private:
     XMLDeclaration( const XMLDeclaration& );	// not supported
     XMLDeclaration& operator=( const XMLDeclaration& );	// not supported
 };
@@ -985,37 +1059,12 @@ public:
 protected:
     XMLUnknown( XMLDocument* doc );
     virtual ~XMLUnknown();
+
+private:
     XMLUnknown( const XMLUnknown& );	// not supported
     XMLUnknown& operator=( const XMLUnknown& );	// not supported
 };
 
-
-enum XMLError {
-    XML_NO_ERROR = 0,
-    XML_SUCCESS = 0,
-
-    XML_NO_ATTRIBUTE,
-    XML_WRONG_ATTRIBUTE_TYPE,
-
-    XML_ERROR_FILE_NOT_FOUND,
-    XML_ERROR_FILE_COULD_NOT_BE_OPENED,
-    XML_ERROR_FILE_READ_ERROR,
-    XML_ERROR_ELEMENT_MISMATCH,
-    XML_ERROR_PARSING_ELEMENT,
-    XML_ERROR_PARSING_ATTRIBUTE,
-    XML_ERROR_IDENTIFYING_TAG,
-    XML_ERROR_PARSING_TEXT,
-    XML_ERROR_PARSING_CDATA,
-    XML_ERROR_PARSING_COMMENT,
-    XML_ERROR_PARSING_DECLARATION,
-    XML_ERROR_PARSING_UNKNOWN,
-    XML_ERROR_EMPTY_DOCUMENT,
-    XML_ERROR_MISMATCHED_ELEMENT,
-    XML_ERROR_PARSING,
-
-    XML_CAN_NOT_CONVERT_TEXT,
-    XML_NO_TEXT_NODE
-};
 
 
 /** An attribute is a name-value pair. Elements have an arbitrary
@@ -1404,15 +1453,15 @@ public:
     	@endverbatim
     */
 	void SetText( const char* inText );
-    /// Convenince method for setting text inside and element. See SetText() for important limitations.
+    /// Convenience method for setting text inside and element. See SetText() for important limitations.
     void SetText( int value );
-    /// Convenince method for setting text inside and element. See SetText() for important limitations.
+    /// Convenience method for setting text inside and element. See SetText() for important limitations.
     void SetText( unsigned value );  
-    /// Convenince method for setting text inside and element. See SetText() for important limitations.
+    /// Convenience method for setting text inside and element. See SetText() for important limitations.
     void SetText( bool value );  
-    /// Convenince method for setting text inside and element. See SetText() for important limitations.
+    /// Convenience method for setting text inside and element. See SetText() for important limitations.
     void SetText( double value );  
-    /// Convenince method for setting text inside and element. See SetText() for important limitations.
+    /// Convenience method for setting text inside and element. See SetText() for important limitations.
     void SetText( float value );  
 
     /**
@@ -1470,10 +1519,13 @@ private:
     XMLElement( const XMLElement& );	// not supported
     void operator=( const XMLElement& );	// not supported
 
-    XMLAttribute* FindAttribute( const char* name );
+    XMLAttribute* FindAttribute( const char* name ) {
+        return const_cast<XMLAttribute*>(const_cast<const XMLElement*>(this)->FindAttribute( name ));
+    }
     XMLAttribute* FindOrCreateAttribute( const char* name );
     //void LinkAttribute( XMLAttribute* attrib );
     char* ParseAttributes( char* p );
+    static void DeleteAttribute( XMLAttribute* attribute );
 
     enum { BUF_SIZE = 200 };
     int _closingType;
@@ -1531,7 +1583,11 @@ public:
 
     /**
     	Load an XML file from disk. You are responsible
-    	for providing and closing the FILE*.
+    	for providing and closing the FILE*. 
+     
+        NOTE: The file should be opened as binary ("rb")
+        not text in order for TinyXML-2 to correctly
+        do newline normalization.
 
     	Returns XML_NO_ERROR (0) on success, or
     	an errorID.
@@ -1641,9 +1697,7 @@ public:
     	Delete a node associated with this document.
     	It will be unlinked from the DOM.
     */
-    void DeleteNode( XMLNode* node )	{
-        node->_parent->DeleteChild( node );
-    }
+    void DeleteNode( XMLNode* node );
 
     void SetError( XMLError error, const char* str1, const char* str2 );
 
@@ -1655,6 +1709,8 @@ public:
     XMLError  ErrorID() const {
         return _errorID;
     }
+	const char* ErrorName() const;
+
     /// Return a possibly helpful diagnostic location or string.
     const char* GetErrorStr1() const {
         return _errorStr1;
@@ -1695,6 +1751,10 @@ private:
     MemPoolT< sizeof(XMLAttribute) > _attributePool;
     MemPoolT< sizeof(XMLText) >		 _textPool;
     MemPoolT< sizeof(XMLComment) >	 _commentPool;
+
+	static const char* _errorNames[XML_ERROR_COUNT];
+
+    void Parse();
 };
 
 
@@ -1738,7 +1798,7 @@ private:
 
 	@verbatim
 	XMLHandle docHandle( &document );
-	XMLElement* child2 = docHandle.FirstChild( "Document" ).FirstChild( "Element" ).FirstChild().NextSibling().ToElement();
+	XMLElement* child2 = docHandle.FirstChildElement( "Document" ).FirstChildElement( "Element" ).FirstChildElement().NextSiblingElement();
 	if ( child2 )
 	{
 		// do something useful
@@ -1813,19 +1873,19 @@ public:
     }
     /// Safe cast to XMLElement. This can return null.
     XMLElement* ToElement() 					{
-        return ( ( _node && _node->ToElement() ) ? _node->ToElement() : 0 );
+        return ( ( _node == 0 ) ? 0 : _node->ToElement() );
     }
     /// Safe cast to XMLText. This can return null.
     XMLText* ToText() 							{
-        return ( ( _node && _node->ToText() ) ? _node->ToText() : 0 );
+        return ( ( _node == 0 ) ? 0 : _node->ToText() );
     }
     /// Safe cast to XMLUnknown. This can return null.
     XMLUnknown* ToUnknown() 					{
-        return ( ( _node && _node->ToUnknown() ) ? _node->ToUnknown() : 0 );
+        return ( ( _node == 0 ) ? 0 : _node->ToUnknown() );
     }
     /// Safe cast to XMLDeclaration. This can return null.
     XMLDeclaration* ToDeclaration() 			{
-        return ( ( _node && _node->ToDeclaration() ) ? _node->ToDeclaration() : 0 );
+        return ( ( _node == 0 ) ? 0 : _node->ToDeclaration() );
     }
 
 private:
@@ -1885,16 +1945,16 @@ public:
         return _node;
     }
     const XMLElement* ToElement() const			{
-        return ( ( _node && _node->ToElement() ) ? _node->ToElement() : 0 );
+        return ( ( _node == 0 ) ? 0 : _node->ToElement() );
     }
     const XMLText* ToText() const				{
-        return ( ( _node && _node->ToText() ) ? _node->ToText() : 0 );
+        return ( ( _node == 0 ) ? 0 : _node->ToText() );
     }
     const XMLUnknown* ToUnknown() const			{
-        return ( ( _node && _node->ToUnknown() ) ? _node->ToUnknown() : 0 );
+        return ( ( _node == 0 ) ? 0 : _node->ToUnknown() );
     }
     const XMLDeclaration* ToDeclaration() const	{
-        return ( ( _node && _node->ToDeclaration() ) ? _node->ToDeclaration() : 0 );
+        return ( ( _node == 0 ) ? 0 : _node->ToDeclaration() );
     }
 
 private:
@@ -1961,7 +2021,7 @@ public:
     /** If streaming, start writing an element.
         The element must be closed with CloseElement()
     */
-    void OpenElement( const char* name );
+    void OpenElement( const char* name, bool compactMode=false );
     /// If streaming, add an attribute to an open element.
     void PushAttribute( const char* name, const char* value );
     void PushAttribute( const char* name, int value );
@@ -1969,7 +2029,7 @@ public:
     void PushAttribute( const char* name, bool value );
     void PushAttribute( const char* name, double value );
     /// If streaming, close the Element.
-    virtual void CloseElement();
+    virtual void CloseElement( bool compactMode=false );
 
     /// Add a text node.
     void PushText( const char* text, bool cdata=false );
@@ -2028,21 +2088,27 @@ public:
     }
 
 protected:
-    void SealElement();
+	virtual bool CompactMode( const XMLElement& )	{ return _compactMode; }
+
+	/** Prints out the space before an element. You may override to change
+	    the space and tabs used. A PrintSpace() override should call Print().
+	*/
+    virtual void PrintSpace( int depth );
+    void Print( const char* format, ... );
+
+    void SealElementIfJustOpened();
     bool _elementJustOpened;
     DynArray< const char*, 10 > _stack;
 
 private:
-    void PrintSpace( int depth );
     void PrintString( const char*, bool restrictedEntitySet );	// prints out, after detecting entities.
-    void Print( const char* format, ... );
 
     bool _firstElement;
     FILE* _fp;
     int _depth;
     int _textDepth;
     bool _processEntities;
-    bool _compactMode;
+	bool _compactMode;
 
     enum {
         ENTITY_RANGE = 64,
@@ -2052,9 +2118,6 @@ private:
     bool _restrictedEntityFlag[ENTITY_RANGE];
 
     DynArray< char, 20 > _buffer;
-#ifdef _MSC_VER
-    DynArray< char, 20 > _accumulator;
-#endif
 };
 
 
