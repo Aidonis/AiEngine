@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<animation name = "back" fps = "15">
+	<frame name ="back0"/>
+	<frame name ="back1"/>
+	<frame name ="back2"/>
+</animation>
+<animation name = "idle" fps = "15">
+	<frame name ="front0"/>
+</animation>
+<animation name = "left" fps = "15">
+	<frame name ="left0"/>
+	<frame name ="left1"/>
+	<frame name ="left2"/>
+</animation>
+<animation name = "right" fps = "15">
+	<frame name ="right0"/>
+	<frame name ="right1"/>
+	<frame name ="right2"/>
+</animation>
+<animation name = "up" fps = "15">
+	<frame name ="front1"/>
+	<frame name ="front2"/>
+</animation>
+<animation name = "down" fps = "15">
+	<frame name ="back1"/>
+	<frame name ="back2"/>
+</animation>

@@ -7,6 +7,7 @@
 
 #include "Sprite.h"
 #include "Quad.h"
+#include "Animator.h"
 
 
 int main()
@@ -38,8 +39,11 @@ int main()
 
 	Quad theSquare;
 	Sprite theSprite;
+	Animator animation;
 
 	theSprite.LoadTexture("./assets/oakSprite.png");
+	//animation.LoadSprites("./assets/oakSheet.xml");
+
 
 	while (!glfwWindowShouldClose(window)){
 		glViewport(0, 0, g_WIDTH, g_HEIGHT);
