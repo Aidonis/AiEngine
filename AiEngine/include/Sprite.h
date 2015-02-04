@@ -3,7 +3,7 @@
 
 #include "Quad.h"
 #include "ToolBox.h"
-#include "SOIL/SOIL.h"
+#include "SOIL\SOIL.h"
 #include "TextFileReader.h"
 
 class Sprite{
@@ -28,6 +28,7 @@ public:
 	void LoadTexture(const char* a_Texture);
 
 	void SetUVData();
+	void SetUVData(glm::vec2 * s_UVData);
 
 private:
 

@@ -59,7 +59,6 @@ Sprite::Sprite(){
 	s_Position = glm::vec3((float)g_WIDTH / 2, (float)g_HEIGHT / 2, 1);
 	s_Scale = glm::vec2(50, 50);
 
-
 }
 
 Sprite::~Sprite(){
@@ -68,11 +67,7 @@ Sprite::~Sprite(){
 }
 
 void Sprite::SetUVData(){
-	//Back side
-	s_UVData[0] = glm::vec2(0.0f, 0.0f);
-	s_UVData[1] = glm::vec2(0.33f, 0.0f);
-	s_UVData[2] = glm::vec2(0.00f, 0.25f);
-	s_UVData[3] = glm::vec2(.33f, 0.25f);
+
 	glBindBuffer(GL_ARRAY_BUFFER, s_UVO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
 
@@ -81,10 +76,10 @@ void Sprite::SetUVData(){
 
 void Sprite::Update(float a_DeltaTime){
 
-	s_Transform.viewTranslate = glm::translate(glm::mat4(), s_Position);
-	s_Transform.modelScale = glm::scale(glm::mat4(), glm::vec3(s_Scale, 1));
-	s_Transform.MVP = Ortho * s_Transform.viewTranslate * s_Transform.modelScale;
-	s_Quad.q_MVP = s_Transform.MVP;
+	//s_Transform.viewTranslate = glm::translate(glm::mat4(), s_Position);
+	//s_Transform.modelScale = glm::scale(glm::mat4(), glm::vec3(s_Scale, 1));
+	//s_Transform.MVP = Ortho * s_Transform.viewTranslate * s_Transform.modelScale;
+	//s_Quad.q_MVP = s_Transform.MVP;
 
 	Draw();
 
