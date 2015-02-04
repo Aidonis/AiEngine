@@ -58,30 +58,31 @@ int main()
 
 
 
-		if (i < 4){
+		if (i < 3){
 			switch (i)
 			{
 			case 0:
-				theSprite.s_Animator.SetSprite("front0");
-				i++;
-				break;
-			case 1:
 				theSprite.s_Animator.SetSprite("left0");
 				i++;
 				break;
-			case 2:
-				theSprite.s_Animator.SetSprite("back0");
+			case 1:
+				theSprite.s_Animator.SetSprite("left1");
 				i++;
 				break;
-			case 3:
-				theSprite.s_Animator.SetSprite("right0");
-				i=0;
+			case 2:
+				theSprite.s_Animator.SetSprite("left2");
+				i++;
+				i = 0;
 				break;
+			//case 3:
+			//	theSprite.s_Animator.SetSprite("left0");
+			//	i=0;
+			//	break;
 			}
 		}
 
 		theSprite.Update(0.1f);
-		Sleep(100);
+		Sleep(150);
 //		theSprite.SetUVData();
 
 		glfwSwapBuffers(window);
