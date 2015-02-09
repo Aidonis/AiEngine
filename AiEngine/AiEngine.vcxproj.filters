@@ -30,6 +30,9 @@
     <ClCompile Include="src\Animator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Fontbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Framework.h">
@@ -50,7 +53,7 @@
     <ClInclude Include="include\Animator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Font.h">
+    <ClInclude Include="include\Fontbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

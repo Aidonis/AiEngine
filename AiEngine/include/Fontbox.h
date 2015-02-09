@@ -7,7 +7,7 @@
 #include <vector>
 
 struct Char{
-	std::string Name;
+	std::string id;
 	float width, height;
 	float x0, x1, y0, y1;
 	float offset;
@@ -21,13 +21,16 @@ struct Font{
 
 class Fontbox{
 public:
+	static Fontbox& Instance();
+
 	void LoadFont(const char* a_FontSheet);
-	void DrawString();
+	void DrawString(std::string, glm::vec2 pos, float scale);
 
 private:
 
 	Fontbox();
 	~Fontbox();
+	void LoadStr(std::string str);
 
 	Sprite text;
 	Font fontAtlas;
@@ -35,6 +38,13 @@ private:
 	std::vector<Char> Drawlist;
 	int CharCount;
 	glm::vec2 f_uvScale;
+
+	GLuint PositionBuffer;
+	GLuint ColorBuffer;
+	GLuint UVBuffer;
+	GLuint MatrixBuffer;
+
+	static Fontbox* MInstance;
 };
 
 

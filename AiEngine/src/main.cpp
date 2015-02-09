@@ -8,6 +8,7 @@
 #include "Sprite.h"
 #include "Quad.h"
 #include "Animator.h"
+#include "Fontbox.h"
 #include <Windows.h>
 
 
@@ -21,7 +22,7 @@ int main()
 		return 1;
 	}
 
-	GLFWwindow * window = glfwCreateWindow(g_WIDTH, g_HEIGHT, "Hello Triangle", NULL, NULL);
+	GLFWwindow * window = glfwCreateWindow(g_WIDTH, g_HEIGHT, "I'm Gary Oak", NULL, NULL);
 
 	if (!window)
 	{
@@ -47,13 +48,17 @@ int main()
 	theTwin.LoadTexture("./assets/oakSprite.png");
 	theTwin.s_Animator.LoadSprites("./assets/oakSheet.xml");
 
+
+	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
+
 	int i = 0;
 	while (!glfwWindowShouldClose(window)){
 		glViewport(0, 0, g_WIDTH, g_HEIGHT);
-
+		glClearColor(.5f, .5f, .5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+		Fontbox::Instance().DrawString("Hello", glm::vec2(0, g_HEIGHT / 2), 2);
 
 		if (i < 3){
 			switch (i)
@@ -83,6 +88,7 @@ int main()
 
 		theTwin.Update(0.1f);
 		theSprite.Update(0.1f);
+
 		Sleep(150);
 
 		glfwSwapBuffers(window);
