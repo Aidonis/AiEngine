@@ -62,8 +62,8 @@ Sprite::Sprite(){
 }
 
 Sprite::~Sprite(){
-	//glBindBuffer(GL_ARRAY_BUFFER, s_UVO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, s_UVO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
 }
 
 void Sprite::SetUVData(){
@@ -76,10 +76,12 @@ void Sprite::SetUVData(){
 
 void Sprite::Update(float a_DeltaTime){
 
-	//s_Transform.viewTranslate = glm::translate(glm::mat4(), s_Position);
-	//s_Transform.modelScale = glm::scale(glm::mat4(), glm::vec3(s_Scale, 1));
-	//s_Transform.MVP = Ortho * s_Transform.viewTranslate * s_Transform.modelScale;
-	//s_Quad.q_MVP = s_Transform.MVP;
+	s_Transform.viewTranslate = glm::translate(glm::mat4(), s_Position);
+	s_Transform.modelScale = glm::scale(glm::mat4(), glm::vec3(s_Scale, 1));
+	s_Transform.viewRotateZ = glm::rotate(glm::mat4(), 0.0f, glm::vec3(0, 0, 1));
+	s_Transform.MVP = Ortho * s_Transform.viewTranslate * s_Transform.modelScale * s_Transform.viewRotateZ;
+	s_Quad.q_MVP = s_Transform.MVP;
+
 	s_Animator.SetUVData(s_UVData);
 	SetUVData();
 	Draw();

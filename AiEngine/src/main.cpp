@@ -44,12 +44,6 @@ int main()
 	theSprite.LoadTexture("./assets/oakSprite.png");
 	theSprite.s_Animator.LoadSprites("./assets/oakSheet.xml");
 
-
-	//std::cout << theSprite.s_Animator.m_UVData[0].x << std::endl;
-	//theSprite.s_Animator.SetSprite("front0");
-	//std::cout << theSprite.s_Animator.m_UVData[0].x << std::endl;
-	//theSprite.s_Animator.SetSprite("back2");
-	//std::cout << theSprite.s_Animator.m_UVData[0].x << std::endl;
 	int i = 0;
 	while (!glfwWindowShouldClose(window)){
 		glViewport(0, 0, g_WIDTH, g_HEIGHT);
@@ -74,16 +68,13 @@ int main()
 				i++;
 				i = 0;
 				break;
-			//case 3:
-			//	theSprite.s_Animator.SetSprite("left0");
-			//	i=0;
-			//	break;
 			}
 		}
 
+		theSprite.s_Position += glm::vec3(5, 0, 0);
+
 		theSprite.Update(0.1f);
 		Sleep(150);
-//		theSprite.SetUVData();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
