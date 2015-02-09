@@ -38,11 +38,14 @@ int main()
 
 	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
 
-	Quad theSquare;
 	Sprite theSprite;
 
 	theSprite.LoadTexture("./assets/oakSprite.png");
 	theSprite.s_Animator.LoadSprites("./assets/oakSheet.xml");
+
+	Sprite theTwin;
+	theTwin.LoadTexture("./assets/oakSprite.png");
+	theTwin.s_Animator.LoadSprites("./assets/oakSheet.xml");
 
 	int i = 0;
 	while (!glfwWindowShouldClose(window)){
@@ -57,22 +60,28 @@ int main()
 			{
 			case 0:
 				theSprite.s_Animator.SetSprite("left0");
+				theTwin.s_Animator.SetSprite("right0");
 				i++;
 				break;
 			case 1:
 				theSprite.s_Animator.SetSprite("left1");
+				theTwin.s_Animator.SetSprite("right1");
 				i++;
 				break;
 			case 2:
 				theSprite.s_Animator.SetSprite("left2");
+				theTwin.s_Animator.SetSprite("right2");
 				i++;
 				i = 0;
 				break;
 			}
 		}
 
-		theSprite.s_Position += glm::vec3(5, 0, 0);
 
+		theSprite.s_Position += glm::vec3(5, 0, 0);
+		theTwin.s_Position -= glm::vec3(5, 0, 0);
+
+		theTwin.Update(0.1f);
 		theSprite.Update(0.1f);
 		Sleep(150);
 

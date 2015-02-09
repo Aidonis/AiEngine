@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Animator.h" />
+    <ClInclude Include="include\Font.h" />
     <ClInclude Include="include\Framework.h" />
     <ClInclude Include="include\TextFileReader.h" />
     <ClInclude Include="include\ToolBox.h" />
