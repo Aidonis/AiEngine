@@ -7,27 +7,29 @@
 int main()
 {
 	//open an OS window using GLFW
-	if (!glfwInit())
-	{
-		fprintf(stderr, "ERROR: could not start GLFW3!\n");
-		return -1;
-	}
+	//if (!glfwInit())
+	//{
+	//	fprintf(stderr, "ERROR: could not start GLFW3!\n");
+	//	return -1;
+	//}
 
-	GLFWwindow * window = glfwCreateWindow(g_WIDTH, g_HEIGHT, "Gray Stff", NULL, NULL);
-	if (!window)
-	{
-		fprintf(stderr, "ERROR: could not open window with GLFW3!\n");
-		glfwTerminate();
-		return 1;
-	}
+	//GLFWwindow * windowHandle = glfwCreateWindow(g_WIDTH, g_HEIGHT, "Gray Stff", NULL, NULL);
+	//if (!windowHandle)
+	//{
+	//	fprintf(stderr, "ERROR: could not open window with GLFW3!\n");
+	//	glfwTerminate();
+	//	return 1;
+	//}
 
-	glfwMakeContextCurrent(window);
-	if (glewInit() != GLEW_OK)
-	{
-		//openGL didn't start shutdown GLFW and return error code
-		glfwTerminate();
-		return -1;
-	}
+	//glfwMakeContextCurrent(windowHandle);
+	//if (glewInit() != GLEW_OK)
+	//{
+	//	//openGL didn't start shutdown GLFW and return error code
+	//	glfwTerminate();
+	//	return -1;
+	//}
+
+	Initialize(g_WIDTH, g_HEIGHT, "The Gary Show");
 
 	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
 	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
@@ -42,7 +44,7 @@ int main()
 
 
 	int i = 0;
-	while (!glfwWindowShouldClose(window)){
+	while (!glfwWindowShouldClose(windowHandle)){
 		float dt = GetDeltaTime();
 		glViewport(0, 0, g_WIDTH, g_HEIGHT);
 		//glClearColor(.5f, .5f, .5f, 1.0f);
@@ -66,7 +68,6 @@ int main()
 			case 2:
 				theSprite.s_Animator.SetSprite("left2");
 				theTwin.s_Animator.SetSprite("right2");
-				i++;
 				i = 0;
 				break;
 			}
@@ -83,10 +84,10 @@ int main()
 
 		Sleep(150);
 
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(windowHandle);
 		glfwPollEvents();
-		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-			glfwSetWindowShouldClose(window, 1);
+		if (GLFW_PRESS == glfwGetKey(windowHandle, GLFW_KEY_ESCAPE)) {
+			glfwSetWindowShouldClose(windowHandle, 1);
 		}
 		ResetDeltaTime();
 	}

@@ -13,10 +13,6 @@ double GetDeltaTime()
 	return deltaTime;
 }
 
-void Initialize(){
-
-}
-
 void ResetDeltaTime()
 {
 
@@ -33,6 +29,9 @@ void ResetDeltaTime()
 
 }
 
+void Initialize(){
+
+}
 
 void Orthographic(float a_fLeft, float a_fRight, float a_fTop, float a_fBottom, float a_fNear, float a_fFar, glm::mat4 & mat)
 {
