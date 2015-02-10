@@ -10,7 +10,6 @@
 #include <iostream>
 
 GLFWwindow* windowHandle;
-GLuint shaderProgram;
 
 //Initialize new window
 int Initialize(int a_Width, int a_Height, const char* a_title){
@@ -60,8 +59,33 @@ bool FrameworkUpdate(){
 
 void ClearScreen(){
 	glViewport(0, 0, g_WIDTH, g_HEIGHT);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 0.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+
+std::vector<Sprite*> spriteList;
+unsigned int CreateSprite(){
+	Sprite* newSprite = new Sprite;
+
+	newSprite->s_Animator.LoadSprites("./assets/oakSheet.xml");
+	newSprite->LoadTexture(newSprite->s_Animator.atlas.sSheet.c_str());
+	newSprite->s_Animator.SetSprite("front0");
+	spriteList.push_back(newSprite);
+
+	return spriteList.size() - 1;
+}
+
+void MoveSprite(unsigned int a_SpriteID, float a_XPos, float a_YPos){
+	Sprite* list = spriteList[a_SpriteID];
+
+	list->s_Position = glm::vec3(g_WIDTH / 2, g_HEIGHT / 2, 1);
+}
+
+void DrawSprite(unsigned int a_SpriteID){
+	Sprite* sp = spriteList[a_SpriteID];
+
+	sp->Update(0.1f);
 }
 
 

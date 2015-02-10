@@ -18,12 +18,20 @@ int main(){
 	theTwin.LoadTexture("./assets/oakSprite.png");
 	theTwin.s_Animator.LoadSprites("./assets/oakSheet.xml");
 
+	int texID[10];
+
+	unsigned int gary = CreateSprite();
+
 	int i = 0;
 	do{
 		float dt = GetDeltaTime();
 		ClearScreen();
 
 		Fontbox::Instance().DrawString("Gary Things", glm::vec2((g_WIDTH/3) + 30, (g_HEIGHT / 5) * 3), 1);
+
+		MoveSprite(gary, 50, 50);
+		DrawSprite(gary);
+
 
 		if (i< 3){
 			switch (i){
@@ -48,8 +56,22 @@ int main(){
 		std::cout << dt << std::endl << std::endl;
 
 		glm::vec3 move(5, 0, 0);
+		if (IsKeyDown(GLFW_KEY_SPACE)){
+			move *= -1;
+		}
 		theSprite.s_Position += move;
 		theTwin.s_Position -= move;
+
+
+		glm::vec3 moveY(0, 5, 0);
+		if (IsKeyDown(GLFW_KEY_UP)){
+			theSprite.s_Position += moveY;
+			theTwin.s_Position -= moveY;
+		}
+		if (IsKeyDown(GLFW_KEY_DOWN)){
+			theSprite.s_Position += -moveY;
+			theTwin.s_Position -= -moveY;
+		}
 
 		theTwin.Update(0.1f);
 		theSprite.Update(0.1f);
