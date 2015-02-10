@@ -48,17 +48,16 @@ int main()
 	theTwin.LoadTexture("./assets/oakSprite.png");
 	theTwin.s_Animator.LoadSprites("./assets/oakSheet.xml");
 
-
 	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
 
 	int i = 0;
 	while (!glfwWindowShouldClose(window)){
 		glViewport(0, 0, g_WIDTH, g_HEIGHT);
-		glClearColor(.5f, .5f, .5f, 1.0f);
+		//glClearColor(.5f, .5f, .5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-		Fontbox::Instance().DrawString("Gary Things", glm::vec2(g_WIDTH/4 + 10, (g_HEIGHT / 5) * 3), 2);
+		Fontbox::Instance().DrawString("Gary Things", glm::vec2((g_WIDTH/3) + 30, (g_HEIGHT / 5) * 3), 1);
 
 		if (i < 3){
 			switch (i)
@@ -82,9 +81,9 @@ int main()
 			}
 		}
 
-
-		theSprite.s_Position += glm::vec3(5, 0, 0);
-		theTwin.s_Position -= glm::vec3(5, 0, 0);
+			glm::vec3 move(5, 0, 0);
+			theSprite.s_Position += move;
+			theTwin.s_Position -= move;
 
 		theTwin.Update(0.1f);
 		theSprite.Update(0.1f);
