@@ -82,7 +82,7 @@ unsigned int CreateSprite(const char* a_xmlSheet){
 
 void SetSprite(unsigned int a_SpriteID, const char* a_SpriteName){
 	Sprite* sp = spriteList[a_SpriteID];
-	sp->s_Animator.SetSprite("front0");
+	sp->s_Animator.SetSprite(a_SpriteName);
 }
 
 //Move sprite to given position

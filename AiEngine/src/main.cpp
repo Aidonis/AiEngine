@@ -23,27 +23,34 @@ int main(){
 		Fontbox::Instance().DrawString("Gary Things", glm::vec2((g_WIDTH/3) + 30, (g_HEIGHT / 5) * 3), 1);
 
 		fk.MoveSprite(gary, g_WIDTH/2, g_HEIGHT /2);
-		fk.MoveSprite(theSprite, g_WIDTH, g_HEIGHT / 2);
-		fk.MoveSprite(theTwin, g_WIDTH / 2, g_HEIGHT);
+		fk.MoveSprite(theSprite, g_WIDTH /2 + 50, g_HEIGHT / 2);
+		fk.MoveSprite(theTwin, g_WIDTH / 2 - 50, g_HEIGHT / 2);
 		
 		fk.DrawSprite(gary);
 
 
-		if (i< 3){
+		if (i< 4){
 			switch (i){
 			case 0:
 				fk.SetSprite(theSprite, "left0");
 				fk.SetSprite(theTwin, "right0");
+				fk.SetSprite(gary, "left0");
 				i++;
 				break;
 			case 1:
 				fk.SetSprite(theSprite, "left1");
 				fk.SetSprite(theTwin, "right1");
+				fk.SetSprite(gary, "right0");
 				i++;
 				break;
 			case 2:
 				fk.SetSprite(theSprite, "left2");
 				fk.SetSprite(theTwin, "right2");
+				fk.SetSprite(gary, "back0");
+				i++;
+				break;
+			case 3:
+				fk.SetSprite(gary, "front0");
 				i = 0;
 				break;
 			}
