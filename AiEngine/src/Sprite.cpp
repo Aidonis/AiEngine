@@ -83,7 +83,7 @@ void Sprite::Update(float a_DeltaTime){
 	s_Quad.q_MVP = s_Transform.MVP;
 
 	s_Animator.SetUVData(s_UVData);
-	SetUVData();
+	//SetUVData();
 	Draw();
 
 }
@@ -102,6 +102,7 @@ void Sprite::Draw(){
 	glBindTexture(GL_TEXTURE_2D, s_TexId);
 	glUniform1i(tex_Location, 0);
 	s_Quad.Draw();
+	SetUVData();
 }
 
 void Sprite::LoadTexture(const char* a_Texture){

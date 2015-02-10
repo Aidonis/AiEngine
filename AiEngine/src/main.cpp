@@ -58,7 +58,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-		Fontbox::Instance().DrawString("Hello", glm::vec2(0, g_HEIGHT / 2), 2);
+		Fontbox::Instance().DrawString("Gary Things", glm::vec2(g_WIDTH/4 + 10, (g_HEIGHT / 5) * 3), 2);
 
 		if (i < 3){
 			switch (i)

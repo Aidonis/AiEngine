@@ -91,7 +91,7 @@ void Fontbox::DrawString(std::string str, glm::vec2 pos, float scale){
 		ch = Drawlist[i];
 		if (i != 0){
 			newPos = text.s_Position.x + ((ch.width / 2)*scale) + ((Drawlist[i - 1].width / 2) *scale) + fontAtlas.kerning;
-			text.s_Position = glm::vec3(newPos, 238.0f, 0.f);
+			text.s_Position = glm::vec3(newPos, pos.y - (ch.offset*scale), 0.f);
 		}
 		else{
 			text.s_Position = glm::vec3(pos.x + ((ch.width / 2) * scale), pos.y - (ch.offset*scale), 0.f);
