@@ -32,15 +32,11 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
-
-	//start Glew
-	//glewExperimental = GLU_TRUE;
 	glewInit();
 
 	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
 
 	Sprite theSprite;
-
 	theSprite.LoadTexture("./assets/oakSprite.png");
 	theSprite.s_Animator.LoadSprites("./assets/oakSheet.xml");
 
@@ -49,17 +45,16 @@ int main()
 	theTwin.s_Animator.LoadSprites("./assets/oakSheet.xml");
 
 	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
-
 	int i = 0;
 	while (!glfwWindowShouldClose(window)){
+		float dt = GetDeltaTime();
 		glViewport(0, 0, g_WIDTH, g_HEIGHT);
 		//glClearColor(.5f, .5f, .5f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		ClearScreen();
 
 		Fontbox::Instance().DrawString("Gary Things", glm::vec2((g_WIDTH/3) + 30, (g_HEIGHT / 5) * 3), 1);
 
-		if (i < 3){
+		if (i< 3){
 			switch (i)
 			{
 			case 0:
@@ -81,6 +76,8 @@ int main()
 			}
 		}
 
+		std::cout << dt << std::endl << std::endl;
+
 			glm::vec3 move(5, 0, 0);
 			theSprite.s_Position += move;
 			theTwin.s_Position -= move;
@@ -92,5 +89,9 @@ int main()
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+		if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+			glfwSetWindowShouldClose(window, 1);
+		}
+		ResetDeltaTime();
 	}
 }

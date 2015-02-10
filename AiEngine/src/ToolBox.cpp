@@ -4,16 +4,16 @@
 glm::mat4 Ortho;
 int g_WIDTH = 640;
 int g_HEIGHT = 480;
-double deltaTime = 0;
 double fps, elapsedTime;
+double deltaTime = 0;
 int frames;
 
-double getDeltaTime()
+double GetDeltaTime()
 {
 	return deltaTime;
 }
 
-void resetDeltaTime()
+void ResetDeltaTime()
 {
 
 	deltaTime = glfwGetTime();
@@ -57,4 +57,8 @@ void Orthographic(float a_fLeft, float a_fRight, float a_fTop, float a_fBottom, 
 	mat[3].z = (-(a_fNear + a_fFar) / (a_fFar - a_fNear));
 	mat[3].w = 1.f;
 
+}
+
+void ClearScreen(){
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

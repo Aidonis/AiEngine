@@ -12,6 +12,7 @@ extern int g_WIDTH;
 extern int g_HEIGHT;
 extern double fps;
 
+
 struct Vertex{
 	glm::vec4 Pos;
 	glm::vec4 Color;
@@ -26,5 +27,11 @@ struct Transform{
 };
 
 void Orthographic(float a_fLeft, float a_fRight, float a_fTop, float a_fBottom, float a_fNear, float a_fFar, glm::mat4 & mat);
+
+double GetDeltaTime();
+
+void ResetDeltaTime();
+
+void ClearScreen();
 
 #endif //_TOOLBOX_H_

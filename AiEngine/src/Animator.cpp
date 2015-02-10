@@ -55,6 +55,8 @@ void Animator::LoadSprites(const char* a_SpriteSheet){
 	atlas.sSheet = childElement->Attribute("sheet");
 	atlas.sAnimations = childElement->Attribute("animations");
 
+	
+
 	for (childElement = currentNode->FirstChildElement();
 		childElement != NULL; childElement = childElement->NextSiblingElement())
 	{
