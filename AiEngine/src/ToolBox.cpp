@@ -13,6 +13,10 @@ double GetDeltaTime()
 	return deltaTime;
 }
 
+void Initialize(){
+
+}
+
 void ResetDeltaTime()
 {
 

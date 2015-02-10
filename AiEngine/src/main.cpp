@@ -1,29 +1,19 @@
 #define GLEW_STATIC
-#include "GL/glew.h"
 
-#include "GLFW/glfw3.h"
-#include <stdio.h>
-#include <iostream>
-
-#include "Sprite.h"
-#include "Quad.h"
-#include "Animator.h"
-#include "Fontbox.h"
+#include "Framework.h"
 #include <Windows.h>
 
 
 int main()
 {
 	//open an OS window using GLFW
-
 	if (!glfwInit())
 	{
 		fprintf(stderr, "ERROR: could not start GLFW3!\n");
-		return 1;
+		return -1;
 	}
 
-	GLFWwindow * window = glfwCreateWindow(g_WIDTH, g_HEIGHT, "I'm Gary Oak", NULL, NULL);
-
+	GLFWwindow * window = glfwCreateWindow(g_WIDTH, g_HEIGHT, "Gray Stff", NULL, NULL);
 	if (!window)
 	{
 		fprintf(stderr, "ERROR: could not open window with GLFW3!\n");
@@ -32,8 +22,14 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
-	glewInit();
+	if (glewInit() != GLEW_OK)
+	{
+		//openGL didn't start shutdown GLFW and return error code
+		glfwTerminate();
+		return -1;
+	}
 
+	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
 	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
 
 	Sprite theSprite;
@@ -44,7 +40,7 @@ int main()
 	theTwin.LoadTexture("./assets/oakSprite.png");
 	theTwin.s_Animator.LoadSprites("./assets/oakSheet.xml");
 
-	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
+
 	int i = 0;
 	while (!glfwWindowShouldClose(window)){
 		float dt = GetDeltaTime();

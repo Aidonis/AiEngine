@@ -34,4 +34,6 @@ void ResetDeltaTime();
 
 void ClearScreen();
 
+void Initialize();
+
 #endif //_TOOLBOX_H_
