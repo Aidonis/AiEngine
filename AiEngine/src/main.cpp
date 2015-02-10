@@ -4,31 +4,7 @@
 #include <Windows.h>
 
 
-int main()
-{
-	//open an OS window using GLFW
-	//if (!glfwInit())
-	//{
-	//	fprintf(stderr, "ERROR: could not start GLFW3!\n");
-	//	return -1;
-	//}
-
-	//GLFWwindow * windowHandle = glfwCreateWindow(g_WIDTH, g_HEIGHT, "Gray Stff", NULL, NULL);
-	//if (!windowHandle)
-	//{
-	//	fprintf(stderr, "ERROR: could not open window with GLFW3!\n");
-	//	glfwTerminate();
-	//	return 1;
-	//}
-
-	//glfwMakeContextCurrent(windowHandle);
-	//if (glewInit() != GLEW_OK)
-	//{
-	//	//openGL didn't start shutdown GLFW and return error code
-	//	glfwTerminate();
-	//	return -1;
-	//}
-
+int main(){
 	Initialize(g_WIDTH, g_HEIGHT, "The Gary Show");
 
 	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
@@ -42,9 +18,7 @@ int main()
 	theTwin.LoadTexture("./assets/oakSprite.png");
 	theTwin.s_Animator.LoadSprites("./assets/oakSheet.xml");
 
-
 	int i = 0;
-	/*while (!glfwWindowShouldClose(windowHandle)){*/
 	do{
 		float dt = GetDeltaTime();
 		ClearScreen();
@@ -52,8 +26,7 @@ int main()
 		Fontbox::Instance().DrawString("Gary Things", glm::vec2((g_WIDTH/3) + 30, (g_HEIGHT / 5) * 3), 1);
 
 		if (i< 3){
-			switch (i)
-			{
+			switch (i){
 			case 0:
 				theSprite.s_Animator.SetSprite("left0");
 				theTwin.s_Animator.SetSprite("right0");
@@ -74,9 +47,9 @@ int main()
 
 		std::cout << dt << std::endl << std::endl;
 
-			glm::vec3 move(5, 0, 0);
-			theSprite.s_Position += move;
-			theTwin.s_Position -= move;
+		glm::vec3 move(5, 0, 0);
+		theSprite.s_Position += move;
+		theTwin.s_Position -= move;
 
 		theTwin.Update(0.1f);
 		theSprite.Update(0.1f);
