@@ -49,6 +49,9 @@ bool FrameworkUpdate(){
 
 	glfwSwapBuffers(windowHandle);
 	glfwPollEvents();
+	if (GLFW_PRESS == glfwGetKey(windowHandle, GLFW_KEY_ESCAPE)) {
+		glfwSetWindowShouldClose(windowHandle, 1);
+	}
 	return true;
 }
 

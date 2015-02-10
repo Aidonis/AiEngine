@@ -44,7 +44,8 @@ int main()
 
 
 	int i = 0;
-	while (!glfwWindowShouldClose(windowHandle)){
+	/*while (!glfwWindowShouldClose(windowHandle)){*/
+	do{
 		float dt = GetDeltaTime();
 		glViewport(0, 0, g_WIDTH, g_HEIGHT);
 		//glClearColor(.5f, .5f, .5f, 1.0f);
@@ -83,12 +84,6 @@ int main()
 		theSprite.Update(0.1f);
 
 		Sleep(150);
-
-		glfwSwapBuffers(windowHandle);
-		glfwPollEvents();
-		if (GLFW_PRESS == glfwGetKey(windowHandle, GLFW_KEY_ESCAPE)) {
-			glfwSetWindowShouldClose(windowHandle, 1);
-		}
 		ResetDeltaTime();
-	}
+	} while (FrameworkUpdate());
 }
