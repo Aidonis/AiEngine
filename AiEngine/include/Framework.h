@@ -9,8 +9,9 @@
 #include <stdio.h>
 #include <iostream>
 
-GLFWwindow* windowHandle;
 
+class Framework{
+public:
 //Initialize new window
 int Initialize(int a_Width, int a_Height, const char* a_title){
 	//open an OS window using GLFW
@@ -57,6 +58,7 @@ bool FrameworkUpdate(){
 	return true;
 }
 
+//Clear screen to grey
 void ClearScreen(){
 	glViewport(0, 0, g_WIDTH, g_HEIGHT);
 	glClearColor(0.5f, 0.5f, 0.5f, 0.f);
@@ -64,11 +66,13 @@ void ClearScreen(){
 }
 
 
-std::vector<Sprite*> spriteList;
-unsigned int CreateSprite(){
+
+
+//Create sprite from given sprite name on given xmlsheet
+unsigned int CreateSprite(const char* a_xmlSheet){
 	Sprite* newSprite = new Sprite;
 
-	newSprite->s_Animator.LoadSprites("./assets/oakSheet.xml");
+	newSprite->s_Animator.LoadSprites(a_xmlSheet);
 	newSprite->LoadTexture(newSprite->s_Animator.atlas.sSheet.c_str());
 	newSprite->s_Animator.SetSprite("front0");
 	spriteList.push_back(newSprite);
@@ -76,18 +80,28 @@ unsigned int CreateSprite(){
 	return spriteList.size() - 1;
 }
 
+void SetSprite(unsigned int a_SpriteID, const char* a_SpriteName){
+	Sprite* sp = spriteList[a_SpriteID];
+	sp->s_Animator.SetSprite("front0");
+}
+
+//Move sprite to given position
 void MoveSprite(unsigned int a_SpriteID, float a_XPos, float a_YPos){
 	Sprite* list = spriteList[a_SpriteID];
 
-	list->s_Position = glm::vec3(g_WIDTH / 2, g_HEIGHT / 2, 1);
+	list->s_Position = glm::vec3(a_XPos, a_YPos, 1);
 }
 
+//Draw the given sprite
 void DrawSprite(unsigned int a_SpriteID){
 	Sprite* sp = spriteList[a_SpriteID];
 
 	sp->Update(0.1f);
 }
 
-
+private:
+	std::vector<Sprite*> spriteList;
+	GLFWwindow* windowHandle;
+};
 
 #endif //_FRAMEWORK_H_
