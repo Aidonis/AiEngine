@@ -61,7 +61,3 @@ void Orthographic(float a_fLeft, float a_fRight, float a_fTop, float a_fBottom, 
 	mat[3].w = 1.f;
 
 }
-
-void ClearScreen(){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}

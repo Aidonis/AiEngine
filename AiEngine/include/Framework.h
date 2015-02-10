@@ -4,20 +4,17 @@
 #include "GL/glew.h"
 
 #include "GLFW/glfw3.h"
+#include "Sprite.h"
+#include "Fontbox.h"
 #include <stdio.h>
 #include <iostream>
-
-#include "Sprite.h"
-#include "Quad.h"
-#include "Animator.h"
-#include "Fontbox.h"
 
 GLFWwindow* windowHandle;
 GLuint shaderProgram;
 
+//Initialize new window
 int Initialize(int a_Width, int a_Height, const char* a_title){
 	//open an OS window using GLFW
-
 	if (!glfwInit())
 	{
 		fprintf(stderr, "ERROR: could not start GLFW3!\n");
@@ -53,6 +50,12 @@ bool FrameworkUpdate(){
 		glfwSetWindowShouldClose(windowHandle, 1);
 	}
 	return true;
+}
+
+void ClearScreen(){
+	glViewport(0, 0, g_WIDTH, g_HEIGHT);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 #endif //_FRAMEWORK_H_

@@ -47,8 +47,6 @@ int main()
 	/*while (!glfwWindowShouldClose(windowHandle)){*/
 	do{
 		float dt = GetDeltaTime();
-		glViewport(0, 0, g_WIDTH, g_HEIGHT);
-		//glClearColor(.5f, .5f, .5f, 1.0f);
 		ClearScreen();
 
 		Fontbox::Instance().DrawString("Gary Things", glm::vec2((g_WIDTH/3) + 30, (g_HEIGHT / 5) * 3), 1);
