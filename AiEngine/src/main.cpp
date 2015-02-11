@@ -29,20 +29,19 @@ int main(){
 		float dt = GetDeltaTime() * 10;
 		timer += dt;
 		fk.ClearScreen();
+		fk.GetMouseLocation(mouseX, mouseY);
 
 		Fontbox::Instance().DrawString("Gary Things", glm::vec2((g_WIDTH/3) + 30, (g_HEIGHT / 5) * 3), 1);
 
-		fk.GetMouseLocation(mouseX, mouseY);
-
 		fk.MoveSprite(gary,centerScreen);
 		fk.MoveSprite(theSprite, g_WIDTH /2 + 50, g_HEIGHT / 2);
+	
 		if (fk.GetMouseButtonDown(GLFW_MOUSE_BUTTON_2)){
 			mousePos = glm::vec2(mouseX, g_HEIGHT - mouseY);
 			startLerp = true;
 		}
-		std::cout << mousePos.x << " " << mousePos.y << std::endl;
 
-		if (timer > 1.f){
+		if (timer > 1.5f){
 			if (startLerp){
 				if (percent < 1.f){
 					fk.LerpSprite(theTwin, mousePos, percent);
@@ -82,9 +81,6 @@ int main(){
 			}
 			timer = 0;
 		}
-		std::cout << dt << std::endl << std::endl;
-
-
 
 		fk.DrawSprite(theSprite);
 		fk.DrawSprite(theTwin);
