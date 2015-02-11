@@ -38,15 +38,6 @@ int Initialize(int a_Width, int a_Height, const char* a_title){
 
 }
 
-//Key Handeling
-bool IsKeyDown(int a_Key){
-	if (GLFW_PRESS == glfwGetKey(windowHandle, a_Key)) {
-		return true;
-}	
-	else
-		return false;
-}
-
 bool FrameworkUpdate(){
 	if (glfwWindowShouldClose(windowHandle)){
 		return false;
@@ -107,9 +98,26 @@ void DrawSprite(unsigned int a_SpriteID){
 	sp->Update(0.1f);
 }
 
+//Key Handeling
+bool IsKeyDown(int a_Key){
+	if (GLFW_PRESS == glfwGetKey(windowHandle, a_Key)) {
+		return true;
+	}
+	else
+		return false;
+}
+
 //Get Mouse Position
 void GetMouseLocation(double& a_mouseX, double& a_mouseY){
 	glfwGetCursorPos(windowHandle, &a_mouseX, &a_mouseY);
+}
+
+bool GetMouseButtonDown(int a_MouseButton){
+	if (GLFW_PRESS == glfwGetMouseButton(windowHandle, a_MouseButton)){
+		return true;
+	}
+	else
+		return false;
 }
 
 //Lerp Sprite
