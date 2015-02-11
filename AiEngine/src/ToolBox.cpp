@@ -59,5 +59,9 @@ void Orthographic(float a_fLeft, float a_fRight, float a_fTop, float a_fBottom, 
 	mat[3].y = ((a_fBottom + a_fTop) / (a_fBottom - a_fTop));
 	mat[3].z = (-(a_fNear + a_fFar) / (a_fFar - a_fNear));
 	mat[3].w = 1.f;
+}
 
+//Math stuff
+glm::vec2 Lerp(glm::vec2 a_start, glm::vec2 a_end, float a_percent){
+	return (a_start + (a_end - a_start) * a_percent);
 }

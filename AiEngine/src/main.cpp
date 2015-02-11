@@ -18,6 +18,10 @@ int main(){
 
 	int i = 0;
 	float timer = 0;
+
+	double mouseX = 0;
+	double mouseY = 0;
+
 	do{
 		float dt = GetDeltaTime() * 10;
 		timer += dt;
@@ -25,9 +29,15 @@ int main(){
 
 		Fontbox::Instance().DrawString("Gary Things", glm::vec2((g_WIDTH/3) + 30, (g_HEIGHT / 5) * 3), 1);
 
+		fk.GetMouseLocation(mouseX, mouseY);
+		glm::vec2 mousePos = glm::vec2(mouseX, mouseY);
+		std::cout << mousePos.x << " " << mousePos.y << std::endl;
+
+
 		fk.MoveSprite(gary,centerScreen);
 		fk.MoveSprite(theSprite, g_WIDTH /2 + 50, g_HEIGHT / 2);
-		fk.MoveSprite(theTwin, g_WIDTH / 2 - 50, g_HEIGHT / 2);
+		fk.LerpSprite(theTwin, mousePos, .1);
+
 
 		if (timer > 1.f){
 			if (i < 4){
@@ -61,25 +71,7 @@ int main(){
 		}
 		std::cout << dt << std::endl << std::endl;
 
-		//glm::vec3 move(5, 0, 0);
-		//if (fk.IsKeyDown(GLFW_KEY_SPACE)){
-		//	move *= -1;
-		//}
-		//theSprite.s_Position += move;
-		//theTwin.s_Position -= move;
 
-		//glm::vec3 moveY(0, 5, 0);
-		//if (fk.IsKeyDown(GLFW_KEY_UP)){
-		//	theSprite.s_Position += moveY;
-		//	theTwin.s_Position -= moveY;
-		//}
-		//if (fk.IsKeyDown(GLFW_KEY_DOWN)){
-		//	theSprite.s_Position += -moveY;
-		//	theTwin.s_Position -= -moveY;
-		//}
-
-		//theTwin.Update(0.1f);
-		//theSprite.Update(0.1f);
 
 		fk.DrawSprite(theSprite);
 		fk.DrawSprite(theTwin);

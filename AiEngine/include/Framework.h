@@ -12,6 +12,8 @@
 
 class Framework{
 public:
+	float mouseX, mouseY;
+
 //Initialize new window
 int Initialize(int a_Width, int a_Height, const char* a_title){
 	//open an OS window using GLFW
@@ -104,22 +106,19 @@ void DrawSprite(unsigned int a_SpriteID){
 
 	sp->Update(0.1f);
 }
-//
-//void update_fps_counter(){
-//	static double previous_seconds = glfwGetTime();
-//	static int frame_count;
-//	double current_seconds = glfwGetTime();
-//	double elapsed_seconds = current_seconds - previous_seconds;
-//	if (elapsed_seconds > 0.25) {
-//		previous_seconds = current_seconds;
-//		double fps = (double)frame_count / elapsed_seconds;
-//		char tmp[128];
-//		sprintf_s(tmp, "opengl @ fps: %.2lf", fps);
-//		glfwSetWindowTitle(windowHandle, tmp);
-//		frame_count = 0;
-//	}
-//	frame_count++;
-//}
+
+//Get Mouse Position
+void GetMouseLocation(double& a_mouseX, double& a_mouseY){
+	glfwGetCursorPos(windowHandle, &a_mouseX, &a_mouseY);
+}
+
+//Lerp Sprite
+void LerpSprite(unsigned int a_SpriteID, glm::vec2 a_NewPosition, float a_percent){
+	Sprite* sp = spriteList[a_SpriteID];
+	glm::vec2 spPos = glm::vec2(sp->s_Position.x, sp->s_Position.y);
+	glm::vec2 newVector = Lerp(spPos, a_NewPosition, a_percent);
+	sp->s_Position = glm::vec3(newVector, 1);
+}
 
 private:
 	std::vector<Sprite*> spriteList;
