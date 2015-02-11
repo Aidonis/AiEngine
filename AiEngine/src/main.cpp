@@ -1,9 +1,10 @@
 #define GLEW_STATIC
 
 #include "Framework.h"
-#include <Windows.h>
 
 Framework fk;
+glm::vec2 centerScreen = glm::vec2(g_WIDTH / 2, g_HEIGHT / 2);
+
 
 int main(){
 	fk.Initialize(g_WIDTH, g_HEIGHT, "The Gary Show");
@@ -16,46 +17,48 @@ int main(){
 	unsigned int gary = fk.CreateSprite("./assets/oakSheet.xml");
 
 	int i = 0;
+	float timer = 0;
 	do{
-		float dt = GetDeltaTime();
+		float dt = GetDeltaTime() * 10;
+		timer += dt;
 		fk.ClearScreen();
 
 		Fontbox::Instance().DrawString("Gary Things", glm::vec2((g_WIDTH/3) + 30, (g_HEIGHT / 5) * 3), 1);
 
-		fk.MoveSprite(gary, g_WIDTH/2, g_HEIGHT /2);
+		fk.MoveSprite(gary,centerScreen);
 		fk.MoveSprite(theSprite, g_WIDTH /2 + 50, g_HEIGHT / 2);
 		fk.MoveSprite(theTwin, g_WIDTH / 2 - 50, g_HEIGHT / 2);
-		
-		fk.DrawSprite(gary);
 
-
-		if (i< 4){
-			switch (i){
-			case 0:
-				fk.SetSprite(theSprite, "left0");
-				fk.SetSprite(theTwin, "right0");
-				fk.SetSprite(gary, "left0");
-				i++;
-				break;
-			case 1:
-				fk.SetSprite(theSprite, "left1");
-				fk.SetSprite(theTwin, "right1");
-				fk.SetSprite(gary, "right0");
-				i++;
-				break;
-			case 2:
-				fk.SetSprite(theSprite, "left2");
-				fk.SetSprite(theTwin, "right2");
-				fk.SetSprite(gary, "back0");
-				i++;
-				break;
-			case 3:
-				fk.SetSprite(gary, "front0");
-				i = 0;
-				break;
+		if (timer > 1.f){
+			if (i < 4){
+				switch (i){
+				case 0:
+					fk.SetSprite(theSprite, "left0");
+					fk.SetSprite(theTwin, "right0");
+					fk.SetSprite(gary, "left0");
+					i++;
+					break;
+				case 1:
+					fk.SetSprite(theSprite, "left1");
+					fk.SetSprite(theTwin, "right1");
+					fk.SetSprite(gary, "right0");
+					i++;
+					break;
+				case 2:
+					fk.SetSprite(theSprite, "left2");
+					fk.SetSprite(theTwin, "right2");
+					fk.SetSprite(gary, "back0");
+					i++;
+					break;
+				case 3:
+					fk.SetSprite(gary, "front0");
+					i = 0;
+					break;
+				}
+				centerScreen -= glm::vec2(0, 1);
 			}
+			timer = 0;
 		}
-
 		std::cout << dt << std::endl << std::endl;
 
 		//glm::vec3 move(5, 0, 0);
@@ -64,7 +67,6 @@ int main(){
 		//}
 		//theSprite.s_Position += move;
 		//theTwin.s_Position -= move;
-
 
 		//glm::vec3 moveY(0, 5, 0);
 		//if (fk.IsKeyDown(GLFW_KEY_UP)){
@@ -78,11 +80,11 @@ int main(){
 
 		//theTwin.Update(0.1f);
 		//theSprite.Update(0.1f);
+
 		fk.DrawSprite(theSprite);
 		fk.DrawSprite(theTwin);
 		fk.DrawSprite(gary);
 
-		Sleep(150);
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());
 }

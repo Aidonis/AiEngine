@@ -91,6 +91,12 @@ void MoveSprite(unsigned int a_SpriteID, float a_XPos, float a_YPos){
 
 	list->s_Position = glm::vec3(a_XPos, a_YPos, 1);
 }
+//Move sprite to given vec2 position
+void MoveSprite(unsigned int a_SpriteID, glm::vec2 a_Pos){
+	Sprite* list = spriteList[a_SpriteID];
+
+	list->s_Position = glm::vec3(a_Pos, 1);
+}
 
 //Draw the given sprite
 void DrawSprite(unsigned int a_SpriteID){
@@ -98,6 +104,22 @@ void DrawSprite(unsigned int a_SpriteID){
 
 	sp->Update(0.1f);
 }
+//
+//void update_fps_counter(){
+//	static double previous_seconds = glfwGetTime();
+//	static int frame_count;
+//	double current_seconds = glfwGetTime();
+//	double elapsed_seconds = current_seconds - previous_seconds;
+//	if (elapsed_seconds > 0.25) {
+//		previous_seconds = current_seconds;
+//		double fps = (double)frame_count / elapsed_seconds;
+//		char tmp[128];
+//		sprintf_s(tmp, "opengl @ fps: %.2lf", fps);
+//		glfwSetWindowTitle(windowHandle, tmp);
+//		frame_count = 0;
+//	}
+//	frame_count++;
+//}
 
 private:
 	std::vector<Sprite*> spriteList;
