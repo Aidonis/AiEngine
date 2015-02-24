@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas width= "96" height="128" sheet="./assets/RPGpack_sheet.png" animations="./assets/oakAnimations.xml">
+
+<sprite name = "grass" x0 = "64.0f" x1 = "64.0f" y0 ="128.0f" y1 ="128.0f"/>
+
+</atlas>
