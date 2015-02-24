@@ -74,6 +74,7 @@
   <ItemGroup>
     <ClCompile Include="src\Animator.cpp" />
     <ClCompile Include="src\Fontbox.cpp" />
+    <ClCompile Include="src\Graph.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Quad.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="include\Animator.h" />
     <ClInclude Include="include\Fontbox.h" />
     <ClInclude Include="include\Framework.h" />
+    <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\TextFileReader.h" />
     <ClInclude Include="include\ToolBox.h" />
     <ClInclude Include="include\Quad.h" />
