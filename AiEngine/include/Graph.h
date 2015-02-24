@@ -6,21 +6,17 @@
 #include <stack>
 #include <queue>
 #include <list>
-
+#include "Framework.h"
 
 struct Edge;
 
 typedef std::vector<Edge> EdgeList;
 
-struct Vec2{
-	float x, y;
-};
-
 class GraphNode
 {
 public:
 	GraphNode(int a_x, int a_y);
-	Vec2 pos;
+	glm::vec2 pos;
 
 	bool visited;
 	
