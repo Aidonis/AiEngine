@@ -19,7 +19,7 @@ int main(){
 	unsigned int grass = fk.CreateSprite("./assets/pack_sheet.xml");
 	//unsigned int water = fk.CreateSprite("./assets/pack_sheet.xml");
 
-	graph.SearchDFS(graph.nodes[2], graph.nodes[12]);
+	graph.SearchDFS(graph.nodes[24], graph.nodes[23]);
 
 	//dt variable
 	float timer = 0;
@@ -36,14 +36,12 @@ int main(){
 	glm::vec2 gridStart = glm::vec2((graph.nodes[0]->pos.x + 1) * 64, (graph.nodes[0]->pos.y + 1) * 64);
 	glm::vec2 gridCurrent = gridStart;
 
-	//Store Sprite Positions the lame way
-	for (int row = 0; row < 5; row++){
-		for (int col = 0; col < 5; col++){
-			spritePositionList.push_back(gridCurrent);
-			gridCurrent.x += 55;
+	//OutPut currently visited nodes
+	std::cout << "What has been visted!" << std::endl;
+	for (int i = 0; i < graph.nodes.size(); i++){
+		if (graph.nodes[i]->visited == true){
+			std::cout << "(" << graph.nodes[i]->pos.x << "," << graph.nodes[i]->pos.y << ")" << std::endl;
 		}
-		gridCurrent.x = gridStart.x;
-		gridCurrent.y += 55;
 	}
 
 	do{
@@ -57,9 +55,9 @@ int main(){
 		}
 
 		//Draw Grid
-		graph.nodes[0]->pos = centerScreen;
-		graph.nodes[0]->Draw();
-
+		for (int i = 0; i < 25; i++){
+			graph.nodes[i]->Draw();
+		}
 
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());

@@ -47,13 +47,16 @@ void GraphNode::Draw(){
 
 //Graph
 Graph::Graph(unsigned int a_size){
+
 	unsigned int ID = fk.CreateSprite("./assets/pack_sheet.xml");
+	//Assign Nodes
 	for (unsigned int r = 0; r < a_size; r++) {
 		for (unsigned int c = 0; c < a_size; c++) {
-			nodes.push_back(new GraphNode(r, c));
+			//Set Position //TODO: No magic numbers
+			nodes.push_back(new GraphNode((r*64) + 30, (c *64) +30));
 		}
 	}
-	// < v > ^
+	//Assign Edges < v > ^
 	for (unsigned int r = 0; r < a_size; r++) {
 		for (unsigned int c = 0; c < a_size; c++) {
 			if (c > 0) {
@@ -97,10 +100,10 @@ bool Graph::SearchDFS(GraphNode* a_Start, GraphNode* a_End){
 		GraphNode* current = NodeStack.top();
 		NodeStack.pop();
 		if (current->visited == true){
-			current->spriteName = "water";
 			continue;
 		}
 		current->visited = true;
+		current->spriteName = "water";
 
 		if (current == a_End){
 			return true;
