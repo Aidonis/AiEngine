@@ -1,5 +1,6 @@
+#include "Framework.h"
 #include "Graph.h"
-//#include "Tile.h"
+
 Framework fk;
 
 glm::vec2 centerScreen = glm::vec2(g_WIDTH / 2, g_HEIGHT / 2);
@@ -13,11 +14,13 @@ int main(){
 	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
 	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
 	
-	Graph graph(2);
+	
 
 	//Create Grass Sprite
 	unsigned int grass = fk.CreateSprite("./assets/pack_sheet.xml");
 	//unsigned int Water = fk.CreateSprite("./assets/pack_sheet.xml");
+
+	Graph graph(2, grass);
 
 	graph.SearchDFS(graph.nodes[0], graph.nodes[1]);
 
@@ -55,10 +58,9 @@ int main(){
 		}
 
 		////Draw Grid
-		for (int i = 0; i < 4; i++)
+		/*for (int i = 0; i < 4; i++)
 		{
-			graph.nodes[i]->Draw();
-		}
+		}*/
 		fk.SetSprite(grass, "water");
 		fk.MoveSprite(grass, centerScreen.x, centerScreen.y);
 		fk.DrawSprite(grass);

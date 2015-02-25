@@ -39,16 +39,16 @@ void GraphNode::ResetVisit(){
 
 }
 
-void GraphNode::Draw(){
-	fk.SetSprite(spriteID, spriteName);
-	fk.MoveSprite(spriteID, pos);
-	fk.DrawSprite(spriteID);
-}
+//void GraphNode::Draw(){
+//	fk.SetSprite(spriteID, spriteName);
+//	fk.MoveSprite(spriteID, pos);
+//	fk.DrawSprite(spriteID);
+//}
 
 //Graph
-Graph::Graph(unsigned int a_size){
+Graph::Graph(unsigned int a_size, unsigned int a_spriteID){
 
-	unsigned int ID = fk.CreateSprite("./assets/pack_sheet.xml");
+	//unsigned int ID = fk.CreateSprite("./assets/pack_sheet.xml");
 	//Assign Nodes
 	for (unsigned int r = 0; r < a_size; r++) {
 		for (unsigned int c = 0; c < a_size; c++) {
@@ -76,7 +76,7 @@ Graph::Graph(unsigned int a_size){
 	//Assign Sprite Info
 	for (unsigned int r = 0; r < a_size; r++) {
 		for (unsigned int c = 0; c < a_size; c++) {
-			nodes[(r*a_size) + c]->spriteID = ID;
+			nodes[(r*a_size) + c]->spriteID = a_spriteID;
 			nodes[(r*a_size) + c]->spriteName = "grass";
 		}
 	}

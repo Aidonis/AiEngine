@@ -6,7 +6,8 @@
 #include <stack>
 #include <queue>
 #include <list>
-#include "Framework.h"
+#include "glm\glm.hpp"
+//#include "Framework.h"
 
 
 struct Edge;
@@ -36,7 +37,7 @@ public:
 	char* spriteName;
 	
 	//Draw
-	void Draw();
+	//void Draw();
 
 };
 
@@ -56,7 +57,7 @@ typedef std::vector<GraphNode*>NodeList;
 class Graph{
 public:
 	Graph();
-	Graph(unsigned int a_size);
+	Graph(unsigned int a_size, unsigned int a_spriteID);
 
 	//static GraphNode * goal;
 
@@ -69,7 +70,6 @@ public:
 	bool SearchDFS(GraphNode* a_Start, GraphNode* a_End);
 	bool SearchBFS(GraphNode* a_Start, GraphNode* a_End);
 	bool SearchDJK(GraphNode* a_Start, GraphNode* a_End);
-
 
 private:
 
