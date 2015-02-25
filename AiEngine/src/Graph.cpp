@@ -53,10 +53,10 @@ Graph::Graph(unsigned int a_size){
 	for (unsigned int r = 0; r < a_size; r++) {
 		for (unsigned int c = 0; c < a_size; c++) {
 			//Set Position //TODO: No magic numbers
-			nodes.push_back(new GraphNode((r*64) + 30, (c *64) +30));
+			nodes.push_back(new GraphNode((c*64) + 30, (r *64) +30));
 		}
 	}
-	//Assign Edges < v > ^
+	//Assign Edges < ^ > v
 	for (unsigned int r = 0; r < a_size; r++) {
 		for (unsigned int c = 0; c < a_size; c++) {
 			if (c > 0) {

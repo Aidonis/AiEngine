@@ -13,13 +13,13 @@ int main(){
 	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
 	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
 	
-	Graph graph(5);
+	Graph graph(2);
 
 	//Create Grass Sprite
 	unsigned int grass = fk.CreateSprite("./assets/pack_sheet.xml");
-	//unsigned int water = fk.CreateSprite("./assets/pack_sheet.xml");
+	//unsigned int Water = fk.CreateSprite("./assets/pack_sheet.xml");
 
-	graph.SearchDFS(graph.nodes[24], graph.nodes[23]);
+	graph.SearchDFS(graph.nodes[0], graph.nodes[1]);
 
 	//dt variable
 	float timer = 0;
@@ -54,11 +54,26 @@ int main(){
 			mousePos = glm::vec2(mouseX, g_HEIGHT - mouseY);
 		}
 
-		//Draw Grid
-		for (int i = 0; i < 25; i++){
+		////Draw Grid
+		for (int i = 0; i < 4; i++)
+		{
 			graph.nodes[i]->Draw();
 		}
+		fk.SetSprite(grass, "water");
+		fk.MoveSprite(grass, centerScreen.x, centerScreen.y);
+		fk.DrawSprite(grass);
 
+		fk.SetSprite(grass, "water");
+		fk.MoveSprite(grass, centerScreen.x + 100, centerScreen.y);
+		fk.DrawSprite(grass);
+
+		fk.SetSprite(grass, "grass");
+		fk.MoveSprite(grass, centerScreen.x, centerScreen.y + 100);
+		fk.DrawSprite(grass);
+
+		fk.SetSprite(grass, "grass");
+		fk.MoveSprite(grass, centerScreen.x + 100, centerScreen.y + 100);
+		fk.DrawSprite(grass);
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());
 }
