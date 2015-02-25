@@ -8,6 +8,7 @@
 #include <list>
 #include "Framework.h"
 
+
 struct Edge;
 
 typedef std::vector<Edge> EdgeList;
@@ -29,6 +30,14 @@ public:
 	EdgeList edges;
 	void AddEdge(GraphNode* a_node);
 	void RemoveEdge(GraphNode* a_node);
+
+	//Texture Info
+	unsigned int spriteID;
+	char* spriteName;
+	
+	//Draw
+	void Draw();
+
 };
 
 bool NodeCompare(const GraphNode* a_left, const GraphNode* a_Right);

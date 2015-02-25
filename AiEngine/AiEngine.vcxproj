@@ -86,6 +86,7 @@
     <ClInclude Include="include\Framework.h" />
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\TextFileReader.h" />
+    <ClInclude Include="include\Tile.h" />
     <ClInclude Include="include\ToolBox.h" />
     <ClInclude Include="include\Quad.h" />
     <ClInclude Include="include\Sprite.h" />

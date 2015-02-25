@@ -2,5 +2,6 @@
 <atlas width= "1280" height="832" sheet="./assets/RPGpack_sheet.png" animations="./assets/pack_sheetAnimation">
 
 <sprite name = "grass" x0 = "64.0f" x1 = "128.0f" y0 ="64.0f" y1 ="128.0f"/>
+<sprite name = "water" x0 = "704.0f" x1 = "768.0f" y0 ="64.0f" y1 ="128.0f"/>
 
 </atlas>

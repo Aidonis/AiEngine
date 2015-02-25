@@ -133,4 +133,6 @@ private:
 	GLFWwindow* windowHandle;
 };
 
+extern Framework fk;
+
 #endif //_FRAMEWORK_H_

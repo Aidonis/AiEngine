@@ -8,6 +8,8 @@ GraphNode::GraphNode(int a_x, int a_y){
 	weight = 0;
 	previousNode = NULL;
 	weight = INFINITY;
+	spriteID = NULL;
+	spriteName = NULL;
 }
 
 void GraphNode::AddEdge(GraphNode * a_node){
@@ -37,8 +39,15 @@ void GraphNode::ResetVisit(){
 
 }
 
+void GraphNode::Draw(){
+	fk.SetSprite(spriteID, spriteName);
+	fk.MoveSprite(spriteID, pos);
+	fk.DrawSprite(spriteID);
+}
+
 //Graph
 Graph::Graph(unsigned int a_size){
+	unsigned int ID = fk.CreateSprite("./assets/pack_sheet.xml");
 	for (unsigned int r = 0; r < a_size; r++) {
 		for (unsigned int c = 0; c < a_size; c++) {
 			nodes.push_back(new GraphNode(r, c));
@@ -61,6 +70,13 @@ Graph::Graph(unsigned int a_size){
 			}
 		}
 	}
+	//Assign Sprite Info
+	for (unsigned int r = 0; r < a_size; r++) {
+		for (unsigned int c = 0; c < a_size; c++) {
+			nodes[(r*a_size) + c]->spriteID = ID;
+			nodes[(r*a_size) + c]->spriteName = "grass";
+		}
+	}
 }
 
 void Graph::AddNode(GraphNode* a_node){
@@ -81,9 +97,9 @@ bool Graph::SearchDFS(GraphNode* a_Start, GraphNode* a_End){
 		GraphNode* current = NodeStack.top();
 		NodeStack.pop();
 		if (current->visited == true){
+			current->spriteName = "water";
 			continue;
 		}
-
 		current->visited = true;
 
 		if (current == a_End){
