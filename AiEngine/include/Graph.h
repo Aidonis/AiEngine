@@ -41,8 +41,6 @@ public:
 
 };
 
-bool NodeCompare(const GraphNode* a_left, const GraphNode* a_Right);
-
 bool Neighbors(GraphNode* a_nodeA, GraphNode* a_nodeB);
 
 struct Edge{
@@ -60,7 +58,7 @@ public:
 	Graph(unsigned int a_size, unsigned int a_spriteID);
 	Graph(unsigned int a_size, unsigned int a_spriteID, char* a_spriteName);
 
-	//static GraphNode * goal;
+	static GraphNode * goal;
 
 	void AddNode(GraphNode* a_Node);
 	void RemoveNode(GraphNode* a_Node);
@@ -70,10 +68,15 @@ public:
 
 	bool SearchDFS(GraphNode* a_Start, GraphNode* a_End);
 	bool SearchBFS(GraphNode* a_Start, GraphNode* a_End);
-	bool SearchDJK(GraphNode* a_Start, GraphNode* a_End);
+	bool SearchDJK(GraphNode* a_Start, GraphNode* a_End, bool(*heuFunc)(const GraphNode*, const GraphNode*));
 
 private:
 
 };
 
+bool NodeCompare(const GraphNode* a_left, const GraphNode* a_Right);
+
+bool StraightLine(const GraphNode * a_left, const GraphNode * a_right);
+
+bool Manhattan(const GraphNode * left, const GraphNode * right);
 #endif //_GRAPH_H_

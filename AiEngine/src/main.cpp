@@ -21,9 +21,11 @@ int main(){
 	unsigned int wTile = fk.CreateSprite("./assets/pack_sheet.xml", "water");
 	//unsigned int Water = fk.CreateSprite("./assets/pack_sheet.xml");
 
-	Graph graph(3, gTile, "grass");
+	Graph graph(5, gTile, "grass");
 
-	//graph.SearchDFS(graph.nodes[0], graph.nodes[1]);
+	graph.SearchDJK(graph.nodes[0], graph.nodes[4], Manhattan);
+
+	//graph.SearchDFS(graph.nodes[0], graph.nodes[7]);
 
 	//dt variable
 	float timer = 0;
@@ -56,8 +58,11 @@ int main(){
 		}
 
 		////Draw Grid
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 25; i++)
 		{
+			if (graph.nodes[i]->visited){
+				graph.nodes[i]->spriteID = wTile;
+			}
 			fk.MoveSprite(graph.nodes[i]->spriteID, graph.nodes[i]->pos);
 			fk.DrawSprite(graph.nodes[i]->spriteID);
 		}

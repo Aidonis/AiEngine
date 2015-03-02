@@ -7,10 +7,12 @@ GraphNode::GraphNode(int a_x, int a_y){
 	visited = false;
 	weight = 0;
 	previousNode = NULL;
-	weight = INFINITY;
+	weight = INT_MAX;
 	spriteID = NULL;
 	spriteName = NULL;
 }
+
+GraphNode * Graph::goal = NULL;
 
 void GraphNode::AddEdge(GraphNode * a_node){
 	Edge newEdge;
@@ -38,12 +40,6 @@ void GraphNode::ResetVisit(){
 	weight = INFINITY;
 
 }
-
-//void GraphNode::Draw(){
-//	fk.SetSprite(spriteID, spriteName);
-//	fk.MoveSprite(spriteID, pos);
-//	fk.DrawSprite(spriteID);
-//}
 
 //Graph
 Graph::Graph(unsigned int a_size, unsigned int a_spriteID){
@@ -139,7 +135,6 @@ bool Graph::SearchDFS(GraphNode* a_Start, GraphNode* a_End){
 			continue;
 		}
 		current->visited = true;
-		current->spriteName = "water";
 
 		if (current == a_End){
 			return true;
@@ -164,6 +159,7 @@ bool Graph::SearchBFS(GraphNode* a_Start, GraphNode* a_End){
 			continue;
 		}
 		current->visited = true;
+
 		if (current == a_End){
 			return true;
 		}
@@ -174,7 +170,7 @@ bool Graph::SearchBFS(GraphNode* a_Start, GraphNode* a_End){
 	return false;
 }
 
-bool Graph::SearchDJK(GraphNode* a_Start, GraphNode* a_End){
+bool Graph::SearchDJK(GraphNode* a_Start, GraphNode* a_End, bool(*heuFunc)(const GraphNode*, const GraphNode*)){
 	//Reset Nodes/Weights
 	ResetVisted();
 
@@ -183,12 +179,12 @@ bool Graph::SearchDJK(GraphNode* a_Start, GraphNode* a_End){
 	a_Start->previousNode = a_Start;
 	a_Start->weight = 0;
 	nodeList.push_front(a_Start);
-	//goal = a_End;
+	goal = a_End;
 
 	//While queue not empty
 	while (!nodeList.empty()){
 		//Sort
-		nodeList.sort(NodeCompare);
+		nodeList.sort(heuFunc);
 
 		//Get current node off the end of the queue and remove it
 		GraphNode* currentNode = nodeList.back();
@@ -207,7 +203,7 @@ bool Graph::SearchDJK(GraphNode* a_Start, GraphNode* a_End){
 			//If end node not traversed
 			if (!endNode->visited){
 				//Calculate current node's weight = edge cost
-				float cost = currentNode->weight + (*i).cost;
+				int cost = currentNode->weight + (*i).cost;
 
 				//If cost is less than existing weight cost in end node
 				if (cost < endNode->weight){
@@ -240,4 +236,20 @@ bool Neighbors(GraphNode* a_nodeA, GraphNode* a_nodeB){
 
 bool NodeCompare(const GraphNode* a_left, const GraphNode* a_right){
 	return (a_left->weight < a_right->weight);
+}
+
+bool StraightLine(const GraphNode* a_left, const GraphNode* a_right){
+	float leftF = a_left->weight + (a_left->pos + Graph::goal->pos).length();
+
+	float rightF = a_right->weight + (a_right->pos + Graph::goal->pos).length();
+
+	return (leftF < rightF);
+}
+
+bool Manhattan(const GraphNode * left, const GraphNode * right) {
+	float leftF = left->weight + abs(left->pos.x - Graph::goal->pos.x) + abs(left->pos.y - Graph::goal->pos.y);
+
+	float rightF = right->weight + abs(right->pos.x - Graph::goal->pos.x) + abs(right->pos.y - Graph::goal->pos.y);
+
+	return (leftF < rightF);
 }
