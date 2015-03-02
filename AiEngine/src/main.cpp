@@ -17,10 +17,11 @@ int main(){
 	
 
 	//Create Grass Sprite
-	unsigned int tile = fk.CreateSprite("./assets/pack_sheet.xml", "grass");
+	unsigned int gTile = fk.CreateSprite("./assets/pack_sheet.xml", "grass");
+	unsigned int wTile = fk.CreateSprite("./assets/pack_sheet.xml", "water");
 	//unsigned int Water = fk.CreateSprite("./assets/pack_sheet.xml");
 
-	Graph graph(2, tile, "grass");
+	Graph graph(3, gTile, "grass");
 
 	//graph.SearchDFS(graph.nodes[0], graph.nodes[1]);
 
@@ -55,31 +56,12 @@ int main(){
 		}
 
 		////Draw Grid
-		/*for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 9; i++)
 		{
-		}*/
-		//fk.SetSprite(grass, "grass");
-		/*if (dt > 20){
-			fk.SetSprite(tile, "water");
+			fk.MoveSprite(graph.nodes[i]->spriteID, graph.nodes[i]->pos);
+			fk.DrawSprite(graph.nodes[i]->spriteID);
 		}
-		else{
-			fk.SetSprite(tile, "grass");
-		}*/
-		//fk.SetSprite(tile, "grass");
-		//fk.MoveSprite(tile, centerScreen.x, centerScreen.y);
-		//fk.DrawSprite(tile);
 
-		//fk.SetSprite(tile, "grass");
-		//fk.MoveSprite(tile, centerScreen.x + 100, centerScreen.y);
-		//fk.DrawSprite(tile);
-
-		//fk.SetSprite(tile, "water");
-		//fk.MoveSprite(tile, centerScreen.x, centerScreen.y + 100);
-		//fk.DrawSprite(tile);
-
-		//fk.SetSprite(tile, "water");
-		//fk.MoveSprite(tile, centerScreen.x + 100, centerScreen.y + 100);
-		//fk.DrawSprite(tile);
 
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());

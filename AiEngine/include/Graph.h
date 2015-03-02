@@ -37,7 +37,7 @@ public:
 	char* spriteName;
 	
 	//Draw
-	//void Draw();
+	void Draw();
 
 };
 
