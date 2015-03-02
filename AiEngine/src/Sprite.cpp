@@ -2,6 +2,67 @@
 
 Sprite::Sprite(){
 
+	////Load shader to string
+	//std::string vString = textFileReader("./src/VertexShader.glsl");
+	//std::string fString = textFileReader("./src/TexturedFragmentShader.glsl");
+
+	////Convert to Char*
+	//const char* vs = vString.c_str();
+	//const char* fs = fString.c_str();
+
+	////Compile Vert Shader
+	//GLuint VertexShader = glCreateShader(GL_VERTEX_SHADER);
+	//glShaderSource(VertexShader, 1, &vs, NULL);
+	//glCompileShader(VertexShader);
+	//
+	////Compile Frag Shader
+	//GLuint FragShader = glCreateShader(GL_FRAGMENT_SHADER);
+	//glShaderSource(FragShader, 1, &fs, NULL);
+	//glCompileShader(FragShader);
+
+	////Link shaders into shader program
+	//GLuint ShaderProgram = glCreateProgram();
+
+	//glAttachShader(ShaderProgram, FragShader);
+	//glAttachShader(ShaderProgram, VertexShader);
+
+	//glLinkProgram(ShaderProgram);
+	//
+	//s_Quad.q_ShaderProgram = ShaderProgram;
+	//glUseProgram(s_Quad.q_ShaderProgram);
+
+	////Basic UV Data
+	////s_UVData[0] = glm::vec2(64.f/1280.f, 128.f/832); //64x128 
+	////s_UVData[1] = glm::vec2(128.f/832, 128.f/832); //128x128
+	////s_UVData[2] = glm::vec2(64.f/1280.f, 64.f/1280.f);// 64x64
+	////s_UVData[3] = glm::vec2(128.f/832, 64.f/1280.f); //128x64
+	//
+	////Bind VAO
+	//glBindVertexArray(s_Quad.q_VAO);
+	////GEN/BIND/BUFFER UVO
+	//glGenBuffers(1, &s_UVO);
+	//glBindBuffer(GL_ARRAY_BUFFER, s_UVO); //Ask a question about this at some point!
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
+
+	////BIND UVO
+	////glBindBuffer(GL_ARRAY_BUFFER, s_UVO);// <------
+
+	//GLint texAttrib = glGetAttribLocation(s_Quad.q_ShaderProgram, "texcoord");
+
+	//glEnableVertexAttribArray(texAttrib);
+	//glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 2 * (sizeof(float)), 0);
+	//
+	////Clear Buffer
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindVertexArray(0);
+
+	//s_Position = glm::vec3((float)g_WIDTH / 2, (float)g_HEIGHT / 2, 1);
+	//s_Scale = glm::vec2(50, 50);
+
+}
+
+void Sprite::Initialize(){
+
 	//Load shader to string
 	std::string vString = textFileReader("./src/VertexShader.glsl");
 	std::string fString = textFileReader("./src/TexturedFragmentShader.glsl");
@@ -14,7 +75,7 @@ Sprite::Sprite(){
 	GLuint VertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(VertexShader, 1, &vs, NULL);
 	glCompileShader(VertexShader);
-	
+
 	//Compile Frag Shader
 	GLuint FragShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(FragShader, 1, &fs, NULL);
@@ -27,16 +88,10 @@ Sprite::Sprite(){
 	glAttachShader(ShaderProgram, VertexShader);
 
 	glLinkProgram(ShaderProgram);
-	
+
 	s_Quad.q_ShaderProgram = ShaderProgram;
 	glUseProgram(s_Quad.q_ShaderProgram);
 
-	//Basic UV Data
-	//s_UVData[0] = glm::vec2(0.66f, 0.25f);
-	//s_UVData[1] = glm::vec2(1.00f, 0.25f);
-	//s_UVData[2] = glm::vec2(0.66f, 0.50f);
-	//s_UVData[3] = glm::vec2(1.00f, 0.50f);
-	
 	//Bind VAO
 	glBindVertexArray(s_Quad.q_VAO);
 	//GEN/BIND/BUFFER UVO
@@ -51,14 +106,13 @@ Sprite::Sprite(){
 
 	glEnableVertexAttribArray(texAttrib);
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 2 * (sizeof(float)), 0);
-	
+
 	//Clear Buffer
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
 	s_Position = glm::vec3((float)g_WIDTH / 2, (float)g_HEIGHT / 2, 1);
 	s_Scale = glm::vec2(50, 50);
-
 }
 
 Sprite::~Sprite(){
@@ -67,7 +121,6 @@ Sprite::~Sprite(){
 }
 
 void Sprite::SetUVData(){
-
 	glBindBuffer(GL_ARRAY_BUFFER, s_UVO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
 

@@ -31,6 +31,7 @@ public:
 	void LoadTexture(const char* a_Texture);
 
 	void SetUVData();
+	void Initialize();
 
 
 private:

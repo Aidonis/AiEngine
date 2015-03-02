@@ -59,16 +59,17 @@ int main(){
 		{
 		}*/
 		//fk.SetSprite(grass, "grass");
-		if (dt > 20){
+		/*if (dt > 20){
 			fk.SetSprite(tile, "water");
 		}
 		else{
 			fk.SetSprite(tile, "grass");
-		}
-		fk.MoveSprite(tile, centerScreen.x, centerScreen.y);
-		fk.DrawSprite(tile);
+		}*/
+		//fk.SetSprite(tile, "grass");
+		//fk.MoveSprite(tile, centerScreen.x, centerScreen.y);
+		//fk.DrawSprite(tile);
 
-		//fk.SetSprite(tile, "water");
+		//fk.SetSprite(tile, "grass");
 		//fk.MoveSprite(tile, centerScreen.x + 100, centerScreen.y);
 		//fk.DrawSprite(tile);
 
@@ -76,9 +77,10 @@ int main(){
 		//fk.MoveSprite(tile, centerScreen.x, centerScreen.y + 100);
 		//fk.DrawSprite(tile);
 
-		//fk.SetSprite(grass, "grass");
-		//fk.MoveSprite(grass, centerScreen.x + 100, centerScreen.y + 100);
-		//fk.DrawSprite(grass);
+		//fk.SetSprite(tile, "water");
+		//fk.MoveSprite(tile, centerScreen.x + 100, centerScreen.y + 100);
+		//fk.DrawSprite(tile);
+
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());
 }

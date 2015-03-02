@@ -64,7 +64,7 @@ void ClearScreen(){
 //Create sprite from given sprite name on given xmlsheet
 unsigned int CreateSprite(const char* a_xmlSheet, const char* a_spriteName){
 	Sprite* newSprite = new Sprite;
-
+	newSprite->Initialize();
 	newSprite->s_Animator.LoadSprites(a_xmlSheet);
 	newSprite->LoadTexture(newSprite->s_Animator.atlas.sSheet.c_str());
 	newSprite->s_Animator.SetSprite(a_spriteName);
