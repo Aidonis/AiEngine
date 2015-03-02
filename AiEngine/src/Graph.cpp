@@ -82,6 +82,42 @@ Graph::Graph(unsigned int a_size, unsigned int a_spriteID){
 	}
 }
 
+Graph::Graph(unsigned int a_size, unsigned int a_spriteID, char* a_spriteName){
+
+	//unsigned int ID = fk.CreateSprite("./assets/pack_sheet.xml");
+	//Assign Nodes
+	for (unsigned int r = 0; r < a_size; r++) {
+		for (unsigned int c = 0; c < a_size; c++) {
+			//Set Position //TODO: No magic numbers
+			nodes.push_back(new GraphNode((c * 64) + 30, (r * 64) + 30));
+		}
+	}
+	//Assign Edges < ^ > v
+	for (unsigned int r = 0; r < a_size; r++) {
+		for (unsigned int c = 0; c < a_size; c++) {
+			if (c > 0) {
+				nodes[(r * a_size) + c]->AddEdge(nodes[(r * a_size) + c - 1]);
+			}
+			if (r < a_size - 1) {
+				nodes[(r * a_size) + c]->AddEdge(nodes[((r + 1) * a_size) + c]);
+			}
+			if (c < a_size - 1) {
+				nodes[(r * a_size) + c]->AddEdge(nodes[(r * a_size) + c + 1]);
+			}
+			if (r > 0) {
+				nodes[(r * a_size) + c]->AddEdge(nodes[((r - 1) * a_size) + c]);
+			}
+		}
+	}
+	//Assign Sprite Info
+	for (unsigned int r = 0; r < a_size; r++) {
+		for (unsigned int c = 0; c < a_size; c++) {
+			nodes[(r*a_size) + c]->spriteID = a_spriteID;
+			nodes[(r*a_size) + c]->spriteName = a_spriteName;
+		}
+	}
+}
+
 void Graph::AddNode(GraphNode* a_node){
 	nodes.push_back(a_node);
 }

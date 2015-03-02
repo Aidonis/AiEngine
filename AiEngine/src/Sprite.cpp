@@ -32,10 +32,10 @@ Sprite::Sprite(){
 	glUseProgram(s_Quad.q_ShaderProgram);
 
 	//Basic UV Data
-	s_UVData[0] = glm::vec2(0.66f, 0.25f);
-	s_UVData[1] = glm::vec2(1.00f, 0.25f);
-	s_UVData[2] = glm::vec2(0.66f, 0.50f);
-	s_UVData[3] = glm::vec2(1.00f, 0.50f);
+	//s_UVData[0] = glm::vec2(0.66f, 0.25f);
+	//s_UVData[1] = glm::vec2(1.00f, 0.25f);
+	//s_UVData[2] = glm::vec2(0.66f, 0.50f);
+	//s_UVData[3] = glm::vec2(1.00f, 0.50f);
 	
 	//Bind VAO
 	glBindVertexArray(s_Quad.q_VAO);
@@ -45,7 +45,7 @@ Sprite::Sprite(){
 	glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
 
 	//BIND UVO
-	glBindBuffer(GL_ARRAY_BUFFER, s_UVO);// <------
+	//glBindBuffer(GL_ARRAY_BUFFER, s_UVO);// <------
 
 	GLint texAttrib = glGetAttribLocation(s_Quad.q_ShaderProgram, "texcoord");
 

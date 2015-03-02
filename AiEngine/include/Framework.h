@@ -62,15 +62,15 @@ void ClearScreen(){
 
 
 //Create sprite from given sprite name on given xmlsheet
-unsigned int CreateSprite(const char* a_xmlSheet){
+unsigned int CreateSprite(const char* a_xmlSheet, const char* a_spriteName){
 	Sprite* newSprite = new Sprite;
 
 	newSprite->s_Animator.LoadSprites(a_xmlSheet);
 	newSprite->LoadTexture(newSprite->s_Animator.atlas.sSheet.c_str());
-	newSprite->s_Animator.SetSprite("front0");
+	newSprite->s_Animator.SetSprite(a_spriteName);
 	spriteList.push_back(newSprite);
 
-	return spriteList.size() - 1;
+	return spriteList.size() -1;
 }
 
 void SetSprite(unsigned int a_SpriteID, const char* a_SpriteName){

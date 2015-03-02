@@ -58,6 +58,7 @@ class Graph{
 public:
 	Graph();
 	Graph(unsigned int a_size, unsigned int a_spriteID);
+	Graph(unsigned int a_size, unsigned int a_spriteID, char* a_spriteName);
 
 	//static GraphNode * goal;
 

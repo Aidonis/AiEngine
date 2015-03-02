@@ -17,12 +17,12 @@ int main(){
 	
 
 	//Create Grass Sprite
-	unsigned int grass = fk.CreateSprite("./assets/pack_sheet.xml");
+	unsigned int tile = fk.CreateSprite("./assets/pack_sheet.xml", "grass");
 	//unsigned int Water = fk.CreateSprite("./assets/pack_sheet.xml");
 
-	Graph graph(2, grass);
+	Graph graph(2, tile, "grass");
 
-	graph.SearchDFS(graph.nodes[0], graph.nodes[1]);
+	//graph.SearchDFS(graph.nodes[0], graph.nodes[1]);
 
 	//dt variable
 	float timer = 0;
@@ -31,9 +31,6 @@ int main(){
 	double mouseY = 0;
 	int j = 0;
 	glm::vec2 mousePos = glm::vec2(0, 0);
-
-	//Sprite Position
-	std::vector<glm::vec2>spritePositionList;
 
 	//Store Sprite Position
 	glm::vec2 gridStart = glm::vec2((graph.nodes[0]->pos.x + 1) * 64, (graph.nodes[0]->pos.y + 1) * 64);
@@ -61,21 +58,27 @@ int main(){
 		/*for (int i = 0; i < 4; i++)
 		{
 		}*/
-		fk.SetSprite(grass, "water");
-		fk.MoveSprite(grass, centerScreen.x, centerScreen.y);
-		fk.DrawSprite(grass);
+		//fk.SetSprite(grass, "grass");
+		if (dt > 20){
+			fk.SetSprite(tile, "water");
+		}
+		else{
+			fk.SetSprite(tile, "grass");
+		}
+		fk.MoveSprite(tile, centerScreen.x, centerScreen.y);
+		fk.DrawSprite(tile);
 
-		fk.SetSprite(grass, "water");
-		fk.MoveSprite(grass, centerScreen.x + 100, centerScreen.y);
-		fk.DrawSprite(grass);
+		//fk.SetSprite(tile, "water");
+		//fk.MoveSprite(tile, centerScreen.x + 100, centerScreen.y);
+		//fk.DrawSprite(tile);
 
-		fk.SetSprite(grass, "grass");
-		fk.MoveSprite(grass, centerScreen.x, centerScreen.y + 100);
-		fk.DrawSprite(grass);
+		//fk.SetSprite(tile, "water");
+		//fk.MoveSprite(tile, centerScreen.x, centerScreen.y + 100);
+		//fk.DrawSprite(tile);
 
-		fk.SetSprite(grass, "grass");
-		fk.MoveSprite(grass, centerScreen.x + 100, centerScreen.y + 100);
-		fk.DrawSprite(grass);
+		//fk.SetSprite(grass, "grass");
+		//fk.MoveSprite(grass, centerScreen.x + 100, centerScreen.y + 100);
+		//fk.DrawSprite(grass);
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());
 }
