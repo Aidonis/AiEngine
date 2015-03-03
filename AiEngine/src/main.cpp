@@ -23,8 +23,10 @@ int main(){
 
 	Graph graph(8, dTile, "dirt");
 
-	graph.SearchDJK(graph.nodes[0], graph.nodes[4], NodeCompare);
+	
+	//int steps = graph.DJK_Steps(graph.nodes[0], graph.nodes[4], Dijkstra);
 
+	//std::cout << steps << std::endl;
 
 	//dt variable
 	float timer = 0;
@@ -44,6 +46,8 @@ int main(){
 			std::cout << "(" << graph.nodes[i]->pos.x << "," << graph.nodes[i]->pos.y << ")" << std::endl;
 		}
 	}
+
+	GraphNode* endNode = graph.nodes[0];
 
 	do{
 		float dt = GetDeltaTime() * 10;
@@ -69,14 +73,19 @@ int main(){
 				graph.nodes[i]->spriteID = wTile;
 			}
 			if (graph.nodes[i]->isClicked(mousePos)){
+				 endNode = graph.nodes[i];
 				graph.nodes[i]->spriteID = gTile;
 			}
 			else if(!graph.nodes[i]->visited){
 				graph.nodes[i]->spriteID = dTile;
 			}
 			fk.MoveSprite(graph.nodes[i]->spriteID, graph.nodes[i]->pos);
+
 			fk.DrawSprite(graph.nodes[i]->spriteID);
 		}
+
+		//graph.AStarSearch(graph.nodes[0], endNode);
+		graph.AStarSearch(graph.nodes[0], endNode);
 
 
 		ResetDeltaTime();

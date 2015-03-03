@@ -5,9 +5,10 @@ GraphNode::GraphNode(int a_x, int a_y){
 	pos.x = a_x;
 	pos.y = a_y;
 	visited = false;
-	weight = 0;
 	previousNode = NULL;
-	weight = INT_MAX;
+	fScore = 0;
+	gScore = INT_MAX;
+	weight = 1;
 	spriteID = NULL;
 	spriteName = NULL;
 }
@@ -37,7 +38,7 @@ void GraphNode::RemoveEdge(GraphNode * a_node){
 void GraphNode::ResetVisit(){
 	previousNode = NULL;
 	visited = false;
-	weight = INFINITY;
+	weight = INT_MAX;
 
 }
 //Graphnode Util
@@ -134,7 +135,8 @@ void Graph::AddNode(GraphNode* a_node){
 void Graph::ResetVisted(){
 	for (NodeList::iterator i = nodes.begin(); i != nodes.end(); i++){
 		(*i)->visited = false;
-		(*i)->weight = INT_MAX;
+		(*i)->gScore = INT_MAX;
+		(*i)->fScore = 0;
 	}
 }
 
@@ -184,59 +186,46 @@ bool Graph::SearchBFS(GraphNode* a_Start, GraphNode* a_End){
 	return false;
 }
 
-bool Graph::SearchDJK(GraphNode* a_Start, GraphNode* a_End, bool(*heuFunc)(const GraphNode*, const GraphNode*)){
-	//Reset Nodes/Weights
+void Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
+	//Reset Nodes/Weights - Set to Null and Infinity
 	ResetVisted();
 
 	//Push start node onto the priority queue
-	std::list<GraphNode*> nodeList;
+	std::list<GraphNode*> priorityQ;
 	a_Start->previousNode = a_Start;
-	a_Start->weight = 0;
-	nodeList.push_front(a_Start);
-	goal = a_End;
+	a_Start->gScore = 0;
+	priorityQ.push_front(a_Start);
 
-	//While queue not empty
-	while (!nodeList.empty()){
-		//Sort
-		nodeList.sort(heuFunc);
+	while (!priorityQ.empty()){
+		priorityQ.sort(Dijkstra);
+		GraphNode* current = priorityQ.front();
+		priorityQ.pop_front();
 
-		//Get current node off the end of the queue and remove it
-		GraphNode* currentNode = nodeList.back();
-		nodeList.pop_back();
-
-		//Mark as traversed
-		if (currentNode == a_End){
-			return true;
+		current->visited = true;
+		if (current != a_Start && current != a_End){
+			//change color ish
 		}
-		currentNode->visited = true;
 
-		//Loop through the edges
-		for (EdgeList::iterator i = currentNode->edges.begin(); i != currentNode->edges.end(); i++){
-			GraphNode* endNode = (*i).End;
-
-			//If end node not traversed
-			if (!endNode->visited){
-				//Calculate current node's weight = edge cost
-				int cost = currentNode->weight + (*i).cost;
-
-				//If cost is less than existing weight cost in end node
-				if (cost < endNode->weight){
-					//set end node previous node to current node
-					endNode->previousNode = currentNode;
-
-					//set end node weight to current node weight + edge cost
-					endNode->weight = cost;
-
-					//if end node not in queue
-					if (std::find(nodeList.begin(), nodeList.end(), endNode) == nodeList.end()){
-						nodeList.push_front(endNode);
+		if (current == a_End){
+			break;
+		}
+		for (EdgeList::iterator i = current->edges.begin(); i != current->edges.end(); i++){
+			GraphNode* neighbor = (*i).End;
+			if (!neighbor->visited){
+				float fScore = current->gScore + neighbor->weight;
+				if (fScore < neighbor->gScore){
+					neighbor->previousNode = current;
+					neighbor->gScore = current->gScore + neighbor->weight;
+					neighbor->fScore = fScore;
+					if (std::find(priorityQ.begin(), priorityQ.end(), neighbor) == priorityQ.end()){
+						priorityQ.push_back(neighbor);
 					}
 				}
 			}
 		}
 	}
-	return false;
 }
+
 
 bool Neighbors(GraphNode* a_nodeA, GraphNode* a_nodeB){
 	for (int i = 0; i < 4; i++){
@@ -247,8 +236,8 @@ bool Neighbors(GraphNode* a_nodeA, GraphNode* a_nodeB){
 	return false;
 }
 
-bool NodeCompare(const GraphNode* a_left, const GraphNode* a_right){
-	return (a_left->weight < a_right->weight);
+bool Dijkstra(const GraphNode * left, const GraphNode * right) {
+	return (left->weight < right->weight);
 }
 
 bool StraightLine(const GraphNode* a_left, const GraphNode* a_right){

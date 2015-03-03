@@ -24,8 +24,10 @@ public:
 	
 	//Heuristic
 	GraphNode* previousNode;
-	float weight;
-	void ResetVisit();
+	int weight;
+	int fScore;
+	int gScore;
+
 
 	//Edges
 	EdgeList edges;
@@ -51,6 +53,8 @@ public:
 			return true;
 		}
 	}
+
+	void ResetVisit();
 
 private:
 	float GetLeft();
@@ -88,14 +92,20 @@ public:
 	bool SearchDFS(GraphNode* a_Start, GraphNode* a_End);
 	bool SearchBFS(GraphNode* a_Start, GraphNode* a_End);
 	bool SearchDJK(GraphNode* a_Start, GraphNode* a_End, bool(*heuFunc)(const GraphNode*, const GraphNode*));
+	
+	void AStarSearch(GraphNode* a_Start, GraphNode* a_End);
+
+	int DJK_Steps(GraphNode* a_Start, GraphNode* a_End, bool(*heuFunc)(const GraphNode*, const GraphNode*));
 
 private:
 
 };
 
-bool NodeCompare(const GraphNode* a_left, const GraphNode* a_Right);
+bool Dijkstra(const GraphNode* a_left, const GraphNode* a_Right);
 
 bool StraightLine(const GraphNode * a_left, const GraphNode * a_right);
 
 bool Manhattan(const GraphNode * left, const GraphNode * right);
+
+float GetHeuristic();
 #endif //_GRAPH_H_
