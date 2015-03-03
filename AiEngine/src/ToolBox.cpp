@@ -3,7 +3,7 @@
 
 glm::mat4 Ortho;
 int g_WIDTH = 640;
-int g_HEIGHT = 480;
+int g_HEIGHT = 640;
 double fps, elapsedTime;
 double deltaTime = 0;
 int frames;

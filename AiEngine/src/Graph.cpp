@@ -198,7 +198,7 @@ void Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
 	goal = a_End;
 
 	while (!priorityQ.empty()){
-		priorityQ.sort(Manhattan);
+		priorityQ.sort(NodeCompare);
 		GraphNode* current = priorityQ.front();
 		priorityQ.pop_front();
 
@@ -237,7 +237,7 @@ bool Neighbors(GraphNode* a_nodeA, GraphNode* a_nodeB){
 	return false;
 }
 
-bool Dijkstra(const GraphNode * left, const GraphNode * right) {
+bool NodeCompare(const GraphNode * left, const GraphNode * right) {
 	return (left->weight < right->weight);
 }
 

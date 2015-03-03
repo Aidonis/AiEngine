@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas width= "64" height="64" sheet="./assets/pieceRed.png" animations="./assets/pack_sheetAnimation">
+
+<sprite name = "red" x0 = "0.0f" x1 = "64.0f" y0 ="0.0f" y1 ="64.0f"/>
+
+</atlas>

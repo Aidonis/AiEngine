@@ -76,6 +76,7 @@
     <ClCompile Include="src\Fontbox.cpp" />
     <ClCompile Include="src\Graph.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\Quad.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\ToolBox.cpp" />
@@ -86,6 +87,7 @@
     <ClInclude Include="include\Fontbox.h" />
     <ClInclude Include="include\Framework.h" />
     <ClInclude Include="include\Graph.h" />
+    <ClInclude Include="include\player.h" />
     <ClInclude Include="include\TextFileReader.h" />
     <ClInclude Include="include\Tile.h" />
     <ClInclude Include="include\ToolBox.h" />
