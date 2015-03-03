@@ -195,9 +195,10 @@ void Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
 	a_Start->previousNode = a_Start;
 	a_Start->gScore = 0;
 	priorityQ.push_front(a_Start);
+	goal = a_End;
 
 	while (!priorityQ.empty()){
-		priorityQ.sort(Dijkstra);
+		priorityQ.sort(Manhattan);
 		GraphNode* current = priorityQ.front();
 		priorityQ.pop_front();
 

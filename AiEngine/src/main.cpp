@@ -19,7 +19,7 @@ int main(){
 	unsigned int gTile = fk.CreateSprite("./assets/pack_sheet.xml", "grass");
 	unsigned int wTile = fk.CreateSprite("./assets/pack_sheet.xml", "water");
 	unsigned int dTile = fk.CreateSprite("./assets/pack_sheet.xml", "dirt");
-	//unsigned int Water = fk.CreateSprite("./assets/pack_sheet.xml");
+	unsigned int sTile = fk.CreateSprite("./assets/pack_sheet.xml", "wall");
 
 	Graph graph(8, dTile, "dirt");
 
@@ -33,7 +33,8 @@ int main(){
 	//Mouse location
 	double mouseX = 0;
 	double mouseY = 0;
-	glm::vec2 mousePos = glm::vec2(NULL, NULL);
+	glm::vec2 mousePos1 = glm::vec2(NULL, NULL);
+	glm::vec2 mousePos2 = glm::vec2(NULL, NULL);
 
 	//Store Sprite Position
 	glm::vec2 gridStart = glm::vec2((graph.nodes[0]->pos.x + 1) * 64, (graph.nodes[0]->pos.y + 1) * 64);
@@ -48,6 +49,7 @@ int main(){
 	}
 
 	GraphNode* endNode = graph.nodes[0];
+	GraphNode* startNode = graph.nodes[0];
 
 	do{
 		float dt = GetDeltaTime() * 10;
@@ -56,8 +58,10 @@ int main(){
 		//Get mouse position
 		fk.GetMouseLocation(mouseX, mouseY);
 		if (fk.GetMouseButtonDown(GLFW_MOUSE_BUTTON_2)){
-			mousePos = glm::vec2(mouseX, g_HEIGHT - mouseY);
-			std::cout << mousePos.x << " " << mousePos.y << std::endl;
+			mousePos2 = glm::vec2(mouseX, g_HEIGHT - mouseY);
+		}
+		if (fk.GetMouseButtonDown(GLFW_MOUSE_BUTTON_1)){
+			mousePos1 = glm::vec2(mouseX, g_HEIGHT - mouseY);
 		}
 		if (fk.IsKeyDown(GLFW_KEY_SPACE)){
 
@@ -70,11 +74,15 @@ int main(){
 		for (int i = 0; i < 64; i++)
 		{
 			if (graph.nodes[i]->visited){
-				graph.nodes[i]->spriteID = wTile;
-			}
-			if (graph.nodes[i]->isClicked(mousePos)){
-				 endNode = graph.nodes[i];
 				graph.nodes[i]->spriteID = gTile;
+			}
+			if (graph.nodes[i]->isClicked(mousePos2)){
+				endNode = graph.nodes[i];
+				graph.nodes[i]->spriteID = sTile;
+			}
+			if (graph.nodes[i]->isClicked(mousePos1)){
+				startNode = graph.nodes[i];
+				graph.nodes[i]->spriteID = sTile;
 			}
 			else if(!graph.nodes[i]->visited){
 				graph.nodes[i]->spriteID = dTile;
@@ -85,7 +93,7 @@ int main(){
 		}
 
 		//graph.AStarSearch(graph.nodes[0], endNode);
-		graph.AStarSearch(graph.nodes[0], endNode);
+		graph.AStarSearch(startNode, endNode);
 
 
 		ResetDeltaTime();
