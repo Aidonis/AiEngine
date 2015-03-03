@@ -40,6 +40,19 @@ void GraphNode::ResetVisit(){
 	weight = INFINITY;
 
 }
+//Graphnode Util
+float GraphNode::GetTop(){
+	return pos.y + (64 / 2);
+}
+float GraphNode::GetBottom(){
+	return pos.y - (64 / 2);
+}
+float GraphNode::GetLeft(){
+	return pos.x - (64 / 2);
+}
+float GraphNode::GetRight(){
+	return pos.x + (64 / 2);
+}
 
 //Graph
 Graph::Graph(unsigned int a_size, unsigned int a_spriteID){
@@ -121,6 +134,7 @@ void Graph::AddNode(GraphNode* a_node){
 void Graph::ResetVisted(){
 	for (NodeList::iterator i = nodes.begin(); i != nodes.end(); i++){
 		(*i)->visited = false;
+		(*i)->weight = INT_MAX;
 	}
 }
 
@@ -214,8 +228,7 @@ bool Graph::SearchDJK(GraphNode* a_Start, GraphNode* a_End, bool(*heuFunc)(const
 					endNode->weight = cost;
 
 					//if end node not in queue
-					if (!endNode->visited){
-						//push end node onto the queue
+					if (std::find(nodeList.begin(), nodeList.end(), endNode) == nodeList.end()){
 						nodeList.push_front(endNode);
 					}
 				}

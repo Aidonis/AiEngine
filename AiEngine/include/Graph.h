@@ -36,9 +36,28 @@ public:
 	unsigned int spriteID;
 	char* spriteName;
 	
-	//Draw
-	void Draw();
+	//Util
+	bool isClicked(glm::vec2 a_mousePos){
+		if (GetLeft() > a_mousePos.x ||
+			GetRight() < a_mousePos.x ||
+			GetTop() < a_mousePos.y ||
+			GetBottom() > a_mousePos.y){
+			return false;
+		}
+		if (a_mousePos == glm::vec2(NULL, NULL)){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
 
+private:
+	float GetLeft();
+	float GetRight();
+	float GetTop();
+	float GetBottom();
+	
 };
 
 bool Neighbors(GraphNode* a_nodeA, GraphNode* a_nodeB);
