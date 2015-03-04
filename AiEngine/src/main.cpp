@@ -77,7 +77,6 @@ int main(){
 			}
 			if (graph.nodes[i]->isClicked(mousePos1)){
 				startNode = graph.nodes[i];
-				//red.pos = startNode->pos;
 				graph.nodes[i]->spriteID = sTile;
 			}
 			else if (!graph.nodes[i]->visited){
@@ -88,26 +87,6 @@ int main(){
 			fk.DrawSprite(graph.nodes[i]->spriteID);
 		}
 
-		//Lerping token shit over time
-		//if (timer > 1.5f){
-		//	if (startLerp){
-		//		if (red.currentLerpValue < 1.f){
-		//			fk.LerpSprite(red.spriteID, endNode->pos, red.currentLerpValue);
-		//			red.currentLerpValue += .1f;
-		//		}
-		//		else{
-		//			startLerp = false;
-		//			startNode = endNode;
-		//			mousePos1 = mousePos2;
-		//			red.pos = endNode->pos;
-		//			red.currentLerpValue = 0.f;
-		//		}
-		//	}
-		//	timer = 0;
-		//}
-
-		//fk.MoveSprite(red.spriteID, startNode->pos);
-		//graph.AStarSearch(startNode, endNode);
 		graph.AStarSearch(startNode, endNode);
 		red.Update(dt);
 		fk.MoveSprite(red.spriteID, red.pos);

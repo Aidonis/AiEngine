@@ -25,7 +25,7 @@ void Player::Update(float deltaTime){
 		previousNode = goalNode->previousNode;
 		if (currentLerpValue < 1){
 			pos = glm::lerp(previousNode->pos, goalNode->pos, currentLerpValue);
-			currentLerpValue += .5 * deltaTime;
+			currentLerpValue += .1 * deltaTime;
 			
 		}
 		else{
@@ -35,7 +35,6 @@ void Player::Update(float deltaTime){
 			if (pathList.size() > 0){
 				goalNode = pathList.front();
 			}
-			pos = goalNode->pos;
 		}
 	}
 	else
