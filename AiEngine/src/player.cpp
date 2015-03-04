@@ -11,7 +11,6 @@ Player::~Player(){
 Player::Player(unsigned int a_Sprite, glm::vec2 a_Position){
 	pos = a_Position;
 	spriteID = a_Sprite;
-	currentNode = 
 }
 
 Player::Player(unsigned int a_Sprite, GraphNode* a_Node){
@@ -23,17 +22,20 @@ Player::Player(unsigned int a_Sprite, GraphNode* a_Node){
 void Player::Update(float deltaTime){
 	if (pathList.size() > 0){
 		goalNode = pathList.front();
-		previousNode = currentNode;
+		previousNode = goalNode->previousNode;
 		if (currentLerpValue < 1){
 			pos = glm::lerp(previousNode->pos, goalNode->pos, currentLerpValue);
-			currentLerpValue += 1 * deltaTime;
+			currentLerpValue += .5 * deltaTime;
+			
 		}
 		else{
 			currentLerpValue = 0;
 			previousNode = goalNode;
 			pathList.erase(pathList.begin());
-			if (pathList.size() > 0);
-			goalNode = pathList.front();
+			if (pathList.size() > 0){
+				goalNode = pathList.front();
+			}
+			pos = goalNode->pos;
 		}
 	}
 	else

@@ -38,7 +38,7 @@ int main(){
 
 	//Player piece
 	unsigned int rPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
-	Player red = Player(rPlayer, startNode->pos);
+	Player red = Player(rPlayer, startNode);
 	fk.MoveSprite(red.spriteID, red.pos);
 
 	bool startLerp = false;
@@ -58,6 +58,7 @@ int main(){
 			mousePos1 = glm::vec2(mouseX, g_HEIGHT - mouseY);
 		}
 		if (fk.IsKeyDown(GLFW_KEY_SPACE)){
+			red.pathList = graph.AStarSearch(startNode, endNode);
 			startLerp = true;
 		}
 		if (fk.IsKeyDown(GLFW_KEY_R)){
@@ -76,6 +77,7 @@ int main(){
 			}
 			if (graph.nodes[i]->isClicked(mousePos1)){
 				startNode = graph.nodes[i];
+				//red.pos = startNode->pos;
 				graph.nodes[i]->spriteID = sTile;
 			}
 			else if (!graph.nodes[i]->visited){
@@ -87,27 +89,28 @@ int main(){
 		}
 
 		//Lerping token shit over time
-		if (timer > 1.5f){
-			if (startLerp){
-				if (red.currentLerpValue < 1.f){
-					fk.LerpSprite(red.spriteID, endNode->pos, red.currentLerpValue);
-					red.currentLerpValue += .1f;
-				}
-				else{
-					startLerp = false;
-					startNode = endNode;
-					mousePos1 = mousePos2;
-					red.pos = endNode->pos;
-					red.currentLerpValue = 0.f;
-				}
-			}
-			timer = 0;
-		}
+		//if (timer > 1.5f){
+		//	if (startLerp){
+		//		if (red.currentLerpValue < 1.f){
+		//			fk.LerpSprite(red.spriteID, endNode->pos, red.currentLerpValue);
+		//			red.currentLerpValue += .1f;
+		//		}
+		//		else{
+		//			startLerp = false;
+		//			startNode = endNode;
+		//			mousePos1 = mousePos2;
+		//			red.pos = endNode->pos;
+		//			red.currentLerpValue = 0.f;
+		//		}
+		//	}
+		//	timer = 0;
+		//}
 
 		//fk.MoveSprite(red.spriteID, startNode->pos);
 		//graph.AStarSearch(startNode, endNode);
-		red.pathList = graph.AStarSearch(graph.nodes[0], graph.nodes[10]);
+		graph.AStarSearch(startNode, endNode);
 		red.Update(dt);
+		fk.MoveSprite(red.spriteID, red.pos);
 		fk.DrawSprite(red.spriteID);
 
 		ResetDeltaTime();

@@ -55,14 +55,14 @@ float GraphNode::GetRight(){
 	return pos.x + (64 / 2);
 }
 
-GraphNode* GraphNode::getNearestNode(glm::vec2 a_position){
-	if (GetLeft() > a_position.x ||
-		GetRight() < a_position.x ||
-		GetTop() < a_position.y ||
-		GetBottom() > a_position.y){
+bool GraphNode::isClicked(glm::vec2 a_mousePos){
+	if (GetLeft() > a_mousePos.x ||
+		GetRight() < a_mousePos.x ||
+		GetTop() < a_mousePos.y ||
+		GetBottom() > a_mousePos.y){
 		return false;
 	}
-	if (a_position == glm::vec2(NULL, NULL)){
+	if (a_mousePos == glm::vec2(NULL, NULL)){
 		return false;
 	}
 	else{
@@ -204,6 +204,7 @@ bool Graph::SearchBFS(GraphNode* a_Start, GraphNode* a_End){
 std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
 	//Reset Nodes/Weights - Set to Null and Infinity
 	ResetVisted();
+	pathList.clear();
 
 	//Push start node onto the priority queue
 	std::list<GraphNode*> priorityQ;
@@ -213,7 +214,7 @@ std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End)
 	goal = a_End;
 
 	while (!priorityQ.empty()){
-		priorityQ.sort(NodeCompare);
+		priorityQ.sort(StraightLine);
 		GraphNode* current = priorityQ.front();
 		priorityQ.pop_front();
 
