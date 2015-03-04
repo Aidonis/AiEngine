@@ -53,6 +53,7 @@ public:
 			return true;
 		}
 	}
+	GraphNode* getNearestNode(glm::vec2 a_position);
 
 	void ResetVisit();
 
@@ -92,7 +93,9 @@ public:
 	bool SearchDFS(GraphNode* a_Start, GraphNode* a_End);
 	bool SearchBFS(GraphNode* a_Start, GraphNode* a_End);
 	
-	void AStarSearch(GraphNode* a_Start, GraphNode* a_End);
+	std::vector<GraphNode*> AStarSearch(GraphNode* a_Start, GraphNode* a_End);
+
+	std::vector<GraphNode*> pathList;
 
 private:
 

@@ -86,6 +86,7 @@ int main(){
 			fk.DrawSprite(graph.nodes[i]->spriteID);
 		}
 
+		//Lerping token shit over time
 		if (timer > 1.5f){
 			if (startLerp){
 				if (red.currentLerpValue < 1.f){
@@ -96,6 +97,7 @@ int main(){
 					startLerp = false;
 					startNode = endNode;
 					mousePos1 = mousePos2;
+					red.pos = endNode->pos;
 					red.currentLerpValue = 0.f;
 				}
 			}
@@ -103,7 +105,9 @@ int main(){
 		}
 
 		//fk.MoveSprite(red.spriteID, startNode->pos);
-		graph.AStarSearch(startNode, endNode);
+		//graph.AStarSearch(startNode, endNode);
+		red.pathList = graph.AStarSearch(graph.nodes[0], graph.nodes[10]);
+		red.Update(dt);
 		fk.DrawSprite(red.spriteID);
 
 		ResetDeltaTime();

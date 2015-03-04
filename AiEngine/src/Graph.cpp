@@ -55,6 +55,21 @@ float GraphNode::GetRight(){
 	return pos.x + (64 / 2);
 }
 
+GraphNode* GraphNode::getNearestNode(glm::vec2 a_position){
+	if (GetLeft() > a_position.x ||
+		GetRight() < a_position.x ||
+		GetTop() < a_position.y ||
+		GetBottom() > a_position.y){
+		return false;
+	}
+	if (a_position == glm::vec2(NULL, NULL)){
+		return false;
+	}
+	else{
+		return true;
+	}
+}
+
 //Graph
 Graph::Graph(unsigned int a_size, unsigned int a_spriteID){
 
@@ -186,7 +201,7 @@ bool Graph::SearchBFS(GraphNode* a_Start, GraphNode* a_End){
 	return false;
 }
 
-void Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
+std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
 	//Reset Nodes/Weights - Set to Null and Infinity
 	ResetVisted();
 
@@ -203,9 +218,9 @@ void Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
 		priorityQ.pop_front();
 
 		current->visited = true;
-		if (current != a_Start && current != a_End){
-			//change color ish
-		}
+		//if (current != a_Start && current != a_End){
+		//	//change color ?
+		//}
 
 		if (current == a_End){
 			break;
@@ -225,6 +240,18 @@ void Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
 			}
 		}
 	}
+	if (a_End->previousNode == nullptr){
+		return pathList;
+	}
+
+	pathList.push_back(a_End);
+	GraphNode* parent = a_End->previousNode;
+	pathList.insert(pathList.begin(), parent);
+	while (parent != a_Start){
+		parent = parent->previousNode;
+		pathList.insert(pathList.begin(), parent);
+	}
+	return pathList;
 }
 
 
