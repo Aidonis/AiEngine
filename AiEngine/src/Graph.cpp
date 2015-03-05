@@ -243,7 +243,7 @@ std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End)
 		}
 	}
 	if (a_End->previousNode == nullptr){
-		return pathList;
+		break;
 	}
 
 	pathList.push_back(a_End);

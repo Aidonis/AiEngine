@@ -30,6 +30,7 @@ int main(){
 	//Mouse location
 	double mouseX = 0;
 	double mouseY = 0;
+	unsigned int clickCount = 0;
 	glm::vec2 mousePos1 = glm::vec2(NULL, NULL);
 	glm::vec2 mousePos2 = glm::vec2(NULL, NULL);
 	glm::vec2 mousePos3 = glm::vec2(NULL, NULL);
@@ -54,9 +55,17 @@ int main(){
 		//Get mouse position
 		fk.GetMouseLocation(mouseX, mouseY);
 		if (fk.GetMouseButtonDown(GLFW_MOUSE_BUTTON_2)){
+			clickCount++;
 			mousePos2 = glm::vec2(mouseX, g_HEIGHT - mouseY);
-			graph.GetNearestNode(mousePos2)->spriteID = sTile;
-			endNode = graph.GetNearestNode(mousePos2);
+			if (clickCount == 1){
+				graph.GetNearestNode(mousePos2)->spriteID = sTile;
+				endNode = graph.GetNearestNode(mousePos2);
+			}
+			if (clickCount == 2){
+				graph.GetNearestNode(mousePos2)->spriteID = dTile;
+				endNode = nullptr;
+				clickCount = 0;
+			}
 		}
 		if (fk.GetMouseButtonDown(GLFW_MOUSE_BUTTON_1)){
 			mousePos1 = glm::vec2(mouseX, g_HEIGHT - mouseY);
