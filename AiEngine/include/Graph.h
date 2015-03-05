@@ -21,7 +21,8 @@ public:
 	glm::vec2 pos;
 
 	bool visited;
-	
+	bool walked;
+
 	//Heuristic
 	GraphNode* previousNode;
 	int weight;
@@ -41,7 +42,7 @@ public:
 	//Util
 	bool isClicked(glm::vec2 a_mousePos);
 
-	//GraphNode* getNearestNode(glm::vec2 a_position);
+	//
 
 	void ResetVisit();
 
@@ -81,8 +82,9 @@ public:
 	bool SearchDFS(GraphNode* a_Start, GraphNode* a_End);
 	bool SearchBFS(GraphNode* a_Start, GraphNode* a_End);
 	
-	std::vector<GraphNode*> AStarSearch(GraphNode* a_Start, GraphNode* a_End);
+	GraphNode* GetNearestNode(glm::vec2 a_position);
 
+	std::vector<GraphNode*> AStarSearch(GraphNode* a_Start, GraphNode* a_End);
 	std::vector<GraphNode*> pathList;
 
 private:

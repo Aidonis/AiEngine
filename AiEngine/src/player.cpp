@@ -22,6 +22,7 @@ Player::Player(unsigned int a_Sprite, GraphNode* a_Node){
 void Player::Update(float deltaTime){
 	if (pathList.size() > 0){
 		goalNode = pathList.front();
+		goalNode->walked = true;
 		previousNode = goalNode->previousNode;
 		if (currentLerpValue < 1){
 			pos = glm::lerp(previousNode->pos, goalNode->pos, currentLerpValue);

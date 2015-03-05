@@ -4,6 +4,7 @@
 <sprite name = "grass" x0 = "64.0f" x1 = "128.0f" y0 ="64.0f" y1 ="128.0f"/>
 <sprite name = "water" x0 = "704.0f" x1 = "768.0f" y0 ="64.0f" y1 ="128.0f"/>
 <sprite name = "dirt" x0 = "384" x1 = "448" y0 = "64.0f" y1 = "128.0f"/>
-<sprite name = "wall" x0 = "896" x1 = "960" y0 = "448" y1 = "512"/>
+<sprite name = "stone" x0 = "896" x1 = "960" y0 = "448" y1 = "512"/>
+<sprite name = "wall" x0 = "896" x1 = "960" y0 = "192" y1 = "256"/>
 
 </atlas>

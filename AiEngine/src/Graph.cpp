@@ -152,6 +152,8 @@ void Graph::ResetVisted(){
 		(*i)->visited = false;
 		(*i)->gScore = INT_MAX;
 		(*i)->fScore = 0;
+		(*i)->walked = false;
+		pathList.clear();
 	}
 }
 
@@ -204,7 +206,6 @@ bool Graph::SearchBFS(GraphNode* a_Start, GraphNode* a_End){
 std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
 	//Reset Nodes/Weights - Set to Null and Infinity
 	ResetVisted();
-	pathList.clear();
 
 	//Push start node onto the priority queue
 	std::list<GraphNode*> priorityQ;
@@ -214,7 +215,7 @@ std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End)
 	goal = a_End;
 
 	while (!priorityQ.empty()){
-		priorityQ.sort(StraightLine);
+		priorityQ.sort(NodeCompare);
 		GraphNode* current = priorityQ.front();
 		priorityQ.pop_front();
 
@@ -249,10 +250,20 @@ std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End)
 	GraphNode* parent = a_End->previousNode;
 	pathList.insert(pathList.begin(), parent);
 	while (parent != a_Start){
+		parent->walked = true;
 		parent = parent->previousNode;
 		pathList.insert(pathList.begin(), parent);
 	}
 	return pathList;
+}
+
+GraphNode* Graph::GetNearestNode(glm::vec2 a_position){
+
+	for(NodeList::iterator i = nodes.begin(); i != nodes.end(); i++){
+		if ((*i)->isClicked(a_position)){
+			return (*i);
+		}
+	}
 }
 
 
