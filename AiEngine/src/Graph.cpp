@@ -34,13 +34,6 @@ void GraphNode::RemoveEdge(GraphNode * a_node){
 		edges.erase(edgeToDelete);
 	}
 }
-
-void GraphNode::ResetVisit(){
-	previousNode = NULL;
-	visited = false;
-	weight = INT_MAX;
-
-}
 //Graphnode Util
 float GraphNode::GetTop(){
 	return pos.y + (64 / 2);
@@ -68,6 +61,14 @@ bool GraphNode::isClicked(glm::vec2 a_mousePos){
 	else{
 		return true;
 	}
+}
+
+void GraphNode::Reset(){
+	weight = 1;
+	gScore = INT_MAX;
+	visited = false;
+	walked = false;
+	fScore = 0;
 }
 
 //Graph

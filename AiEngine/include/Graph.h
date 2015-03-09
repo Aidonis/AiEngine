@@ -44,7 +44,7 @@ public:
 
 	//
 
-	void ResetVisit();
+	void Reset();
 
 private:
 	float GetLeft();

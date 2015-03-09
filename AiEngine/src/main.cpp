@@ -52,14 +52,16 @@ int main(){
 		
 		fk.ClearScreen();
 
-		//Get mouse position
+		//Get mouse positionw
 		fk.GetMouseLocation(mouseX, mouseY);	
 		//Right Click - Set endNode
 		if (fk.GetMouseButtonDown(GLFW_MOUSE_BUTTON_2)){
 			mousePos2 = glm::vec2(mouseX, g_HEIGHT - mouseY);
 			//If there is an old endNode
 			if (!endNode == NULL){
+				endNode->Reset();
 				endNode->spriteID = dTile;
+
 			}
 				graph.GetNearestNode(mousePos2)->spriteID = sTile;
 				endNode = graph.GetNearestNode(mousePos2);
@@ -70,6 +72,7 @@ int main(){
 			mousePos1 = glm::vec2(mouseX, g_HEIGHT - mouseY);
 			//If there is an old startNode
 			if (!startNode == NULL){
+				startNode->Reset();
 				startNode->spriteID = dTile;
 			}
 			graph.GetNearestNode(mousePos1)->spriteID = sTile;
@@ -77,10 +80,9 @@ int main(){
 		}
 		//Run Search
 		if (fk.IsKeyDown(GLFW_KEY_SPACE)){
-			graph.ResetVisted();
 			red.pathList = graph.AStarSearch(startNode, endNode);
 			for (NodeList::iterator i = graph.nodes.begin(); i != graph.nodes.end(); i++){
-				if (!(*i)->visited && !(*i)->walked){
+				if (!(*i)->visited && !(*i)->walked && (*i)->weight != INT_MAX){
 					(*i)->spriteID = dTile;
 				}
 				if ((*i)->visited){
@@ -92,9 +94,6 @@ int main(){
 				if ((*i) == startNode || (*i) == endNode){
 					(*i)->spriteID = sTile;
 				}
-
-
-
 			}
 		}
 		if (fk.IsKeyDown(GLFW_KEY_R)){
