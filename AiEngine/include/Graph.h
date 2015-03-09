@@ -14,6 +14,20 @@ struct Edge;
 
 typedef std::vector<Edge> EdgeList;
 
+struct Ray
+{
+	glm::vec2 origin;
+	glm::vec2 direction;
+
+	Ray(glm::vec2 origin, glm::vec2 direction)
+	{
+		this->origin = origin;
+		this->direction = direction;
+	}
+
+
+};
+
 class GraphNode
 {
 public:
@@ -28,6 +42,7 @@ public:
 	int weight;
 	int fScore;
 	int gScore;
+	glm::vec2 size;
 
 
 	//Edges
@@ -94,6 +109,8 @@ private:
 bool NodeCompare(const GraphNode* a_left, const GraphNode* a_Right);
 
 bool StraightLine(const GraphNode * a_left, const GraphNode * a_right);
+
+glm::vec2 GetRayDirection(const glm::vec2& a_pointA, const glm::vec2& a_pointB);
 
 bool Manhattan(const GraphNode * left, const GraphNode * right);
 

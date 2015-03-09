@@ -11,6 +11,7 @@ GraphNode::GraphNode(int a_x, int a_y){
 	weight = 1;
 	spriteID = NULL;
 	spriteName = NULL;
+	size = glm::vec2(64, 64);
 }
 
 GraphNode * Graph::goal = NULL;
@@ -305,18 +306,30 @@ bool NodeCompare(const GraphNode * left, const GraphNode * right) {
 	return (left->weight < right->weight);
 }
 
-bool StraightLine(const GraphNode* a_left, const GraphNode* a_right){
-	float leftF = a_left->weight + (a_left->pos + Graph::goal->pos).length();
-
-	float rightF = a_right->weight + (a_right->pos + Graph::goal->pos).length();
-
-	return (leftF < rightF);
-}
-
 bool Manhattan(const GraphNode * left, const GraphNode * right) {
 	float leftF = left->weight + abs(left->pos.x - Graph::goal->pos.x) + abs(left->pos.y - Graph::goal->pos.y);
 
 	float rightF = right->weight + abs(right->pos.x - Graph::goal->pos.x) + abs(right->pos.y - Graph::goal->pos.y);
 
 	return (leftF < rightF);
+}
+
+bool StraightLine(const GraphNode* a_start, const GraphNode* a_end){
+	Ray ray(a_start->pos, GetRayDirection(a_start->pos, a_end->pos));
+	std::vector<GraphNode*> nodeList =
+}
+
+
+glm::vec2 GetRayDirection(const glm::vec2& a_pointA, const glm::vec2& a_pointB){
+	return glm::normalize(a_pointB - a_pointA);
+}
+
+std::vector<GraphNode*> GetTilesInLine(Ray& a_ray, GraphNode* a_start, GraphNode* a_end){
+	std::vector<GraphNode*> result;
+	glm::vec2 currentPosition = a_ray.origin;
+	GraphNode* currentNode = a_start;
+
+	while (currentNode != a_end){
+		currentPosition += a_end->size * a_ray.direction;
+	}
 }
