@@ -53,27 +53,49 @@ int main(){
 		fk.ClearScreen();
 
 		//Get mouse position
-		fk.GetMouseLocation(mouseX, mouseY);
+		fk.GetMouseLocation(mouseX, mouseY);	
+		//Right Click - Set endNode
 		if (fk.GetMouseButtonDown(GLFW_MOUSE_BUTTON_2)){
-			clickCount++;
 			mousePos2 = glm::vec2(mouseX, g_HEIGHT - mouseY);
-			if (clickCount == 1){
+			//If there is an old endNode
+			if (!endNode == NULL){
+				endNode->spriteID = dTile;
+			}
 				graph.GetNearestNode(mousePos2)->spriteID = sTile;
 				endNode = graph.GetNearestNode(mousePos2);
-			}
-			if (clickCount == 2){
-				graph.GetNearestNode(mousePos2)->spriteID = dTile;
-				endNode = nullptr;
-				clickCount = 0;
-			}
+
 		}
+		//Left Click - Set startNode
 		if (fk.GetMouseButtonDown(GLFW_MOUSE_BUTTON_1)){
 			mousePos1 = glm::vec2(mouseX, g_HEIGHT - mouseY);
+			//If there is an old startNode
+			if (!startNode == NULL){
+				startNode->spriteID = dTile;
+			}
 			graph.GetNearestNode(mousePos1)->spriteID = sTile;
 			startNode = graph.GetNearestNode(mousePos1);
 		}
+		//Run Search
 		if (fk.IsKeyDown(GLFW_KEY_SPACE)){
+			graph.ResetVisted();
 			red.pathList = graph.AStarSearch(startNode, endNode);
+			for (NodeList::iterator i = graph.nodes.begin(); i != graph.nodes.end(); i++){
+				if (!(*i)->visited && !(*i)->walked){
+					(*i)->spriteID = dTile;
+				}
+				if ((*i)->visited){
+					(*i)->spriteID = wTile;
+				}
+				if ((*i)->walked){
+					(*i)->spriteID = gTile;
+				}
+				if ((*i) == startNode || (*i) == endNode){
+					(*i)->spriteID = sTile;
+				}
+
+
+
+			}
 		}
 		if (fk.IsKeyDown(GLFW_KEY_R)){
 			graph.ResetVisted();
@@ -87,30 +109,13 @@ int main(){
 
 		//New Draw
 		for (int i = 0; i < graph.nodes.size(); i++){
-			//if (graph.nodes[i]->visited){
-			//	graph.nodes[i]->spriteID = gTile;
-			//}
-			//if (graph.nodes[i]->isClicked(mousePos2)){
-			//	endNode = graph.nodes[i];
-			//	graph.nodes[i]->spriteID = sTile;
-			//}
-			//if (graph.nodes[i]->isClicked(mousePos1)){
-			//	startNode = graph.nodes[i];
-			//	graph.nodes[i]->spriteID = sTile;
-			//}
-
-			//if (graph.nodes[i]->walked){
-			//	graph.nodes[i]->spriteID = sTile;
-			//}
-			//else if (!graph.nodes[i]->visited){
-			//	graph.nodes[i]->spriteID = dTile;
-			//}
-
 			fk.MoveSprite(graph.nodes[i]->spriteID, graph.nodes[i]->pos);
 			fk.DrawSprite(graph.nodes[i]->spriteID);
 		}
-
-		graph.AStarSearch(startNode, endNode);
+		if (!endNode == NULL && !startNode == NULL){
+			graph.AStarSearch(startNode, endNode);
+		}
+		
 		red.Update(dt);
 		fk.MoveSprite(red.spriteID, red.pos);
 		fk.DrawSprite(red.spriteID);
