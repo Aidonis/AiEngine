@@ -80,7 +80,7 @@ int main(){
 		}
 		//Run Search
 		if (fk.IsKeyDown(GLFW_KEY_SPACE)){
-			red.pathList = graph.AStarSearch(startNode, endNode);
+			red.pathList = graph.AStarSearch(startNode, endNode, true);
 			for (NodeList::iterator i = graph.nodes.begin(); i != graph.nodes.end(); i++){
 				if (!(*i)->visited && !(*i)->walked && (*i)->weight != INT_MAX){
 					(*i)->spriteID = dTile;
@@ -112,7 +112,7 @@ int main(){
 			fk.DrawSprite(graph.nodes[i]->spriteID);
 		}
 		if (!endNode == NULL && !startNode == NULL){
-			graph.AStarSearch(startNode, endNode);
+			graph.AStarSearch(startNode, endNode, true);
 		}
 		
 		red.Update(dt);

@@ -204,7 +204,7 @@ bool Graph::SearchBFS(GraphNode* a_Start, GraphNode* a_End){
 	return false;
 }
 
-std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End){
+std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End, bool a_smoothPath){
 	//Reset Nodes/Weights - Set to Null and Infinity
 	ResetVisted();
 
@@ -255,6 +255,30 @@ std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End)
 		parent = parent->previousNode;
 		pathList.insert(pathList.begin(), parent);
 	}
+
+	if (a_smoothPath){
+		if (pathList.size() < 3){
+			return pathList;
+		}
+		GraphNode* start = *pathList.begin();
+		GraphNode* end = *(pathList.begin() + 2);
+
+		while (std::find(pathList.begin(), pathList.end(), end) + 1 != pathList.end()){
+			if (StraightLine(start, end)){
+				pathList.erase(std::find(pathList.begin(), pathList.end(), end) + 1);
+				if (std::find(pathList.begin(), pathList.end(), end) + 1 != pathList.end()){
+					end = *(std::find(pathList.begin(), pathList.end(), end) + 1);
+				}
+			}
+			else{
+				start = *(std::find(pathList.begin(), pathList.end(), start) + 1);
+				if (std::find(pathList.begin(), pathList.end(), end) + 1 != pathList.end()){
+					end = *(std::find(pathList.begin(), pathList.end(), end) + 1);
+				}
+			}
+		}
+	}
+
 	return pathList;
 }
 
