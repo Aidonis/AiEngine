@@ -12,6 +12,7 @@ GraphNode::GraphNode(int a_x, int a_y){
 	spriteID = NULL;
 	spriteName = NULL;
 	size = glm::vec2(64, 64);
+	walkable = true;
 }
 
 GraphNode * Graph::goal = NULL;
@@ -70,6 +71,7 @@ void GraphNode::Reset(){
 	visited = false;
 	walked = false;
 	fScore = 0;
+	walkable = true;
 }
 
 //Graph
@@ -133,6 +135,60 @@ Graph::Graph(unsigned int a_size, unsigned int a_spriteID, char* a_spriteName){
 			}
 			if (r > 0) {
 				nodes[(r * a_size) + c]->AddEdge(nodes[((r - 1) * a_size) + c]);
+			}
+		}
+	}
+	//Assign Sprite Info
+	for (unsigned int r = 0; r < a_size; r++) {
+		for (unsigned int c = 0; c < a_size; c++) {
+			nodes[(r*a_size) + c]->spriteID = a_spriteID;
+			nodes[(r*a_size) + c]->spriteName = a_spriteName;
+		}
+	}
+}
+
+Graph::Graph(unsigned int a_size, unsigned int a_spriteID, char* a_spriteName, bool a_diagonal){
+
+	//unsigned int ID = fk.CreateSprite("./assets/pack_sheet.xml");
+	//Assign Nodes
+	for (unsigned int r = 0; r < a_size; r++) {
+		for (unsigned int c = 0; c < a_size; c++) {
+			//Set Position //TODO: No magic numbers
+			nodes.push_back(new GraphNode((c * 64) + 30, (r * 64) + 30));
+		}
+	}
+	//Assign Edges < ^ > v
+	for (unsigned int r = 0; r < a_size; r++) {
+		for (unsigned int c = 0; c < a_size; c++) {
+			if (c > 0) {
+				nodes[(r * a_size) + c]->AddEdge(nodes[(r * a_size) + c - 1]);
+			}
+			if (r < a_size - 1) {
+				nodes[(r * a_size) + c]->AddEdge(nodes[((r + 1) * a_size) + c]);
+			}
+			if (c < a_size - 1) {
+				nodes[(r * a_size) + c]->AddEdge(nodes[(r * a_size) + c + 1]);
+			}
+			if (r > 0) {
+				nodes[(r * a_size) + c]->AddEdge(nodes[((r - 1) * a_size) + c]);
+			}
+			if (a_diagonal){
+				//top right
+				if (r < a_size - 1 && c < a_size - 1){
+					nodes[(r * a_size) + c]->AddEdge(nodes[((r + 1) * a_size) + c + 1]);
+				}
+				//top left
+				if (r < a_size - 1 && c > 0){
+					nodes[(r * a_size) + c]->AddEdge(nodes[((r + 1) * a_size) + c - 1]);
+				}
+				//bottom right
+				if (r > 0 && c < a_size - 1){
+					nodes[(r * a_size) + c]->AddEdge(nodes[((r - 1) * a_size) + c + 1]);
+				}
+				//bottom left
+				if (r > 0 && c > 0){
+					nodes[(r * a_size) + c]->AddEdge(nodes[((r - 1) * a_size) + c - 1]);
+				}
 			}
 		}
 	}
@@ -222,9 +278,6 @@ std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End,
 		priorityQ.pop_front();
 
 		current->visited = true;
-		//if (current != a_Start && current != a_End){
-		//	//change color ?
-		//}
 
 		if (current == a_End){
 			break;
@@ -314,22 +367,68 @@ bool Manhattan(const GraphNode * left, const GraphNode * right) {
 	return (leftF < rightF);
 }
 
-bool StraightLine(const GraphNode* a_start, const GraphNode* a_end){
-	Ray ray(a_start->pos, GetRayDirection(a_start->pos, a_end->pos));
-	std::vector<GraphNode*> nodeList =
-}
-
-
-glm::vec2 GetRayDirection(const glm::vec2& a_pointA, const glm::vec2& a_pointB){
+glm::vec2 Graph::GetRayDirection(const glm::vec2& a_pointA, const glm::vec2& a_pointB){
 	return glm::normalize(a_pointB - a_pointA);
 }
 
-std::vector<GraphNode*> GetTilesInLine(Ray& a_ray, GraphNode* a_start, GraphNode* a_end){
+std::vector<GraphNode*> Graph::GetTilesInLine(Ray& a_ray, GraphNode* a_end){
 	std::vector<GraphNode*> result;
 	glm::vec2 currentPosition = a_ray.origin;
-	GraphNode* currentNode = a_start;
+	GraphNode* currentNode = nullptr;
 
 	while (currentNode != a_end){
 		currentPosition += a_end->size * a_ray.direction;
+		currentNode = GetNearestNode(currentPosition);
+		if (std::find(result.begin(), result.end(), currentNode) == result.end()){
+			result.push_back(currentNode);
+		}
 	}
+	return result;
 }
+
+AABB Graph::GetAABB(GraphNode* a_node){
+	float hHeight = a_node->size.x * .5;
+	float hWidth = a_node->size.x * .5;
+	return AABB(glm::vec2(a_node->pos.x - hWidth, a_node->pos.y - hHeight), glm::vec2(a_node->pos.x + hWidth, a_node->pos.y + hHeight));
+}
+
+bool Graph::RayAABBIntersect(Ray& a_ray, AABB& a_box, float& enter, float& exit){
+	glm::vec2 min = (a_box.minPoint - a_ray.origin) / a_ray.direction;
+	glm::vec2 max = (a_box.maxPoint - a_ray.origin) / a_ray.direction;
+
+	glm::vec2 near = glm::min(min, max);
+	glm::vec2 far = glm::max(min, max);
+
+	enter = glm::max(glm::max(near.x, near.y), 0.0f);
+	exit = glm::min(far.x, far.y);
+
+	return (exit > 0.0f && enter < exit);
+}
+
+bool Graph::StraightLine(GraphNode* a_start, GraphNode* a_end){
+	Ray ray(a_start->pos, GetRayDirection(a_start->pos, a_end->pos));
+	std::vector<GraphNode*> nodeList = GetTilesInLine(ray, a_end);
+	for (GraphNode* node : nodeList){
+		if (!node->walkable){
+			AABB box = GetAABB(node);
+			float enter = 0.0f;
+			float exit = 0.0f;
+			if (RayAABBIntersect(ray, box, enter, exit)){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+//Get nearest node from graph
+//GraphNode* Graph::NearestNode(glm::vec2 a_pos, Graph* a_graph){
+//	for (NodeList::iterator i = a_graph->nodes.begin(); i != a_graph->nodes.end(); i++){
+//		if ((*i)->isClicked(a_pos)){
+//			return (*i);
+//		}
+//		else{
+//			return nullptr;
+//		}
+//	}
+//}

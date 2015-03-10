@@ -25,7 +25,7 @@ int main(){
 	unsigned int wallTile = fk.CreateSprite("./assets/pack_sheet.xml", "wall");
 
 
-	Graph graph(10, dTile, "dirt");
+	Graph graph(10, dTile, "dirt", true);
 
 	//dt variable
 	float timer = 0;
@@ -106,6 +106,7 @@ int main(){
 			mousePos3 = glm::vec2(mouseX, g_HEIGHT - mouseY);
 			graph.GetNearestNode(mousePos3)->spriteID = wallTile;
 			graph.GetNearestNode(mousePos3)->weight = INT_MAX;
+			graph.GetNearestNode(mousePos3)->walkable = false;
 		}
 
 		//New Draw

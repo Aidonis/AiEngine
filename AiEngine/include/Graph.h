@@ -7,7 +7,6 @@
 #include <queue>
 #include <list>
 #include "glm\glm.hpp"
-//#include "Framework.h"
 
 
 struct Edge;
@@ -24,8 +23,18 @@ struct Ray
 		this->origin = origin;
 		this->direction = direction;
 	}
+};
 
+struct AABB
+{
+	glm::vec2 minPoint;
+	glm::vec2 maxPoint;
 
+	AABB(glm::vec2 minPoint, glm::vec2 maxPoint)
+	{
+		this->minPoint = minPoint;
+		this->maxPoint = maxPoint;
+	}
 };
 
 class GraphNode
@@ -36,6 +45,7 @@ public:
 
 	bool visited;
 	bool walked;
+	bool walkable;
 
 	//Heuristic
 	GraphNode* previousNode;
@@ -85,6 +95,7 @@ public:
 	Graph();
 	Graph(unsigned int a_size, unsigned int a_spriteID);
 	Graph(unsigned int a_size, unsigned int a_spriteID, char* a_spriteName);
+	Graph(unsigned int a_size, unsigned int a_spriteID, char* a_spriteName, bool a_diagonal);
 
 	static GraphNode * goal;
 
@@ -102,17 +113,25 @@ public:
 	std::vector<GraphNode*> AStarSearch(GraphNode* a_Start, GraphNode* a_End, bool a_smoothPath);
 	std::vector<GraphNode*> pathList;
 
+	//
+	glm::vec2 GetRayDirection(const glm::vec2& a_pointA, const glm::vec2& a_pointB);
+	AABB GetAABB(GraphNode* a_node);
+	bool RayAABBIntersect(Ray& a_ray, AABB& a_box, float& enter, float& exit);
+	std::vector<GraphNode*> GetTilesInLine(Ray& a_ray, GraphNode* a_end);
+	bool StraightLine(GraphNode * a_start, GraphNode * a_end);
+	//GraphNode* NearestNode(glm::vec2 a_pos, Graph* a_graph);
+
 private:
 
 };
 
 bool NodeCompare(const GraphNode* a_left, const GraphNode* a_Right);
 
-bool StraightLine(const GraphNode * a_left, const GraphNode * a_right);
-
-glm::vec2 GetRayDirection(const glm::vec2& a_pointA, const glm::vec2& a_pointB);
-
 bool Manhattan(const GraphNode * left, const GraphNode * right);
+
+
+
+
 
 float GetHeuristic();
 #endif //_GRAPH_H_
