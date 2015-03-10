@@ -22,7 +22,7 @@ int main(){
 	unsigned int wTile = fk.CreateSprite("./assets/pack_sheet.xml", "water");
 	unsigned int dTile = fk.CreateSprite("./assets/pack_sheet.xml", "dirt");
 	unsigned int sTile = fk.CreateSprite("./assets/pack_sheet.xml", "stone");
-	unsigned int wallTile = fk.CreateSprite("./assets/pack_sheet.xml", "wall");
+	unsigned int stoneTile = fk.CreateSprite("./assets/pack_sheet.xml", "wall");
 
 
 	Graph graph(10, dTile, "dirt", true);
@@ -82,16 +82,16 @@ int main(){
 		}
 		//Run Search
 		if (fk.IsKeyDown(GLFW_KEY_SPACE)){
-			red.pathList = graph.AStarSearch(startNode, endNode, true);
+			red.pathList = graph.AStarSearch(startNode, endNode, false);
 			for (NodeList::iterator i = graph.nodes.begin(); i != graph.nodes.end(); i++){
 				if (!(*i)->visited && !(*i)->walked && (*i)->weight != INT_MAX){
 					(*i)->spriteID = dTile;
 				}
 				if ((*i)->visited){
-					(*i)->spriteID = wTile;
+					(*i)->spriteID = gTile;
 				}
 				if ((*i)->walked){
-					(*i)->spriteID = gTile;
+					(*i)->spriteID = stoneTile;
 				}
 				if ((*i) == startNode || (*i) == endNode){
 					(*i)->spriteID = sTile;
@@ -104,7 +104,7 @@ int main(){
 
 		if (fk.IsKeyDown(GLFW_KEY_W)){
 			mousePos3 = glm::vec2(mouseX, g_HEIGHT - mouseY);
-			graph.GetNearestNode(mousePos3)->spriteID = wallTile;
+			graph.GetNearestNode(mousePos3)->spriteID = wTile;
 			graph.GetNearestNode(mousePos3)->weight = INT_MAX;
 			graph.GetNearestNode(mousePos3)->walkable = false;
 		}
@@ -115,7 +115,7 @@ int main(){
 			fk.DrawSprite(graph.nodes[i]->spriteID);
 		}
 		if (!endNode == NULL && !startNode == NULL){
-			graph.AStarSearch(startNode, endNode, true);
+			graph.AStarSearch(startNode, endNode, false);
 		}
 		
 		red.Update(dt);

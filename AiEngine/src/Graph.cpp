@@ -319,7 +319,7 @@ std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End,
 
 		while (std::find(pathList.begin(), pathList.end(), end) + 1 != pathList.end()){
 			if (StraightLine(start, end)){
-				pathList.erase(std::find(pathList.begin(), pathList.end(), end) + 1);
+				pathList.erase(std::find(pathList.begin(), pathList.end(), start) + 1);
 				if (std::find(pathList.begin(), pathList.end(), end) + 1 != pathList.end()){
 					end = *(std::find(pathList.begin(), pathList.end(), end) + 1);
 				}
