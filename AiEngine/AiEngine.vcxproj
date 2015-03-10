@@ -73,22 +73,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Animator.cpp" />
+    <ClCompile Include="src\Flee.cpp" />
     <ClCompile Include="src\Fontbox.cpp" />
     <ClCompile Include="src\Graph.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\NonPlayer.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\Quad.cpp" />
+    <ClCompile Include="src\Seek.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\ToolBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Animator.h" />
     <ClInclude Include="include\Butts.h" />
+    <ClInclude Include="include\Flee.h" />
     <ClInclude Include="include\Fontbox.h" />
     <ClInclude Include="include\Framework.h" />
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\NonPlayer.h" />
     <ClInclude Include="include\player.h" />
+    <ClInclude Include="include\Seek.h" />
+    <ClInclude Include="include\SteeringBehaviour.h" />
     <ClInclude Include="include\TextFileReader.h" />
     <ClInclude Include="include\Tile.h" />
     <ClInclude Include="include\ToolBox.h" />

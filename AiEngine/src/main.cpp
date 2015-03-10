@@ -1,5 +1,6 @@
 #include "Framework.h"
 #include "player.h"
+#include "NonPlayer.h"
 
 Framework fk;
 
@@ -46,6 +47,18 @@ int main(){
 	Player red = Player(rPlayer, startNode);
 	fk.MoveSprite(red.spriteID, red.pos);
 
+	//NonPlayer
+	unsigned int jPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
+	NonPlayer jim(jPlayer, centerScreen);
+
+
+	//NonPlayer
+	unsigned int bPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
+	NonPlayer bob(bPlayer, startNode->pos + glm::vec2(50, 75));
+
+	jim.SetFleeTarget(&bob);
+	bob.SetSeekTarget(&jim);
+
 	bool walking = false;
 
 	do{
@@ -53,6 +66,9 @@ int main(){
 		timer += dt;
 		
 		fk.ClearScreen();
+
+		//Nearest Node
+		jim.currentNode = graph.GetNearestNode(jim.pos);
 
 		//Get mouse positionw
 		fk.GetMouseLocation(mouseX, mouseY);	
@@ -119,8 +135,16 @@ int main(){
 		}
 		
 		red.Update(dt);
+		jim.Update(dt);
+		bob.Update(dt);
+
 		fk.MoveSprite(red.spriteID, red.pos);
+		fk.MoveSprite(jim.spriteID, jim.pos);
+		fk.MoveSprite(bob.spriteID, bob.pos);
+
 		fk.DrawSprite(red.spriteID);
+		fk.DrawSprite(bob.spriteID);
+		fk.DrawSprite(jim.spriteID);
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());
 }
