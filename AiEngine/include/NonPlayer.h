@@ -22,6 +22,7 @@ public:
 	void LoadSteering();
 	void SetSeekTarget(NonPlayer* a_target);
 	void SetFleeTarget(NonPlayer* a_target);
+	void SetWander();
 
 private:
 	std::map<STEERING_BEHAVIOUR_TYPE, SteeringBehaviour*> SteeringBehaviourList;

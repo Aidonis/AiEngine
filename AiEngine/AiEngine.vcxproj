@@ -83,6 +83,7 @@
     <ClCompile Include="src\Seek.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\ToolBox.cpp" />
+    <ClCompile Include="src\Wander.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Animator.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="include\ToolBox.h" />
     <ClInclude Include="include\Quad.h" />
     <ClInclude Include="include\Sprite.h" />
+    <ClInclude Include="include\Wander.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

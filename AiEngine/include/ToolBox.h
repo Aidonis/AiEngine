@@ -6,7 +6,6 @@
 #include "GLFW\glfw3.h"
 #include "glm\gtx\compatibility.hpp"
 
-
 extern glm::mat4 Ortho;
 
 //Window size stuff
@@ -14,6 +13,7 @@ extern int g_WIDTH;
 extern int g_HEIGHT;
 extern double fps;
 
+//
 
 struct Vertex{
 	glm::vec4 Pos;

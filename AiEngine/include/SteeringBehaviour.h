@@ -3,6 +3,9 @@
 
 #include "glm\glm.hpp"
 
+#define PI 3.14159265359
+#define RADIAN_CONVERSION PI / 180.0f
+
 class NonPlayer;
 
 enum STEERING_BEHAVIOUR_TYPE
