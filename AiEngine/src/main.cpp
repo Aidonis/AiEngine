@@ -26,7 +26,7 @@ int main(){
 	unsigned int stoneTile = fk.CreateSprite("./assets/pack_sheet.xml", "wall");
 
 
-	Graph graph(10, dTile, "dirt", true);
+	Graph graph(10, dTile, "dirt", false);
 
 	//dt variable
 	float timer = 0;
