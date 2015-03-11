@@ -32,10 +32,10 @@ private:
 	const float WANDER_FORCE_SCALE = 8.0f;
 
 	glm::vec2 DoSeek(glm::vec2 a_target, float a_slowRadius);
-	glm::vec2 DoFlee(glm::vec2 a_target);
-	glm::vec2 DoWander();
-	glm::vec2 DoEvade(IBoid& a_target);
-	glm::vec2 DoPersue(IBoid& a_target);
+	//glm::vec2 DoFlee(glm::vec2 a_target);
+	//glm::vec2 DoWander();
+	//glm::vec2 DoEvade(IBoid& a_target);
+	//glm::vec2 DoPersue(IBoid& a_target);
 
 
 };

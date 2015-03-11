@@ -1,8 +1,6 @@
 #ifndef _I_BOID_H_
 #define _I_BOID_H_
 
-
-
 #include "glm\glm.hpp"
 
 class IBoid{

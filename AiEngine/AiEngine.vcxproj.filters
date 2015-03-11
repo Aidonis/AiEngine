@@ -51,6 +51,12 @@
     <ClCompile Include="src\Wander.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\IBoid.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SteeringManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Framework.h">
@@ -99,6 +105,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Wander.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SteeringManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
