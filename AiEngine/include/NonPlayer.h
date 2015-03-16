@@ -20,21 +20,26 @@ public:
 	glm::vec2 velocity;
 	float magnitude;
 	float maxVelocity;
-	SteeringBehaviour* behaviour;
 
 	void Update(float a_deltaTime);
+	void Update(float a_deltaTime, std::vector<NonPlayer*> a_list);
 	void SetSeekTarget(glm::vec2 a_position);
 	void SetFleeTarget(glm::vec2 a_position);
+	void Initialize();
+
 
 	//IBoid methods
 	glm::vec2& GetVelocity();
 	glm::vec2& GetPosition();
 	float GetMaxVelocity();
 
+	//alignment
+
 private:
 	SteeringManager* steering;
 	glm::vec2 seekTarget;
 	glm::vec2 fleeTarget;
+
 
 };
 

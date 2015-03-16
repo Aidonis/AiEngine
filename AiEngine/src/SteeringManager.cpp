@@ -1,4 +1,5 @@
 #include "SteeringManager.h"
+#include "NonPlayer.h"
 
 SteeringManager::SteeringManager(){
 }
@@ -33,6 +34,14 @@ void SteeringManager::Seek(glm::vec2 a_target, float a_slowRadius){
 
 void SteeringManager::Wander(){
 	steering += DoWander();
+}
+
+void SteeringManager::Align(std::vector<NonPlayer*> a_list){
+	steering += DoAlign(a_list);
+}
+
+void SteeringManager::Cohesion(std::vector<NonPlayer*> a_list){
+	steering += DoCohesion(a_list);
 }
 
 //Internal Behavior
@@ -87,7 +96,40 @@ glm::vec2 SteeringManager::DoWander(){
 	//return
 	glm::vec2 force = (circleCenter + jitter) * WANDER_FORCE_SCALE;
 	return force;
+}
 
+glm::vec2 SteeringManager::DoAlign(std::vector<NonPlayer*> a_list){
+	unsigned int neighborCount = 0;
+	glm::vec2 velocity(0,0);
+	for (int i = 0; i < a_list.size(); i++){
+		if (a_list[i] != host){
+			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 50){
+				velocity += a_list[i]->velocity;
+				neighborCount++;
+				glm::normalize(velocity);
+				return velocity;
+			}
+		}
+	}
+}
+
+glm::vec2 SteeringManager::DoCohesion(std::vector<NonPlayer*> a_list){
+	unsigned int neighborCount = 0;
+	glm::vec2 velocity(0, 0);
+	for (int i = 0; i < a_list.size(); i++){
+		if (a_list[i] != host){
+			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 100){
+				velocity += a_list[i]->velocity;
+				neighborCount++;
+			}
+			if (neighborCount != 0){
+				velocity *= (1 / neighborCount);
+				velocity = glm::vec2(velocity - host->GetVelocity());
+				glm::normalize(velocity);
+				return velocity;
+			}
+		}
+	}
 }
 
 void SteeringManager::SetAngle(glm::vec2& a_vector, float a_value){

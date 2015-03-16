@@ -26,6 +26,16 @@ int main(){
 	unsigned int stoneTile = fk.CreateSprite("./assets/pack_sheet.xml", "wall");
 
 
+	unsigned int purple = fk.CreateSprite("./assets/piecePurple.xml", "purple");
+	std::vector<NonPlayer*> purpList;
+	for (int i = 0; i < 10; i++){
+		NonPlayer* np = new NonPlayer();
+		np->Initialize();
+		np->spriteID = purple;
+		np->pos = glm::vec2(rand() % 200 + 1, rand() % 300 + 1);
+		purpList.push_back(np);
+	}
+
 	Graph graph(10, dTile, "dirt", false);
 
 	//dt variable
@@ -47,21 +57,17 @@ int main(){
 	Player red = Player(rPlayer, startNode);
 	fk.MoveSprite(red.spriteID, red.pos);
 
-	////NonPlayer Jim
-	//unsigned int jPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
-	//NonPlayer jim(jPlayer, centerScreen);
+	//NonPlayer Jim
+	unsigned int jPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
+	NonPlayer jim(jPlayer, centerScreen);
 
-	////NonPlayer BoB
-	//unsigned int bPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
-	//NonPlayer bob(bPlayer, startNode->pos + glm::vec2(50, 75));
+	//NonPlayer BoB
+	unsigned int bPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
+	NonPlayer bob(bPlayer, startNode->pos + glm::vec2(50, 75));
 
 	//NonPlayer Will
 	unsigned int wPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
 	NonPlayer will(wPlayer, startNode->pos + glm::vec2(100, 75));
-
-	//jim.SetFleeTarget(&bob);
-	//bob.SetSeekTarget(&jim);
-	//will.SetWander();
 
 	bool walking = false;
 
@@ -71,6 +77,8 @@ int main(){
 		
 		fk.ClearScreen();
 		will.SetSeekTarget(red.pos);
+		jim.SetSeekTarget(red.pos);
+		bob.SetSeekTarget(red.pos);
 		//Nearest Node
 //		jim.currentNode = graph.GetNearestNode(jim.pos);
 
@@ -137,20 +145,28 @@ int main(){
 		if (!endNode == NULL && !startNode == NULL){
 			graph.AStarSearch(startNode, endNode, false);
 		}
-		
+
+		//purpList[0]->SetSeekTarget(jim.pos);
+		for (int i = 0; i < purpList.size(); i++)
+		{
+			fk.MoveSprite(purpList[i]->spriteID, purpList[i]->pos);
+			purpList[i]->Update(dt, purpList);
+			fk.DrawSprite(purpList[i]->spriteID);
+		}
+
 		red.Update(dt);
-		//jim.Update(dt);
-		//bob.Update(dt);
+		jim.Update(dt);
+		bob.Update(dt);
 		will.Update(dt);
 
 		fk.MoveSprite(red.spriteID, red.pos);
-		//fk.MoveSprite(jim.spriteID, jim.pos);
-		//fk.MoveSprite(bob.spriteID, bob.pos);
+		fk.MoveSprite(jim.spriteID, jim.pos);
+		fk.MoveSprite(bob.spriteID, bob.pos);
 		fk.MoveSprite(will.spriteID, will.pos);
-		std::cout << will.pos.x << " " << will.pos.y << std::endl;
+
 		fk.DrawSprite(red.spriteID);
-		//fk.DrawSprite(bob.spriteID);
-		//fk.DrawSprite(jim.spriteID);
+		fk.DrawSprite(bob.spriteID);
+		fk.DrawSprite(jim.spriteID);
 		fk.DrawSprite(will.spriteID);
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());

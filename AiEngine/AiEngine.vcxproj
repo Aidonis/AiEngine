@@ -74,29 +74,24 @@
   <ItemGroup>
     <ClCompile Include="include\IBoid.h" />
     <ClCompile Include="src\Animator.cpp" />
-    <ClCompile Include="src\Flee.cpp" />
     <ClCompile Include="src\Fontbox.cpp" />
     <ClCompile Include="src\Graph.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\NonPlayer.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\Quad.cpp" />
-    <ClCompile Include="src\Seek.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\SteeringManager.cpp" />
     <ClCompile Include="src\ToolBox.cpp" />
-    <ClCompile Include="src\Wander.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Animator.h" />
     <ClInclude Include="include\Butts.h" />
-    <ClInclude Include="include\Flee.h" />
     <ClInclude Include="include\Fontbox.h" />
     <ClInclude Include="include\Framework.h" />
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\NonPlayer.h" />
     <ClInclude Include="include\player.h" />
-    <ClInclude Include="include\Seek.h" />
     <ClInclude Include="include\SteeringBehaviour.h" />
     <ClInclude Include="include\SteeringManager.h" />
     <ClInclude Include="include\TextFileReader.h" />
@@ -104,7 +99,6 @@
     <ClInclude Include="include\ToolBox.h" />
     <ClInclude Include="include\Quad.h" />
     <ClInclude Include="include\Sprite.h" />
-    <ClInclude Include="include\Wander.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
