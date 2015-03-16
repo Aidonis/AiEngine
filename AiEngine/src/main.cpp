@@ -47,21 +47,21 @@ int main(){
 	Player red = Player(rPlayer, startNode);
 	fk.MoveSprite(red.spriteID, red.pos);
 
-	//NonPlayer Jim
-	unsigned int jPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
-	NonPlayer jim(jPlayer, centerScreen);
+	////NonPlayer Jim
+	//unsigned int jPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
+	//NonPlayer jim(jPlayer, centerScreen);
 
-	//NonPlayer BoB
-	unsigned int bPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
-	NonPlayer bob(bPlayer, startNode->pos + glm::vec2(50, 75));
+	////NonPlayer BoB
+	//unsigned int bPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
+	//NonPlayer bob(bPlayer, startNode->pos + glm::vec2(50, 75));
 
 	//NonPlayer Will
 	unsigned int wPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
 	NonPlayer will(wPlayer, startNode->pos + glm::vec2(100, 75));
 
-	jim.SetFleeTarget(&bob);
-	bob.SetSeekTarget(&jim);
-	will.SetWander();
+	//jim.SetFleeTarget(&bob);
+	//bob.SetSeekTarget(&jim);
+	//will.SetWander();
 
 	bool walking = false;
 
@@ -70,9 +70,9 @@ int main(){
 		timer += dt;
 		
 		fk.ClearScreen();
-
+		will.SetSeekTarget(red.pos);
 		//Nearest Node
-		jim.currentNode = graph.GetNearestNode(jim.pos);
+//		jim.currentNode = graph.GetNearestNode(jim.pos);
 
 		//Get mouse positionw
 		fk.GetMouseLocation(mouseX, mouseY);	
@@ -139,18 +139,18 @@ int main(){
 		}
 		
 		red.Update(dt);
-		jim.Update(dt);
-		bob.Update(dt);
+		//jim.Update(dt);
+		//bob.Update(dt);
 		will.Update(dt);
 
 		fk.MoveSprite(red.spriteID, red.pos);
-		fk.MoveSprite(jim.spriteID, jim.pos);
-		fk.MoveSprite(bob.spriteID, bob.pos);
+		//fk.MoveSprite(jim.spriteID, jim.pos);
+		//fk.MoveSprite(bob.spriteID, bob.pos);
 		fk.MoveSprite(will.spriteID, will.pos);
-
+		std::cout << will.pos.x << " " << will.pos.y << std::endl;
 		fk.DrawSprite(red.spriteID);
-		fk.DrawSprite(bob.spriteID);
-		fk.DrawSprite(jim.spriteID);
+		//fk.DrawSprite(bob.spriteID);
+		//fk.DrawSprite(jim.spriteID);
 		fk.DrawSprite(will.spriteID);
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());

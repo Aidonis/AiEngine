@@ -24,7 +24,7 @@ glm::vec2 Wander::getForce(){
 	//scale vector
 	displacement *= radius;
 	
-	//Chang current angle
+	//Change current angle
 	SetAngle(displacement, wanderAngle);
 
 	//Jitter angle

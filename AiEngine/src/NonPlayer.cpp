@@ -16,40 +16,62 @@ NonPlayer::~NonPlayer(){
 }
 
 NonPlayer::NonPlayer(unsigned int a_sprite, glm::vec2 a_position) : Player(a_sprite, a_position){
-	velocity = glm::vec2(20, 20);
-	maxVelocity = 6;
+	steering = new SteeringManager(this);
+	velocity = glm::vec2(10, 10);
+	maxVelocity = 2;
 	behaviour = nullptr;
-	LoadSteering();
+	//LoadSteering();
+	
 
 }
 
+//IBoiD
+glm::vec2& NonPlayer::GetVelocity(){
+	return velocity;
+}
+glm::vec2& NonPlayer::GetPosition(){
+	return pos;
+}
+float NonPlayer::GetMaxVelocity(){
+	return maxVelocity;
+}
+
+
+
 void NonPlayer::Update(float a_deltaTime){
-	Seek* seek = nullptr;
-	Flee* flee = nullptr;
-	Wander* wander = nullptr;
+	//Seek* seek = nullptr;
+	//Flee* flee = nullptr;
+	//Wander* wander = nullptr;
 
-	seek = dynamic_cast<Seek*>(SteeringBehaviourList[SEEK]);
-	flee = dynamic_cast<Flee*>(SteeringBehaviourList[FLEE]);
-	wander = dynamic_cast<Wander*>(SteeringBehaviourList[WANDER]);
+	//seek = dynamic_cast<Seek*>(SteeringBehaviourList[SEEK]);
+	//flee = dynamic_cast<Flee*>(SteeringBehaviourList[FLEE]);
+	//wander = dynamic_cast<Wander*>(SteeringBehaviourList[WANDER]);
 
-	if (seek->target != NULL){
-		velocity += seek->getForce() * a_deltaTime;
-		magnitude = glm::length(velocity);
-		velocity = glm::normalize(velocity) * glm::min(magnitude, maxVelocity);
-		pos += (velocity + 1.f) * a_deltaTime;
-	}
-	if (flee->target != NULL){
-		velocity += flee->getForce() * a_deltaTime;
-		magnitude = glm::length(velocity);
-		velocity = glm::normalize(velocity) * glm::min(magnitude, maxVelocity);
-		pos += (velocity)* a_deltaTime;
-	}
-	if (wander != nullptr){
-		velocity += wander->getForce() * a_deltaTime;
-		magnitude = glm::length(velocity);
-		velocity = glm::normalize(velocity) * glm::min(magnitude, maxVelocity);
-		pos += (velocity + 1.5f) * a_deltaTime;
-	}
+	//if (seek->target != NULL){
+	//	velocity += seek->getForce() * a_deltaTime;
+	//	magnitude = glm::length(velocity);
+	//	velocity = glm::normalize(velocity) * glm::min(magnitude, maxVelocity);
+	//	pos += (velocity + 1.f) * a_deltaTime;
+	//}
+	//if (flee->target != NULL){
+	//	velocity += flee->getForce() * a_deltaTime;
+	//	magnitude = glm::length(velocity);
+	//	velocity = glm::normalize(velocity) * glm::min(magnitude, maxVelocity);
+	//	pos += (velocity)* a_deltaTime;
+	//}
+	//if (wander != nullptr){
+	//	velocity += wander->getForce() * a_deltaTime;
+	//	magnitude = glm::length(velocity);
+	//	velocity = glm::normalize(velocity) * glm::min(magnitude, maxVelocity);
+	//	pos += (velocity + 3.5f) * a_deltaTime;
+	//}
+
+
+	//steering->Wander();
+	//steering->Wander();
+	steering->Seek(seekTarget, 10);
+	steering->Update();
+
 	if (pos.x > 640){
 		pos.x -= 640;
 	}
@@ -80,6 +102,10 @@ void NonPlayer::LoadSteering(){
 
 void NonPlayer::SetSeekTarget(NonPlayer* a_target){
 	dynamic_cast<Seek*>(SteeringBehaviourList[SEEK])->target = a_target;
+}
+
+void NonPlayer::SetSeekTarget(glm::vec2 a_pos){
+	seekTarget = a_pos;
 }
 
 void NonPlayer::SetFleeTarget(NonPlayer* a_target){
