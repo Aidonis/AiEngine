@@ -12,14 +12,14 @@ SteeringManager::SteeringManager(IBoid* a_host)
 	steering = glm::vec2(0, 0);
 }
 
-void SteeringManager::Update(){
+void SteeringManager::Update(float a_deltaTime){
 	glm::vec2& velocity = host->GetVelocity();
 	glm::vec2& position = host->GetPosition();
 
 	Truncate(steering, host->GetMaxVelocity());
-	velocity += steering;
+	velocity += steering * a_deltaTime;
 	Truncate(velocity, host->GetMaxVelocity());
-	position += host->GetVelocity();
+	position += host->GetVelocity() * a_deltaTime;
 }
 
 //External Behavior

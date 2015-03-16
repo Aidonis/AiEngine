@@ -25,7 +25,7 @@ public:
 	void Pursue(IBoid& a_target);
 
 	//Update
-	void Update();
+	void Update(float a_deltaTime);
 
 	//Reset
 	void Reset();
@@ -34,9 +34,9 @@ private:
 	//Numbers
 	const float CIRCLE_DISTANCE = 30;
 	const float CIRCLE_RADIUS = 25.0f;
-	const int ANGLE_CHANGE = 10.f;
+	const int ANGLE_CHANGE = 6.f;
 	const float WANDER_FORCE_SCALE = 8.0f;
-	float wanderAngle = 5.0f;
+	float wanderAngle = 3.0f;
 
 	glm::vec2 DoSeek(glm::vec2 a_target, float a_slowRadius);
 	//glm::vec2 DoFlee(glm::vec2 a_target);
