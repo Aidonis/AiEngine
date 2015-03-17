@@ -29,6 +29,7 @@ public:
 	//
 	void Align(std::vector<NonPlayer*> a_list);
 	void Cohesion(std::vector<NonPlayer*> a_list);
+	void Seperation(std::vector<NonPlayer*> a_list);
 
 	//Update
 	void Update(float a_deltaTime);
@@ -53,6 +54,7 @@ private:
 	//
 	glm::vec2 DoAlign(std::vector<NonPlayer*> a_target);
 	glm::vec2 DoCohesion(std::vector<NonPlayer*> a_target);
+	glm::vec2 DoSeperation(std::vector<NonPlayer*> a_list);
 
 	void SetAngle(glm::vec2& a_vector, float a_value);
 	void Truncate(glm::vec2& a_original, float a_max);

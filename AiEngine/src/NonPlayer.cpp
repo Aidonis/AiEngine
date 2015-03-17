@@ -17,7 +17,7 @@ NonPlayer::NonPlayer(unsigned int a_sprite, glm::vec2 a_position) : Player(a_spr
 void NonPlayer::Initialize(){
 	steering = new SteeringManager(this);
 	velocity = glm::vec2(10, 10);
-	maxVelocity = 3;
+	maxVelocity = 5;
 }
 
 //IBoiD
@@ -60,6 +60,7 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 	}
 	steering->Cohesion(a_list);
 	steering->Align(a_list);
+	steering->Seperation(a_list);
 	steering->Update(a_deltaTime);
 
 	if (pos.x > 640){

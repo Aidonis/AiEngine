@@ -43,6 +43,9 @@ void SteeringManager::Align(std::vector<NonPlayer*> a_list){
 void SteeringManager::Cohesion(std::vector<NonPlayer*> a_list){
 	steering += DoCohesion(a_list);
 }
+void SteeringManager::Seperation(std::vector<NonPlayer*> a_list){
+	steering += DoSeperation(a_list);
+}
 
 //Internal Behavior
 glm::vec2 SteeringManager::DoSeek(glm::vec2 a_target, float a_slowRadius){
@@ -103,7 +106,7 @@ glm::vec2 SteeringManager::DoAlign(std::vector<NonPlayer*> a_list){
 	glm::vec2 velocity(0,0);
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
-			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 50){
+			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 200){
 				velocity += a_list[i]->velocity;
 				neighborCount++;
 				glm::normalize(velocity);
@@ -118,13 +121,28 @@ glm::vec2 SteeringManager::DoCohesion(std::vector<NonPlayer*> a_list){
 	glm::vec2 velocity(0, 0);
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
-			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 100){
+			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 200){
 				velocity += a_list[i]->velocity;
 				neighborCount++;
 			}
 			if (neighborCount != 0){
 				velocity *= (1 / neighborCount);
 				velocity = glm::vec2(velocity - host->GetVelocity());
+				glm::normalize(velocity);
+				return velocity;
+			}
+		}
+	}
+}
+
+glm::vec2 SteeringManager::DoSeperation(std::vector<NonPlayer*> a_list){
+	unsigned int neighborCount = 0;
+	glm::vec2 velocity(0, 0);
+	for (int i = 0; i < a_list.size(); i++){
+		if (a_list[i] != host){
+			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 200){
+				velocity += a_list[i]->GetPosition();
+				neighborCount++;
 				glm::normalize(velocity);
 				return velocity;
 			}

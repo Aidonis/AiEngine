@@ -1,6 +1,8 @@
 #include "Framework.h"
 #include "player.h"
 #include "NonPlayer.h"
+#include <ctime>
+
 
 Framework fk;
 
@@ -10,7 +12,7 @@ glm::vec2 centerScreen = glm::vec2(g_WIDTH / 2, g_HEIGHT / 2);
 
 int main(){
 
-	
+	srand(time(NULL));
 
 	//Initialize
 	fk.Initialize(g_WIDTH, g_HEIGHT, "The Gary Show");
