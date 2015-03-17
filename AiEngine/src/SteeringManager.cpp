@@ -28,9 +28,9 @@ void SteeringManager::Seek(glm::vec2 a_target, float a_slowRadius){
 	steering += DoSeek(a_target, a_slowRadius);
 }
 
-//void SteeringManager::Flee(glm::vec2 a_target){
-//	steering += DoFlee(a_target);
-//}
+void SteeringManager::Flee(glm::vec2 a_target){
+	steering += DoFlee(a_target);
+}
 
 void SteeringManager::Wander(){
 	steering += DoWander();
@@ -46,6 +46,10 @@ void SteeringManager::Cohesion(std::vector<NonPlayer*> a_list){
 void SteeringManager::Seperation(std::vector<NonPlayer*> a_list){
 	steering += DoSeperation(a_list);
 }
+
+//void SteeringManager::Evade(IBoid& a_target){
+//	steering += DoEvade(a_target.GetPosition(), a_target.GetVelocity());
+//}
 
 //Internal Behavior
 glm::vec2 SteeringManager::DoSeek(glm::vec2 a_target, float a_slowRadius){
@@ -66,10 +70,10 @@ glm::vec2 SteeringManager::DoSeek(glm::vec2 a_target, float a_slowRadius){
 	force = desired - host->GetVelocity();
 	return force;
 }
-//
-//glm::vec2 SteeringManager::DoFlee(glm::vec2 a_target){
-//
-//}
+
+glm::vec2 SteeringManager::DoFlee(glm::vec2 a_target){
+	return -DoSeek(a_target, 10);
+}
 
 glm::vec2 SteeringManager::DoWander(){
 	glm::vec2 circleCenter = host->GetVelocity();
@@ -113,7 +117,7 @@ glm::vec2 SteeringManager::DoAlign(std::vector<NonPlayer*> a_list){
 			}
 		}
 	}
-	if (neighborCount == 0){
+	if (neighborCount == 0 || neighborCount == 1){
 		return DoWander();
 	}
 	force = force / (float)neighborCount;
@@ -134,7 +138,7 @@ glm::vec2 SteeringManager::DoCohesion(std::vector<NonPlayer*> a_list){
 			}
 		}
 	}
-	if (neighborCount == 0){
+	if (neighborCount == 0 || neighborCount == 1){
 		return DoWander();
 	}
 	medianPos /= (float)neighborCount;
@@ -143,7 +147,7 @@ glm::vec2 SteeringManager::DoCohesion(std::vector<NonPlayer*> a_list){
 
 glm::vec2 SteeringManager::DoSeperation(std::vector<NonPlayer*> a_list){
 	unsigned int neighborCount = 0;
-	float repulsion = 6.f;
+	float repulsion = 10.f;
 	glm::vec2 velocity;
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
@@ -158,9 +162,19 @@ glm::vec2 SteeringManager::DoSeperation(std::vector<NonPlayer*> a_list){
 	if (neighborCount == 0){
 		return DoWander();
 	}
-	velocity = velocity / (float)neighborCount;
-	return velocity;
+	/*if (neighborCount > 5){
+		velocity = velocity / ((float)neighborCount * 2);
+	}*/
+	else{
+		velocity = velocity / (float)neighborCount;
+		return velocity;
+	}
 }
+
+//glm::vec2 SteeringManager::DoEvade(glm::vec2& a_target, glm::vec2& a_velocity){
+//	glm::vec2 future = a_target + a_velocity;
+//	return DoFlee(future);
+//}
 
 void SteeringManager::SetAngle(glm::vec2& a_vector, float a_value){
 	float length = glm::length(a_vector);

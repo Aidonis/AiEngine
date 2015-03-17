@@ -30,7 +30,8 @@ int main(){
 
 	unsigned int purple = fk.CreateSprite("./assets/piecePurple.xml", "purple");
 	std::vector<NonPlayer*> purpList;
-	for (int i = 0; i < 20; i++){
+	
+	for (int i = 0; i < 50; i++){
 		NonPlayer* np = new NonPlayer();
 		np->Initialize();
 		np->spriteID = purple;
@@ -151,6 +152,10 @@ int main(){
 		//purpList[0]->SetSeekTarget(jim.pos);
 		for (int i = 0; i < purpList.size(); i++)
 		{
+			if (i != 0){
+				purpList[i]->SetSeekTarget(purpList[i % 5]->pos);
+				purpList[i]->SetFleeTarget(purpList[i % 2]->pos);
+			}
 			fk.MoveSprite(purpList[i]->spriteID, purpList[i]->pos);
 			purpList[i]->Update(dt, purpList);
 			fk.DrawSprite(purpList[i]->spriteID);

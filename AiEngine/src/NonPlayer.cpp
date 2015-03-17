@@ -55,13 +55,16 @@ void NonPlayer::Update(float a_deltaTime){
 }
 
 void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
-	//if (seekTarget != glm::vec2(NULL, NULL)){
-	//	steering->Seek(seekTarget, 10);
-	//}
-	//steering->Wander();
+	if (seekTarget != glm::vec2(NULL, NULL)){
+		steering->Seek(seekTarget, 10);
+	}
+	steering->Wander();
+	if (fleeTarget != glm::vec2(NULL, NULL)){
+		steering->Flee(fleeTarget);
+	}
 	steering->Cohesion(a_list);
 	steering->Align(a_list);
-	steering->Seperation(a_list);
+	//steering->Seperation(a_list);
 	
 	steering->Update(a_deltaTime);
 
