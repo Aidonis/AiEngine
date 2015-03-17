@@ -30,11 +30,11 @@ int main(){
 
 	unsigned int purple = fk.CreateSprite("./assets/piecePurple.xml", "purple");
 	std::vector<NonPlayer*> purpList;
-	for (int i = 0; i < 10; i++){
+	for (int i = 0; i < 20; i++){
 		NonPlayer* np = new NonPlayer();
 		np->Initialize();
 		np->spriteID = purple;
-		np->pos = glm::vec2(rand() % 200 + 1, rand() % 300 + 1);
+		np->pos = glm::vec2(rand() % 600 + 1, rand() % 600 + 1);
 		purpList.push_back(np);
 	}
 

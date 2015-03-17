@@ -16,8 +16,8 @@ NonPlayer::NonPlayer(unsigned int a_sprite, glm::vec2 a_position) : Player(a_spr
 
 void NonPlayer::Initialize(){
 	steering = new SteeringManager(this);
-	velocity = glm::vec2(10, 10);
-	maxVelocity = 5;
+	velocity = glm::vec2(rand() % 10, rand() % 10);
+	maxVelocity = 10;
 }
 
 //IBoiD
@@ -55,13 +55,28 @@ void NonPlayer::Update(float a_deltaTime){
 }
 
 void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
-	if (seekTarget != glm::vec2(NULL, NULL)){
-		steering->Seek(seekTarget, 10);
-	}
+	//if (seekTarget != glm::vec2(NULL, NULL)){
+	//	steering->Seek(seekTarget, 10);
+	//}
+	//steering->Wander();
 	steering->Cohesion(a_list);
 	steering->Align(a_list);
 	steering->Seperation(a_list);
+	
 	steering->Update(a_deltaTime);
+
+	//if (pos.x >= 640){
+	//	velocity *= -1;
+	//}
+	//if (pos.x <= 0){
+	//	velocity *= -1;
+	//}
+	//if (pos.y >= 640){
+	//	velocity *= -1;
+	//}
+	//if (pos.y <= 0){
+	//	velocity *= -1;
+	//}
 
 	if (pos.x > 640){
 		pos.x -= 640;
@@ -75,6 +90,7 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 	if (pos.y < 0){
 		pos.y += 640;
 	}
+
 }
 
 void NonPlayer::SetSeekTarget(glm::vec2 a_pos){

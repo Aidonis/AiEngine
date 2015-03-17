@@ -103,51 +103,63 @@ glm::vec2 SteeringManager::DoWander(){
 
 glm::vec2 SteeringManager::DoAlign(std::vector<NonPlayer*> a_list){
 	unsigned int neighborCount = 0;
-	glm::vec2 velocity(0,0);
+	glm::vec2 force;
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
-			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 200){
-				velocity += a_list[i]->velocity;
+			float distance = glm::length(host->GetPosition() - a_list[i]->GetPosition());
+			if (distance <= neighborRadius){
+				force += a_list[i]->velocity;
 				neighborCount++;
-				glm::normalize(velocity);
-				return velocity;
 			}
 		}
 	}
+	if (neighborCount == 0){
+		return DoWander();
+	}
+	force = force / (float)neighborCount;
+	return force - host->GetVelocity();
 }
 
 glm::vec2 SteeringManager::DoCohesion(std::vector<NonPlayer*> a_list){
 	unsigned int neighborCount = 0;
-	glm::vec2 velocity(0, 0);
+	float cohesionForce = 5.f;
+	glm::vec2 force;
+	glm::vec2 medianPos;
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
-			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 200){
-				velocity += a_list[i]->velocity;
+			float distance = glm::length(host->GetPosition() - a_list[i]->GetPosition());
+			if (distance <= neighborRadius){
+				medianPos += a_list[i]->GetPosition();
 				neighborCount++;
-			}
-			if (neighborCount != 0){
-				velocity *= (1 / neighborCount);
-				velocity = glm::vec2(velocity - host->GetVelocity());
-				glm::normalize(velocity);
-				return velocity;
 			}
 		}
 	}
+	if (neighborCount == 0){
+		return DoWander();
+	}
+	medianPos /= (float)neighborCount;
+	return glm::normalize(medianPos - host->GetPosition()) / (glm::length(medianPos - host->GetPosition()) * cohesionForce);
 }
 
 glm::vec2 SteeringManager::DoSeperation(std::vector<NonPlayer*> a_list){
 	unsigned int neighborCount = 0;
-	glm::vec2 velocity(0, 0);
+	float repulsion = 6.f;
+	glm::vec2 velocity;
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
-			if (glm::distance(host->GetPosition(), a_list[i]->GetPosition()) < 200){
-				velocity += a_list[i]->GetPosition();
+			glm::vec2 direction = host->GetPosition() - a_list[i]->GetPosition();
+			float distance = glm::length(direction);
+			if (distance <= neighborRadius){
 				neighborCount++;
-				glm::normalize(velocity);
-				return velocity;
+				velocity += glm::normalize(direction) / (distance * repulsion);
 			}
 		}
 	}
+	if (neighborCount == 0){
+		return DoWander();
+	}
+	velocity = velocity / (float)neighborCount;
+	return velocity;
 }
 
 void SteeringManager::SetAngle(glm::vec2& a_vector, float a_value){
