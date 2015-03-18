@@ -58,7 +58,7 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 	if (seekTarget != glm::vec2(NULL, NULL)){
 		steering->Seek(seekTarget, 10);
 	}
-	//steering->Wander();
+//	steering->Wander();
 	if (fleeTarget != glm::vec2(NULL, NULL)){
 		steering->Flee(fleeTarget);
 	}
@@ -68,7 +68,7 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 	
 	steering->Update(a_deltaTime);
 
-	if (pos.x > 640){
+	/*if (pos.x > 640){
 		pos.x -= 640;
 	}
 	if (pos.x < 0){
@@ -79,6 +79,19 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 	}
 	if (pos.y < 0){
 		pos.y += 640;
+	}
+*/
+	if (pos.x >= 640){
+		velocity *= -1;
+	}
+	if (pos.x <= 0){
+		velocity *= -1;
+	}
+	if (pos.y >= 640){
+		velocity *= -1;
+	}
+	if (pos.y <= 0){
+		velocity *= -1;
 	}
 
 }

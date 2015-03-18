@@ -31,7 +31,7 @@ int main(){
 	unsigned int purple = fk.CreateSprite("./assets/piecePurple.xml", "purple");
 	std::vector<NonPlayer*> purpList;
 	
-	for (int i = 0; i < 100; i++){
+	for (int i = 0; i < 50; i++){
 		NonPlayer* np = new NonPlayer();
 		np->Initialize();
 		np->spriteID = purple;

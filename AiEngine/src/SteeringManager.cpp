@@ -114,21 +114,28 @@ glm::vec2 SteeringManager::DoAlign(std::vector<NonPlayer*> a_list){
 			if (distance < NEIGHBOR_RADIUS){
 				force += a_list[i]->velocity;
 				neighborCount++;
+				
+
 			}
+			//
+			if (neighborCount < 4){
+				return DoWander();
+			}
+			force /= neighborCount;
+			force -= host->GetVelocity();
+
+			float desiredMag = glm::length(force);
+
+			if (desiredMag < 0.000001f && desiredMag > -0.0000001f){
+				return DoWander();
+			}
+
+			force /= desiredMag;
+			force *= ALIGN_FORCE;
 		}
+
 	}
-	force /= neighborCount;
-	force -= host->GetVelocity();
-
-	float desiredMag = glm::length(force);
-
-	if (desiredMag < 0.000001f && desiredMag > -0.0000001f){
-		return DoWander();
-	}
-
-	force /= desiredMag;
-	force *= ALIGN_FORCE;
-
+	
 	return force;
 }
 
@@ -138,30 +145,33 @@ glm::vec2 SteeringManager::DoCohesion(std::vector<NonPlayer*> a_list){
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
 			float distance = glm::distance(host->GetPosition(), a_list[i]->GetPosition());
-			if (distance > NEIGHBOR_RADIUS /2){
+			if (distance > NEIGHBOR_RADIUS /2 && distance < NEIGHBOR_RADIUS){
 				medianPos += a_list[i]->GetPosition();
 				neighborCount++;
 			}
+			///
+			if (neighborCount < 0.000001f && neighborCount > -0.0000001f){
+				return DoWander();
+			}
+
+			medianPos /= (float)neighborCount;
+			medianPos -= host->GetPosition();
+
+			float magnitude = glm::length(medianPos);
+
+			if (magnitude< 0.000001f && magnitude > -0.0000001f){
+				return DoWander();
+			}
+
+			medianPos /= magnitude;
+			medianPos *= COHESION_FORCE;
+			//glm::normalize(medianPos);
 		}
+
 	}
 	
-	if (neighborCount < 0.000001f && neighborCount > -0.0000001f){
-		return DoWander();
-	}
 
-	medianPos /= (float)neighborCount;
-	medianPos -= host->GetPosition();
-
-	float magnitude = glm::length(medianPos);
-
-	if (magnitude< 0.000001f && magnitude > -0.0000001f){
-		return DoWander();
-	}
-
-	medianPos /= magnitude;
-	medianPos *= COHESION_FORCE;
-	glm::normalize(medianPos);
-	return medianPos /2.f;
+	return medianPos;
 	//return glm::normalize(medianPos - host->GetPosition()) / (glm::length(medianPos - host->GetPosition()) * COHESION_FORCE);
 }
 
@@ -178,16 +188,18 @@ glm::vec2 SteeringManager::DoSeperation(std::vector<NonPlayer*> a_list){
 				velocity += currentRepulsion;
 			}
 		}
+		///
+		float magnitude = glm::length(velocity);
+
+		if (magnitude < 0.0000001 && magnitude > -0.0000001){
+			return glm::vec2(0, 0);
+		}
+
+		velocity /= magnitude;
+		velocity *= REPULSION_FORCE;
 	}
 
-	float magnitude = glm::length(velocity);
 
-	if (magnitude < 0.0000001 && magnitude > -0.0000001){
-		return glm::vec2(0, 0);
-	}
-
-	velocity /= magnitude;
-	velocity *= REPULSION_FORCE;
 
 	return velocity;
 

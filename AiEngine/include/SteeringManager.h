@@ -44,11 +44,11 @@ private:
 	const int ANGLE_CHANGE = 6.f;
 	const float WANDER_FORCE_SCALE = 10.0f;
 
-	const float COHESION_FORCE = 1.f;
-	const float REPULSION_FORCE = 1.f;
-	const float ALIGN_FORCE = 2.f;
+	const float COHESION_FORCE = 50.5f;
+	const float REPULSION_FORCE = 50.5f;
+	const float ALIGN_FORCE = 150.f;
 
-	float NEIGHBOR_RADIUS = 250.f;
+	float NEIGHBOR_RADIUS = 320.f;
 
 	float wanderAngle = 5.0f;
 
