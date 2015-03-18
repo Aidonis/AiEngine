@@ -110,65 +110,91 @@ glm::vec2 SteeringManager::DoAlign(std::vector<NonPlayer*> a_list){
 	glm::vec2 force;
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
-			float distance = glm::length(host->GetPosition() - a_list[i]->GetPosition());
-			if (distance <= neighborRadius){
+			float distance = glm::distance(host->GetPosition(), a_list[i]->GetPosition());
+			if (distance < NEIGHBOR_RADIUS){
 				force += a_list[i]->velocity;
 				neighborCount++;
 			}
 		}
 	}
-	if (neighborCount == 0 || neighborCount == 1){
+	force /= neighborCount;
+	force -= host->GetVelocity();
+
+	float desiredMag = glm::length(force);
+
+	if (desiredMag < 0.000001f && desiredMag > -0.0000001f){
 		return DoWander();
 	}
-	force = force / (float)neighborCount;
-	return force - host->GetVelocity();
+
+	force /= desiredMag;
+	force *= ALIGN_FORCE;
+
+	return force;
 }
 
 glm::vec2 SteeringManager::DoCohesion(std::vector<NonPlayer*> a_list){
 	unsigned int neighborCount = 0;
-	float cohesionForce = 5.f;
-	glm::vec2 force;
 	glm::vec2 medianPos;
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
-			float distance = glm::length(host->GetPosition() - a_list[i]->GetPosition());
-			if (distance <= neighborRadius){
+			float distance = glm::distance(host->GetPosition(), a_list[i]->GetPosition());
+			if (distance > NEIGHBOR_RADIUS /2){
 				medianPos += a_list[i]->GetPosition();
 				neighborCount++;
 			}
 		}
 	}
-	if (neighborCount == 0 || neighborCount == 1){
+	
+	if (neighborCount < 0.000001f && neighborCount > -0.0000001f){
 		return DoWander();
 	}
+
 	medianPos /= (float)neighborCount;
-	return glm::normalize(medianPos - host->GetPosition()) / (glm::length(medianPos - host->GetPosition()) * cohesionForce);
+	medianPos -= host->GetPosition();
+
+	float magnitude = glm::length(medianPos);
+
+	if (magnitude< 0.000001f && magnitude > -0.0000001f){
+		return DoWander();
+	}
+
+	medianPos /= magnitude;
+	medianPos *= COHESION_FORCE;
+	glm::normalize(medianPos);
+	return medianPos /2.f;
+	//return glm::normalize(medianPos - host->GetPosition()) / (glm::length(medianPos - host->GetPosition()) * COHESION_FORCE);
 }
 
 glm::vec2 SteeringManager::DoSeperation(std::vector<NonPlayer*> a_list){
 	unsigned int neighborCount = 0;
-	float repulsion = 10.f;
 	glm::vec2 velocity;
 	for (int i = 0; i < a_list.size(); i++){
 		if (a_list[i] != host){
-			glm::vec2 direction = host->GetPosition() - a_list[i]->GetPosition();
-			float distance = glm::length(direction);
-			if (distance <= neighborRadius){
-				neighborCount++;
-				velocity += glm::normalize(direction) / (distance * repulsion);
+			glm::vec2 currentRepulsion = (a_list[i]->GetPosition() - host->GetPosition());
+			float distance = glm::distance(host->GetPosition(), a_list[i]->GetPosition());
+			if (distance < NEIGHBOR_RADIUS /2 ){
+				//neighborCount++;
+				//velocity += glm::normalize(distance) / (distance * REPULSION_FORCE);
+				velocity += currentRepulsion;
 			}
 		}
 	}
-	if (neighborCount == 0){
-		return DoWander();
+
+	float magnitude = glm::length(velocity);
+
+	if (magnitude < 0.0000001 && magnitude > -0.0000001){
+		return glm::vec2(0, 0);
 	}
-	/*if (neighborCount > 5){
-		velocity = velocity / ((float)neighborCount * 2);
-	}*/
-	else{
+
+	velocity /= magnitude;
+	velocity *= REPULSION_FORCE;
+
+	return velocity;
+
+	/*else{
 		velocity = velocity / (float)neighborCount;
 		return velocity;
-	}
+	}*/
 }
 
 //glm::vec2 SteeringManager::DoEvade(glm::vec2& a_target, glm::vec2& a_velocity){
