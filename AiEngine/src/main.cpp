@@ -136,7 +136,7 @@ int main(){
 		for (int i = 0; i < purpList.size(); i++)
 		{
 			if (i != 0){
-			//	purpList[i]->SetSeekTarget(purpList[i % 10]->pos);
+				purpList[i]->SetSeekTarget(purpList[i % 5]->pos);
 			}
 			fk.MoveSprite(purpList[i]->spriteID, purpList[i]->pos);
 			purpList[i]->Update(dt, purpList);

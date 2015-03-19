@@ -273,7 +273,7 @@ std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End,
 	goal = a_End;
 
 	while (!priorityQ.empty()){
-		priorityQ.sort(Manhattan);
+		priorityQ.sort(NodeCompare);
 		GraphNode* current = priorityQ.front();
 		priorityQ.pop_front();
 
