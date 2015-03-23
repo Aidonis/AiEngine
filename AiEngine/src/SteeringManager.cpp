@@ -72,7 +72,11 @@ glm::vec2 SteeringManager::DoSeek(glm::vec2 a_target, float a_slowRadius){
 }
 
 glm::vec2 SteeringManager::DoFlee(glm::vec2 a_target){
-	return -DoSeek(a_target, 10);
+	float distance = glm::distance(host->GetPosition(), a_target);
+	if (distance > 155.f){
+		return DoWander();
+	}
+	return (-DoSeek(a_target, 150)*10.f);
 }
 
 glm::vec2 SteeringManager::DoWander(){
@@ -198,17 +202,12 @@ glm::vec2 SteeringManager::DoSeperation(std::vector<NonPlayer*> a_list){
 		velocity /= magnitude;
 		velocity *= REPULSION_FORCE;
 	}
-
-
-
 	return velocity;
-
-	/*else{
-		velocity = velocity / (float)neighborCount;
-		return velocity;
-	}*/
 }
 
+//glm::vec2 SteeringManager::DoAvoid(){
+//	glm::vec2 force;
+//}
 //glm::vec2 SteeringManager::DoEvade(glm::vec2& a_target, glm::vec2& a_velocity){
 //	glm::vec2 future = a_target + a_velocity;
 //	return DoFlee(future);

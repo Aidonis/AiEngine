@@ -18,6 +18,7 @@ void NonPlayer::Initialize(){
 	steering = new SteeringManager(this);
 	velocity = glm::vec2(rand() % 10, rand() % 10);
 	maxVelocity = 15;
+
 }
 
 //IBoiD
@@ -58,14 +59,15 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 	if (seekTarget != glm::vec2(NULL, NULL)){
 		steering->Seek(seekTarget, 10);
 	}
-	steering->Wander();
+	//steering->Wander();
 	if (fleeTarget != glm::vec2(NULL, NULL)){
 		steering->Flee(fleeTarget);
 	}
 	steering->Cohesion(a_list);
 	steering->Align(a_list);
 	steering->Seperation(a_list);
-	
+	rotateAngle = atan2f(velocity.y, velocity.x);
+	rotateAngle -= PI / 2;
 	steering->Update(a_deltaTime);
 
 	if (pos.x > 640){
@@ -80,20 +82,6 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 	if (pos.y < 0){
 		pos.y += 640;
 	}
-
-	//if (pos.x >= 640){
-	//	velocity *= -1;
-	//}
-	//if (pos.x <= 0){
-	//	velocity *= -1;
-	//}
-	//if (pos.y >= 640){
-	//	velocity *= -1;
-	//}
-	//if (pos.y <= 0){
-	//	velocity *= -1;
-	//}
-
 }
 
 void NonPlayer::SetSeekTarget(glm::vec2 a_pos){

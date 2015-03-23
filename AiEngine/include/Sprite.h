@@ -18,6 +18,7 @@ public:
 	glm::vec3 s_Velocity;
 	glm::vec3 s_Rotation;
 	glm::vec2 s_Scale;
+	float s_rotz;
 
 	GLuint s_TexId;
 	GLuint tex_Location;
@@ -26,12 +27,13 @@ public:
 
 	Animator s_Animator;
 
-	void Update(float a_DeltaTime);
+	void Update();
 	void Draw();
 	void LoadTexture(const char* a_Texture);
 
 	void SetUVData();
 	void Initialize();
+	void SetRotation(const float a_angle);
 
 
 private:

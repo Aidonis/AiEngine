@@ -95,7 +95,14 @@ void MoveSprite(unsigned int a_SpriteID, glm::vec2 a_Pos){
 void DrawSprite(unsigned int a_SpriteID){
 	Sprite* sp = spriteList[a_SpriteID];
 
-	sp->Update(0.1f);
+	sp->Update();
+}
+
+void RotateSprite(unsigned int a_SpriteID, const float a_angle){
+	Sprite* sp = spriteList[a_SpriteID];
+	sp->SetRotation(a_angle);
+
+	sp->Update();
 }
 
 //Key Handeling

@@ -20,6 +20,7 @@ public:
 	glm::vec2 velocity;
 	float magnitude;
 	float maxVelocity;
+	float rotateAngle;
 
 	void Update(float a_deltaTime);
 	void Update(float a_deltaTime, std::vector<NonPlayer*> a_list);

@@ -104,6 +104,6 @@ void Fontbox::DrawString(std::string str, glm::vec2 pos, float scale){
 		text.s_Scale = glm::vec2(ch.width * scale, ch.height * scale);
 
 		text.SetUVData();
-		text.Update(.1f);
+		text.Update();
 	}
 }

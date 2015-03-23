@@ -23,6 +23,7 @@ public:
 	void Seek(glm::vec2 a_target, float a_slowRadius);
 	void Flee(glm::vec2 a_target);
 	void Wander();
+	void Avoid();
 	//void Evade(IBoid& a_target);
 	void Pursue(IBoid& a_target);
 
@@ -56,6 +57,7 @@ private:
 	glm::vec2 DoSeek(glm::vec2 a_target, float a_slowRadius);
 	glm::vec2 DoFlee(glm::vec2 a_target);
 	glm::vec2 DoWander();
+	glm::vec2 DoAvoid();
 	//glm::vec2 DoEvade(glm::vec2& a_target, glm::vec2& a_velocity);
 	//glm::vec2 DoPersue(IBoid& a_target);
 

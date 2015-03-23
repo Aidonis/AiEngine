@@ -132,13 +132,14 @@ int main(){
 			graph.AStarSearch(startNode, endNode, false);
 		}
 
-
+		float rad = PI / 2;
 		for (int i = 0; i < purpList.size(); i++)
 		{
-			if (i != 0){
-				purpList[i]->SetSeekTarget(purpList[i % 5]->pos);
-			}
+			rad += PI /2 ;
+			purpList[i]->SetFleeTarget(glm::vec2(mouseX,g_HEIGHT - mouseY));
+
 			fk.MoveSprite(purpList[i]->spriteID, purpList[i]->pos);
+			fk.RotateSprite(purpList[i]->spriteID, purpList[i]->rotateAngle);
 			purpList[i]->Update(dt, purpList);
 			fk.DrawSprite(purpList[i]->spriteID);
 		}
@@ -146,6 +147,7 @@ int main(){
 		red.Update(dt);
 		fk.MoveSprite(red.spriteID, red.pos);
 		fk.DrawSprite(red.spriteID);
+		rad = PI / 2;
 
 		ResetDeltaTime();
 	} while (fk.FrameworkUpdate());
