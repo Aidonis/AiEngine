@@ -26,12 +26,13 @@ int main(){
 	unsigned int dTile = fk.CreateSprite("./assets/pack_sheet.xml", "dirt");
 	unsigned int sTile = fk.CreateSprite("./assets/pack_sheet.xml", "stone");
 	unsigned int stoneTile = fk.CreateSprite("./assets/pack_sheet.xml", "wall");
+	unsigned int white = fk.CreateSprite("./assets/pieceWhite.xml", "white");
 
 
 	unsigned int purple = fk.CreateSprite("./assets/piecePurple.xml", "purple");
 	std::vector<NonPlayer*> purpList;
 	
-	for (int i = 0; i < 50; i++){
+	for (int i = 0; i < 10; i++){
 		NonPlayer* np = new NonPlayer();
 		np->Initialize();
 		np->spriteID = purple;
@@ -97,6 +98,7 @@ int main(){
 		//Run Search
 		if (fk.IsKeyDown(GLFW_KEY_SPACE)){
 			red.pathList = graph.AStarSearch(startNode, endNode, false);
+			purpList[0]->pathList = graph.AStarSearch(startNode, endNode, false);
 			for (NodeList::iterator i = graph.nodes.begin(); i != graph.nodes.end(); i++){
 				if (!(*i)->visited && !(*i)->walked && (*i)->weight != INT_MAX){
 					(*i)->spriteID = dTile;
@@ -143,7 +145,8 @@ int main(){
 			purpList[i]->Update(dt, purpList);
 			fk.DrawSprite(purpList[i]->spriteID);
 		}
-
+		purpList[0]->spriteID = white;
+		purpList[0]->Update(dt);
 		red.Update(dt);
 		fk.MoveSprite(red.spriteID, red.pos);
 		fk.DrawSprite(red.spriteID);

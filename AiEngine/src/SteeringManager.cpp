@@ -20,6 +20,23 @@ void SteeringManager::Update(float a_deltaTime){
 	Truncate(steering, host->GetMaxVelocity());
 	velocity += steering * a_deltaTime;
 	Truncate(velocity, host->GetMaxVelocity());
+	
+	//Diagonal 
+	//if (velocity.x > 0 && velocity.y > 0){
+	//	velocity.x = velocity.y;
+	//	
+	//}
+	//if (velocity.x < 0 && velocity.y > 0){
+	//	velocity.x = -velocity.y;
+	//	
+	//}
+	//if (velocity.x > 0 && velocity.y < 0){
+	//	velocity.y = -velocity.x;
+	//	
+	//}
+	//if (velocity.x < 0 && velocity.y < 0){
+	//	velocity.x = velocity.y;
+	//}
 	position += host->GetVelocity() * a_deltaTime;
 }
 
@@ -73,10 +90,10 @@ glm::vec2 SteeringManager::DoSeek(glm::vec2 a_target, float a_slowRadius){
 
 glm::vec2 SteeringManager::DoFlee(glm::vec2 a_target){
 	float distance = glm::distance(host->GetPosition(), a_target);
-	if (distance > 155.f){
+	if (distance > 125.f){
 		return DoWander();
 	}
-	return (-DoSeek(a_target, 150)*10.f);
+	return (-DoSeek(a_target, 200)*5.f);
 }
 
 glm::vec2 SteeringManager::DoWander(){
@@ -204,6 +221,10 @@ glm::vec2 SteeringManager::DoSeperation(std::vector<NonPlayer*> a_list){
 	}
 	return velocity;
 }
+
+//glm::vec2 SteeringManager::DoPath(){
+//
+//}
 
 //glm::vec2 SteeringManager::DoAvoid(){
 //	glm::vec2 force;

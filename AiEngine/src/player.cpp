@@ -24,11 +24,14 @@ void Player::Update(float deltaTime){
 		goalNode = pathList.front();
 		goalNode->walked = true;
 		previousNode = goalNode->previousNode;
+		
+		//Lerp to goal node
 		if (currentLerpValue < 1){
 			pos = glm::lerp(previousNode->pos, goalNode->pos, currentLerpValue);
 			currentLerpValue += .5 * deltaTime;
 			
 		}
+
 		else{
 			currentLerpValue = 0;
 			previousNode = goalNode;

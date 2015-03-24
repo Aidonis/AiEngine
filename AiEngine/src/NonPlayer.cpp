@@ -35,23 +35,34 @@ float NonPlayer::GetMaxVelocity(){
 
 
 void NonPlayer::Update(float a_deltaTime){
-	if (seekTarget != glm::vec2(NULL, NULL)){
-		steering->Seek(seekTarget, 10);
-	}
-	steering->Wander();
-	steering->Update(a_deltaTime);
+	float distance = 0;
+	if (pathList.size() > 0){
+		goalNode = pathList.front();
+		goalNode->walked = true;
+		previousNode = goalNode->previousNode;
 
-	if (pos.x > 640){
-		pos.x -= 640;
+		//Seek goal node
+		distance = glm::distance(pos, goalNode->pos);
+		if (distance > 45.f){
+			SetSeekTarget(goalNode->pos);
+		}
+		else{
+			distance = 0;
+			previousNode = goalNode;
+			pathList.erase(pathList.begin());
+			if (pathList.size() > 0){
+				goalNode = pathList.front();
+			}
+			if (pathList.empty()){
+				steering->Wander();
+			}
+		}
 	}
-	if (pos.x < 0){
-		pos.x += 640;
-	}
-	if (pos.y > 640){
-		pos.y -= 640;
-	}
-	if (pos.y < 0){
-		pos.y += 640;
+	else{
+		goalNode = nullptr;
+		steering->Wander();
+		//steering->Wander();
+		SetSeekTarget(glm::vec2(NULL,NULL));
 	}
 }
 
@@ -66,8 +77,10 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 	steering->Cohesion(a_list);
 	steering->Align(a_list);
 	steering->Seperation(a_list);
+
 	rotateAngle = atan2f(velocity.y, velocity.x);
 	rotateAngle -= PI / 2;
+
 	steering->Update(a_deltaTime);
 
 	if (pos.x > 640){
