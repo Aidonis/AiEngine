@@ -80,6 +80,7 @@
     <ClCompile Include="src\NonPlayer.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\Quad.cpp" />
+    <ClCompile Include="src\QuadTree.cpp" />
     <ClCompile Include="src\Sprite.cpp" />
     <ClCompile Include="src\SteeringManager.cpp" />
     <ClCompile Include="src\ToolBox.cpp" />
@@ -92,6 +93,7 @@
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\NonPlayer.h" />
     <ClInclude Include="include\player.h" />
+    <ClInclude Include="include\QuadTree.h" />
     <ClInclude Include="include\SteeringBehaviour.h" />
     <ClInclude Include="include\SteeringManager.h" />
     <ClInclude Include="include\TextFileReader.h" />

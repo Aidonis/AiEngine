@@ -14,19 +14,21 @@ class NonPlayer :
 public:
 
 	NonPlayer();
-	NonPlayer(unsigned int a_SpriteID, glm::vec2 a_position);
 	~NonPlayer();
 
+	NonPlayer(unsigned int a_SpriteID, glm::vec2 a_position);
+	void Initialize();
+	void Update(float a_deltaTime);
+	void Update(float a_deltaTime, std::vector<NonPlayer*> a_list);
+
+	void SetSeekTarget(glm::vec2 a_position);
+	void SetFleeTarget(glm::vec2 a_position);
+	void SetGraph(Graph* a_graph);
+	
 	glm::vec2 velocity;
 	float magnitude;
 	float maxVelocity;
 	float rotateAngle;
-
-	void Update(float a_deltaTime);
-	void Update(float a_deltaTime, std::vector<NonPlayer*> a_list);
-	void SetSeekTarget(glm::vec2 a_position);
-	void SetFleeTarget(glm::vec2 a_position);
-	void Initialize();
 
 
 	//IBoid methods
@@ -40,6 +42,7 @@ private:
 	SteeringManager* steering;
 	glm::vec2 seekTarget;
 	glm::vec2 fleeTarget;
+	Graph* collisionGraph;
 
 
 

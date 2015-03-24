@@ -2,7 +2,7 @@
 #define _Player_H
 
 #include <vector>
-#include <list>
+//#include <list>
 #include "Graph.h"
 #include "glm\glm.hpp"
 #include "glm/gtx/compatibility.hpp"

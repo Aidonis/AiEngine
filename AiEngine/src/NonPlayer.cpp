@@ -36,6 +36,7 @@ float NonPlayer::GetMaxVelocity(){
 
 void NonPlayer::Update(float a_deltaTime){
 	float distance = 0;
+	//Path Follow
 	if (pathList.size() > 0){
 		goalNode = pathList.front();
 		goalNode->walked = true;
@@ -61,7 +62,6 @@ void NonPlayer::Update(float a_deltaTime){
 	else{
 		goalNode = nullptr;
 		steering->Wander();
-		//steering->Wander();
 		SetSeekTarget(glm::vec2(NULL,NULL));
 	}
 }
@@ -71,9 +71,10 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 		steering->Seek(seekTarget, 10);
 	}
 	//steering->Wander();
-	if (fleeTarget != glm::vec2(NULL, NULL)){
-		steering->Flee(fleeTarget);
-	}
+	//if (fleeTarget != glm::vec2(NULL, NULL)){
+	//	steering->Flee(fleeTarget, 120.f);
+	//}
+	steering->Avoid(collisionGraph);
 	steering->Cohesion(a_list);
 	steering->Align(a_list);
 	steering->Seperation(a_list);
@@ -103,4 +104,8 @@ void NonPlayer::SetSeekTarget(glm::vec2 a_pos){
 
 void NonPlayer::SetFleeTarget(glm::vec2 a_pos){
 	fleeTarget = a_pos;
+}
+
+void NonPlayer::SetGraph(Graph* a_Graph){
+	collisionGraph = a_Graph;
 }

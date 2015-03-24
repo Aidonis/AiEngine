@@ -26,10 +26,11 @@ int main(){
 	unsigned int dTile = fk.CreateSprite("./assets/pack_sheet.xml", "dirt");
 	unsigned int sTile = fk.CreateSprite("./assets/pack_sheet.xml", "stone");
 	unsigned int stoneTile = fk.CreateSprite("./assets/pack_sheet.xml", "wall");
-	unsigned int white = fk.CreateSprite("./assets/pieceWhite.xml", "white");
 
-
+	//Player pieces
 	unsigned int purple = fk.CreateSprite("./assets/piecePurple.xml", "purple");
+	unsigned int white = fk.CreateSprite("./assets/pieceWhite.xml", "white");
+	unsigned int rPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
 	std::vector<NonPlayer*> purpList;
 	
 	for (int i = 0; i < 10; i++){
@@ -57,7 +58,6 @@ int main(){
 	GraphNode* startNode = graph.nodes[0];
 
 	//Player piece
-	unsigned int rPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
 	Player red = Player(rPlayer, startNode);
 	fk.MoveSprite(red.spriteID, red.pos);
 
@@ -139,7 +139,7 @@ int main(){
 		{
 			rad += PI /2 ;
 			purpList[i]->SetFleeTarget(glm::vec2(mouseX,g_HEIGHT - mouseY));
-
+			purpList[i]->SetGraph(&graph);
 			fk.MoveSprite(purpList[i]->spriteID, purpList[i]->pos);
 			fk.RotateSprite(purpList[i]->spriteID, purpList[i]->rotateAngle);
 			purpList[i]->Update(dt, purpList);

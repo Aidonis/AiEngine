@@ -1,5 +1,6 @@
 #include "SteeringManager.h"
 #include "NonPlayer.h"
+#include "Graph.h"
 
 SteeringManager::SteeringManager(){
 }
@@ -45,8 +46,8 @@ void SteeringManager::Seek(glm::vec2 a_target, float a_slowRadius){
 	steering += DoSeek(a_target, a_slowRadius);
 }
 
-void SteeringManager::Flee(glm::vec2 a_target){
-	steering += DoFlee(a_target);
+void SteeringManager::Flee(glm::vec2 a_target, float a_radius){
+	steering += DoFlee(a_target, a_radius);
 }
 
 void SteeringManager::Wander(){
@@ -62,6 +63,10 @@ void SteeringManager::Cohesion(std::vector<NonPlayer*> a_list){
 }
 void SteeringManager::Seperation(std::vector<NonPlayer*> a_list){
 	steering += DoSeperation(a_list);
+}
+
+void SteeringManager::Avoid(Graph* a_Graph){
+	steering += DoAvoid(a_Graph);
 }
 
 //void SteeringManager::Evade(IBoid& a_target){
@@ -88,7 +93,7 @@ glm::vec2 SteeringManager::DoSeek(glm::vec2 a_target, float a_slowRadius){
 	return force;
 }
 
-glm::vec2 SteeringManager::DoFlee(glm::vec2 a_target){
+glm::vec2 SteeringManager::DoFlee(glm::vec2 a_target, float a_radius){
 	float distance = glm::distance(host->GetPosition(), a_target);
 	if (distance > 125.f){
 		return DoWander();
@@ -226,9 +231,18 @@ glm::vec2 SteeringManager::DoSeperation(std::vector<NonPlayer*> a_list){
 //
 //}
 
-//glm::vec2 SteeringManager::DoAvoid(){
-//	glm::vec2 force;
-//}
+glm::vec2 SteeringManager::DoAvoid(Graph* a_Graph){
+	float distance;
+	for (NodeList::iterator i = a_Graph->nodes.begin(); i != a_Graph->nodes.end(); i++){
+		if ((*i)->walkable != true){
+			distance = glm::distance(host->GetPosition(), (*i)->pos);
+			if (distance < 64.f){
+				return (-DoSeek((*i)->pos, 200)*15.f);
+			}
+		}
+	}
+	return glm::vec2(NULL,NULL);
+}
 //glm::vec2 SteeringManager::DoEvade(glm::vec2& a_target, glm::vec2& a_velocity){
 //	glm::vec2 future = a_target + a_velocity;
 //	return DoFlee(future);

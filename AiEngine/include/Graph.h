@@ -18,10 +18,10 @@ struct Ray
 	glm::vec2 origin;
 	glm::vec2 direction;
 
-	Ray(glm::vec2 origin, glm::vec2 direction)
+	Ray(glm::vec2 a_origin, glm::vec2 a_direction)
 	{
-		this->origin = origin;
-		this->direction = direction;
+		origin = a_origin;
+		direction = a_direction;
 	}
 };
 
@@ -29,11 +29,12 @@ struct AABB
 {
 	glm::vec2 minPoint;
 	glm::vec2 maxPoint;
+	glm::vec2 center;
 
-	AABB(glm::vec2 minPoint, glm::vec2 maxPoint)
+	AABB(glm::vec2 a_minPoint, glm::vec2 a_maxPoint)
 	{
-		this->minPoint = minPoint;
-		this->maxPoint = maxPoint;
+		minPoint = a_minPoint;
+		maxPoint = a_maxPoint;
 	}
 };
 
