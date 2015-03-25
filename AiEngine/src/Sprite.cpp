@@ -61,8 +61,7 @@ void Sprite::Initialize(){
 }
 
 Sprite::~Sprite(){
-	glBindBuffer(GL_ARRAY_BUFFER, s_UVO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(s_UVData), s_UVData, GL_STATIC_DRAW);
+
 }
 
 void Sprite::SetUVData(){
@@ -80,8 +79,8 @@ void Sprite::Update(){
 	s_Transform.MVP = Ortho * s_Transform.viewTranslate * s_Transform.modelScale * s_Transform.viewRotateZ;
 	s_Quad.q_MVP = s_Transform.MVP;
 
-	s_Animator.SetUVData(s_UVData);
-	//SetUVData();
+	s_Animator.SetUVData(s_UVData); //<--- clear this shit out
+	SetUVData(); //<--- make this work
 	Draw();
 
 }
@@ -100,7 +99,7 @@ void Sprite::Draw(){
 	glBindTexture(GL_TEXTURE_2D, s_TexId);
 	glUniform1i(tex_Location, 0);
 	s_Quad.Draw();
-	SetUVData();
+	//SetUVData();//<--- go away
 }
 
 void Sprite::LoadTexture(const char* a_Texture){
@@ -126,5 +125,4 @@ void Sprite::LoadTexture(const char* a_Texture){
 
 void Sprite::SetRotation(const float a_angle){
 	s_rotz = a_angle;
-	Update();
 }

@@ -9,14 +9,15 @@ QuadTree::~QuadTree(){
 
 }
 
-QuadTree::QuadTree(unsigned int a_level, Rectangle a_bounds){
+QuadTree::QuadTree(unsigned int a_level, Box a_bounds){
 	m_level = a_level;
 	m_bounds = a_bounds;
+	
 	//objects = a_nonPlayerList;
 
 }
 
-void QuadTree::Initialize(unsigned int a_level, Rectangle a_bounds){
+void QuadTree::Initialize(unsigned int a_level, Box a_bounds){
 	m_level = a_level;
 	m_bounds = a_bounds;
 }
@@ -39,14 +40,15 @@ void QuadTree::Split(){
 		QuadTree* node = new QuadTree();
 		nodeList.push_back(node);
 	}
-
-	nodeList[0]->Initialize(m_level + 1, Rectangle(glm::vec2(x + subWidth, y), glm::vec2(subWidth, subHeight)));
-	nodeList[1]->Initialize(m_level + 1, Rectangle(glm::vec2(x, y), glm::vec2(subWidth, subHeight)));
-	nodeList[2]->Initialize(m_level + 1, Rectangle(glm::vec2(x, y + subHeight), glm::vec2(subWidth, subHeight)));
-	nodeList[3]->Initialize(m_level + 1, Rectangle(glm::vec2(x + subWidth, y + subHeight), glm::vec2(subWidth, subHeight)));
+	nodeList[0]->Initialize(m_level + 1, Box(glm::vec2(x + subWidth, y), glm::vec2(subWidth, subHeight)));
+	nodeList[1]->Initialize(m_level + 1, Box(glm::vec2(x, y), glm::vec2(subWidth, subHeight)));
+	nodeList[2]->Initialize(m_level + 1, Box(glm::vec2(x, y + subHeight), glm::vec2(subWidth, subHeight)));
+	nodeList[3]->Initialize(m_level + 1, Box(glm::vec2(x + subWidth, y + subHeight), glm::vec2(subWidth, subHeight)));
 }
 
-int QuadTree::GetIndex(Rectangle a_rect){
+//Determine which node the object belongs to.
+//-1 means cannot fit within child node but part of parent node
+int QuadTree::GetIndex(Box a_rect){
 	int index = -1;
 	float verticalMid = m_bounds.center.x + (m_bounds.width * 0.5f);
 	float horizantalMid = m_bounds.center.y + (m_bounds.height * 0.5f);
@@ -73,14 +75,38 @@ int QuadTree::GetIndex(Rectangle a_rect){
 		}
 	}
 	return index;
-	//Can fit in right quad
 }
 
-//void QuadTree::Insert(Rectangle a_rect){
-//	for (int i = 0; i < nodeList.size(); i++){
-//		int index = GetIndex(a_rect);
-//		if (index != -1){
-//			nodeList[i].Insert(a_rect);
-//		}
-//	}
-//}
+//Insert obect into the quad tree
+//If it exceeds capacity
+//split and add all objects to proper nodes
+void QuadTree::Insert(Box a_rect){
+	for (int i = 0; i < nodeList.size(); i++){
+		if (nodeList[0] != NULL){
+
+			int index = GetIndex(a_rect);
+
+			if (index != -1){
+				nodeList[index]->Insert(a_rect);
+				return;
+			}
+		}
+
+		objects.push_back(a_rect);
+
+		if (objects.size() > MAX_OBJECTS && m_level < MAX_LEVELS){
+			Split();
+			int i = 0;
+			while (i < objects.size()){
+				int index = GetIndex(objects[i]);
+				if (index != -1){
+					nodeList[index]->Insert(objects[i]);
+					objects.erase(objects.begin() + i);
+				}
+				else{
+					i++;
+				}
+			}
+		}
+	}
+}

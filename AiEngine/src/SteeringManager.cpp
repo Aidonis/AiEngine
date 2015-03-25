@@ -96,7 +96,7 @@ glm::vec2 SteeringManager::DoSeek(glm::vec2 a_target, float a_slowRadius){
 glm::vec2 SteeringManager::DoFlee(glm::vec2 a_target, float a_radius){
 	float distance = glm::distance(host->GetPosition(), a_target);
 	if (distance > 125.f){
-		return DoWander();
+		return glm::vec2();
 	}
 	return (-DoSeek(a_target, 200)*5.f);
 }

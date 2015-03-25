@@ -1,14 +1,13 @@
 #include "Framework.h"
 #include "player.h"
 #include "NonPlayer.h"
+#include "QuadTree.h"
 #include <ctime>
 
 
 Framework fk;
 
 glm::vec2 centerScreen = glm::vec2(g_WIDTH / 2, g_HEIGHT / 2);
-
-
 
 int main(){
 
@@ -18,7 +17,10 @@ int main(){
 	fk.Initialize(g_WIDTH, g_HEIGHT, "The Gary Show");
 	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
 	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
-	
+
+	Box screenBounds = Box(glm::vec2(), glm::vec2(g_WIDTH, g_HEIGHT));
+	QuadTree tree = QuadTree(0, screenBounds);
+	std::cout << tree.m_bounds.center.x << " " << tree.m_bounds.center.y << std::endl;
 
 	//Create Grass Sprite
 	unsigned int gTile = fk.CreateSprite("./assets/pack_sheet.xml", "grass");
