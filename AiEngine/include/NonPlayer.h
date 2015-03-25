@@ -1,11 +1,9 @@
 #ifndef _NonPlayer_H
 #define _NonPlayer_H
 
-#include <map>
 #include "SteeringManager.h"
 #include "IBoid.h"
 #include "player.h"
-#include "SteeringBehaviour.h"
 
 class NonPlayer : 
 	public Player,

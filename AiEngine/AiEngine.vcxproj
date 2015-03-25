@@ -94,7 +94,6 @@
     <ClInclude Include="include\NonPlayer.h" />
     <ClInclude Include="include\player.h" />
     <ClInclude Include="include\QuadTree.h" />
-    <ClInclude Include="include\SteeringBehaviour.h" />
     <ClInclude Include="include\SteeringManager.h" />
     <ClInclude Include="include\TextFileReader.h" />
     <ClInclude Include="include\Tile.h" />

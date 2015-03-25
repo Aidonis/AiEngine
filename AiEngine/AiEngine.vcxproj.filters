@@ -89,9 +89,6 @@
     <ClInclude Include="include\NonPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\SteeringBehaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\SteeringManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
