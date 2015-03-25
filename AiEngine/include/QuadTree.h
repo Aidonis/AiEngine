@@ -38,8 +38,9 @@ public:
 	//Bounds of quad tree
 	Rectangle m_bounds;
 	//List of nodes
-	std::vector<QuadTree> nodeList;
+	std::vector<QuadTree*> nodeList;
 
+	void Initialize(unsigned int a_level, Rectangle a_bounds);
 	void Clear();
 	void Split();
 	int GetIndex(Rectangle a_rect);
