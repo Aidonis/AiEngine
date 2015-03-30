@@ -1,7 +1,6 @@
 #include "Framework.h"
 #include "player.h"
 #include "NonPlayer.h"
-#include "QuadTree.h"
 #include <ctime>
 
 
@@ -43,6 +42,7 @@ int main(){
 
 	//dt variable
 	float timer = 0;
+
 	//Mouse location
 	double mouseX = 0;
 	double mouseY = 0;
@@ -59,28 +59,11 @@ int main(){
 	Player red = Player(rPlayer, startNode);
 	fk.MoveSprite(red.spriteID, red.pos);
 
-
-	//Playing with quad trees	
-	Box screenBounds = Box(glm::vec2(), glm::vec2(g_WIDTH, g_HEIGHT));
-	QuadTree tree = QuadTree(0, screenBounds);
-
-
 	do{
 		float dt = GetDeltaTime() * 10;
 		timer += dt;
 		
 		fk.ClearScreen();
-
-		//Quad Tree
-		tree.Clear();
-		for (int i = 0; i < purpList.size(); i++){
-			tree.Insert(purpList[i]);
-		}
-
-
-
-
-
 
 		//Get mouse positionw
 		fk.GetMouseLocation(mouseX, mouseY);	

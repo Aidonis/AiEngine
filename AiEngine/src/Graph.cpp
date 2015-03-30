@@ -420,15 +420,3 @@ bool Graph::StraightLine(GraphNode* a_start, GraphNode* a_end){
 	}
 	return true;
 }
-
-//Get nearest node from graph
-//GraphNode* Graph::NearestNode(glm::vec2 a_pos, Graph* a_graph){
-//	for (NodeList::iterator i = a_graph->nodes.begin(); i != a_graph->nodes.end(); i++){
-//		if ((*i)->isClicked(a_pos)){
-//			return (*i);
-//		}
-//		else{
-//			return nullptr;
-//		}
-//	}
-//}
