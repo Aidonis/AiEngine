@@ -33,6 +33,8 @@ public:
 	glm::vec2& GetVelocity();
 	glm::vec2& GetPosition();
 	float GetMaxVelocity();
+	float GetHeight();
+	float GetWidth();
 
 	//alignment
 

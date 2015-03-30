@@ -18,10 +18,6 @@ int main(){
 	Fontbox::Instance().LoadFont("./assets/font/arial2.xml");
 	Orthographic(0.f, (float)g_WIDTH, (float)g_HEIGHT, 0.f, -1.f, 1.f, Ortho);
 
-	Box screenBounds = Box(glm::vec2(), glm::vec2(g_WIDTH, g_HEIGHT));
-	QuadTree tree = QuadTree(0, screenBounds);
-	std::cout << tree.m_bounds.center.x << " " << tree.m_bounds.center.y << std::endl;
-
 	//Create Grass Sprite
 	unsigned int gTile = fk.CreateSprite("./assets/pack_sheet.xml", "grass");
 	unsigned int wTile = fk.CreateSprite("./assets/pack_sheet.xml", "water");
@@ -63,6 +59,23 @@ int main(){
 	Player red = Player(rPlayer, startNode);
 	fk.MoveSprite(red.spriteID, red.pos);
 
+
+	//Playing with quad trees	
+	Box screenBounds = Box(glm::vec2(), glm::vec2(g_WIDTH, g_HEIGHT));
+	QuadTree tree = QuadTree(0, screenBounds);
+
+	std::vector<NonPlayer*> quadPlayers;
+	for (int i = 0; i < 16; i++){
+		NonPlayer* np = new NonPlayer();
+		np->Initialize();
+		np->spriteID = white;
+		np->pos = glm::vec2(rand() % 600 + 1, rand() % 600 + 1);
+		quadPlayers.push_back(np);
+		tree.Insert(np);
+	}
+
+	
+	std::cout << tree.m_bounds.center.x << " " << tree.m_bounds.center.y << std::endl;
 
 	do{
 		float dt = GetDeltaTime() * 10;

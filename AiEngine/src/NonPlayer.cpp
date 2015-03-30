@@ -12,6 +12,7 @@ NonPlayer::NonPlayer(unsigned int a_sprite, glm::vec2 a_position) : Player(a_spr
 	steering = new SteeringManager(this);
 	velocity = glm::vec2(10, 10);
 	maxVelocity = 5;
+	size = glm::vec2(64.f, 64.f);
 }
 
 void NonPlayer::Initialize(){
@@ -31,8 +32,12 @@ glm::vec2& NonPlayer::GetPosition(){
 float NonPlayer::GetMaxVelocity(){
 	return maxVelocity;
 }
-
-
+float NonPlayer::GetWidth(){
+	return size.x;
+}
+float NonPlayer::GetHeight(){
+	return size.y;
+}
 
 void NonPlayer::Update(float a_deltaTime){
 	float distance = 0;

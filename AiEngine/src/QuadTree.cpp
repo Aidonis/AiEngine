@@ -48,17 +48,17 @@ void QuadTree::Split(){
 
 //Determine which node the object belongs to.
 //-1 means cannot fit within child node but part of parent node
-int QuadTree::GetIndex(Box a_rect){
+int QuadTree::GetIndex(NonPlayer* a_rect){
 	int index = -1;
 	float verticalMid = m_bounds.center.x + (m_bounds.width * 0.5f);
 	float horizantalMid = m_bounds.center.y + (m_bounds.height * 0.5f);
 
 	//Can fit in top quad
-	bool topQuad = (a_rect.center.y < horizantalMid && a_rect.height < horizantalMid);
+	bool topQuad = (a_rect->GetPosition().y < horizantalMid && a_rect->GetHeight < horizantalMid);
 	//Can fit in bottom quad
-	bool botQuad = (a_rect.center.y > horizantalMid);
+	bool botQuad = (a_rect->GetPosition().y > horizantalMid);
 	//Can fit in left quad
-	if (a_rect.center.x < verticalMid && a_rect.center.x + a_rect.width < verticalMid){
+	if (a_rect->GetPosition().x < verticalMid && a_rect->GetPosition().x + a_rect->GetWidth() < verticalMid){
 		if (topQuad){
 			index = 1;
 		}
@@ -66,7 +66,7 @@ int QuadTree::GetIndex(Box a_rect){
 			index = 2;
 		}
 	}
-	else if (a_rect.center.x > verticalMid){
+	else if (a_rect->GetPosition().x > verticalMid){
 		if (topQuad){
 			index = 0;
 		}
@@ -80,7 +80,7 @@ int QuadTree::GetIndex(Box a_rect){
 //Insert obect into the quad tree
 //If it exceeds capacity
 //split and add all objects to proper nodes
-void QuadTree::Insert(Box a_rect){
+void QuadTree::Insert(NonPlayer* a_rect){
 	for (int i = 0; i < nodeList.size(); i++){
 		if (nodeList[0] != NULL){
 

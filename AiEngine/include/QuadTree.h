@@ -33,12 +33,12 @@ public:
 
 	QuadTree(unsigned int a_level, Box a_bounds);
 
-	const int MAX_OBJECTS = 10;
+	const int MAX_OBJECTS = 5;
 	const int MAX_LEVELS = 4;
 
 	unsigned int m_level;
 	//List of Objects
-	std::vector<Box> objects;
+	std::vector<NonPlayer*> objects;
 	//Bounds of quad tree
 	Box m_bounds;
 	//List of nodes
@@ -47,8 +47,8 @@ public:
 	void Initialize(unsigned int a_level, Box a_bounds);
 	void Clear();
 	void Split();
-	int GetIndex(Box a_rect);
-	void Insert(Box a_rect);
+	int GetIndex(NonPlayer* a_rect);
+	void Insert(NonPlayer* a_rect);
 };
 
 #endif //_QUAD_TREE_H_

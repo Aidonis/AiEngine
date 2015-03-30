@@ -16,6 +16,7 @@ public:
 
 	unsigned int spriteID;
 	glm::vec2 pos;
+	glm::vec2 size;
 	
 	GraphNode* goalNode;
 	GraphNode* currentNode;
