@@ -12,14 +12,18 @@ QuadTree::~QuadTree(){
 QuadTree::QuadTree(unsigned int a_level, Box a_bounds){
 	m_level = a_level;
 	m_bounds = a_bounds;
-	
-	//objects = a_nonPlayerList;
-
+	for (int i = 0; i < 4; i++){
+		QuadTree* node = new QuadTree();
+		m_level = a_level;
+		m_bounds = a_bounds;
+		nodeList.push_back(node);
+	}
 }
 
 void QuadTree::Initialize(unsigned int a_level, Box a_bounds){
 	m_level = a_level;
 	m_bounds = a_bounds;
+
 }
 
 void QuadTree::Clear(){
@@ -27,6 +31,8 @@ void QuadTree::Clear(){
 
 	for (int i = 0; i < nodeList.size(); i++){
 		nodeList[i]->Clear();
+		nodeList[i]->Initialize(0, Box(glm::vec2(), glm::vec2(640, 640)));
+		//nodeList[i] = NULL;
 	}
 }
 
@@ -36,10 +42,6 @@ void QuadTree::Split(){
 	float x = m_bounds.center.x;
 	float y = m_bounds.center.y;
 
-	for (int i = 0; i < 4; i++){
-		QuadTree* node = new QuadTree();
-		nodeList.push_back(node);
-	}
 	nodeList[0]->Initialize(m_level + 1, Box(glm::vec2(x + subWidth, y), glm::vec2(subWidth, subHeight)));
 	nodeList[1]->Initialize(m_level + 1, Box(glm::vec2(x, y), glm::vec2(subWidth, subHeight)));
 	nodeList[2]->Initialize(m_level + 1, Box(glm::vec2(x, y + subHeight), glm::vec2(subWidth, subHeight)));
@@ -54,7 +56,7 @@ int QuadTree::GetIndex(NonPlayer* a_rect){
 	float horizantalMid = m_bounds.center.y + (m_bounds.height * 0.5f);
 
 	//Can fit in top quad
-	bool topQuad = (a_rect->GetPosition().y < horizantalMid && a_rect->GetHeight < horizantalMid);
+	bool topQuad = (a_rect->GetPosition().y < horizantalMid && a_rect->GetHeight() < horizantalMid);
 	//Can fit in bottom quad
 	bool botQuad = (a_rect->GetPosition().y > horizantalMid);
 	//Can fit in left quad
@@ -81,7 +83,7 @@ int QuadTree::GetIndex(NonPlayer* a_rect){
 //If it exceeds capacity
 //split and add all objects to proper nodes
 void QuadTree::Insert(NonPlayer* a_rect){
-	for (int i = 0; i < nodeList.size(); i++){
+	//for (int i = 0; i < nodeList.size(); i++){
 		if (nodeList[0] != NULL){
 
 			int index = GetIndex(a_rect);
@@ -95,6 +97,7 @@ void QuadTree::Insert(NonPlayer* a_rect){
 		objects.push_back(a_rect);
 
 		if (objects.size() > MAX_OBJECTS && m_level < MAX_LEVELS){
+			//nodeList[0]->Split();
 			Split();
 			int i = 0;
 			while (i < objects.size()){
@@ -108,5 +111,5 @@ void QuadTree::Insert(NonPlayer* a_rect){
 				}
 			}
 		}
-	}
+	//}
 }

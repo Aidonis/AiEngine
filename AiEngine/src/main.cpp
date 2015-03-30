@@ -64,24 +64,23 @@ int main(){
 	Box screenBounds = Box(glm::vec2(), glm::vec2(g_WIDTH, g_HEIGHT));
 	QuadTree tree = QuadTree(0, screenBounds);
 
-	std::vector<NonPlayer*> quadPlayers;
-	for (int i = 0; i < 16; i++){
-		NonPlayer* np = new NonPlayer();
-		np->Initialize();
-		np->spriteID = white;
-		np->pos = glm::vec2(rand() % 600 + 1, rand() % 600 + 1);
-		quadPlayers.push_back(np);
-		tree.Insert(np);
-	}
-
-	
-	std::cout << tree.m_bounds.center.x << " " << tree.m_bounds.center.y << std::endl;
 
 	do{
 		float dt = GetDeltaTime() * 10;
 		timer += dt;
 		
 		fk.ClearScreen();
+
+		//Quad Tree
+		tree.Clear();
+		for (int i = 0; i < purpList.size(); i++){
+			tree.Insert(purpList[i]);
+		}
+
+
+
+
+
 
 		//Get mouse positionw
 		fk.GetMouseLocation(mouseX, mouseY);	

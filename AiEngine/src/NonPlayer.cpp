@@ -32,10 +32,10 @@ glm::vec2& NonPlayer::GetPosition(){
 float NonPlayer::GetMaxVelocity(){
 	return maxVelocity;
 }
-float NonPlayer::GetWidth(){
+float& NonPlayer::GetWidth(){
 	return size.x;
 }
-float NonPlayer::GetHeight(){
+float& NonPlayer::GetHeight(){
 	return size.y;
 }
 
