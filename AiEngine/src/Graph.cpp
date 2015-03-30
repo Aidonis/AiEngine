@@ -205,7 +205,7 @@ void Graph::AddNode(GraphNode* a_node){
 	nodes.push_back(a_node);
 }
 
-void Graph::ResetVisted(){
+void Graph::ResetVisited(){
 	for (NodeList::iterator i = nodes.begin(); i != nodes.end(); i++){
 		(*i)->visited = false;
 		(*i)->gScore = INT_MAX;
@@ -263,7 +263,7 @@ bool Graph::SearchBFS(GraphNode* a_Start, GraphNode* a_End){
 
 std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End, bool a_smoothPath){
 	//Reset Nodes/Weights - Set to Null and Infinity
-	ResetVisted();
+	ResetVisited();
 
 	//Push start node onto the priority queue
 	std::list<GraphNode*> priorityQ;

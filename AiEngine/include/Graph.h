@@ -104,7 +104,7 @@ public:
 	void RemoveNode(GraphNode* a_Node);
 	NodeList nodes;
 
-	void ResetVisted();
+	void ResetVisited();
 
 	bool SearchDFS(GraphNode* a_Start, GraphNode* a_End);
 	bool SearchBFS(GraphNode* a_Start, GraphNode* a_End);

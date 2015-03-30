@@ -1,6 +1,5 @@
 #include "ToolBox.h"
 
-
 glm::mat4 Ortho; //<---lower class
 int g_WIDTH = 640;
 int g_HEIGHT = 640;

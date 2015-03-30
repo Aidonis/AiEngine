@@ -4,9 +4,9 @@
 #include "IBoid.h"
 #include <vector>
 
-
 #define PI 3.14159265359
 #define RADIAN_CONVERSION PI / 180.0f
+
 class Graph;
 class NonPlayer;
 

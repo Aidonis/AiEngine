@@ -10,6 +10,8 @@
 #include <iostream>
 
 
+
+
 class Framework{
 public:
 	float mouseX, mouseY;

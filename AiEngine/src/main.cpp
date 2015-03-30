@@ -92,7 +92,7 @@ int main(){
 			graph.GetNearestNode(mousePos1)->spriteID = sTile;
 			startNode = graph.GetNearestNode(mousePos1);
 		}
-		//Run Search
+		//Run AStar Search
 		if (fk.IsKeyDown(GLFW_KEY_SPACE)){
 			red.pathList = graph.AStarSearch(startNode, endNode, false);
 			purpList[0]->pathList = graph.AStarSearch(startNode, endNode, false);
@@ -111,8 +111,9 @@ int main(){
 				}
 			}
 		}
+		//Reset Visited
 		if (fk.IsKeyDown(GLFW_KEY_R)){
-			graph.ResetVisted();
+			graph.ResetVisited();
 		}
 
 		if (fk.IsKeyDown(GLFW_KEY_W)){
