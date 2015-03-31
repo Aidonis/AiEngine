@@ -46,15 +46,15 @@ private:
 	const float CIRCLE_DISTANCE = 50;
 	const float CIRCLE_RADIUS = 25.0f;
 	const int ANGLE_CHANGE = 6.f;
-	const float WANDER_FORCE_SCALE = 10.0f;
+	const float WANDER_FORCE_SCALE = 5.0f;
 
-	const float COHESION_FORCE = 50.5f;
-	const float REPULSION_FORCE = 50.5f;
-	const float ALIGN_FORCE = 150.f;
+	const float COHESION_FORCE = 5.5f;
+	const float REPULSION_FORCE = 5.5f;
+	const float ALIGN_FORCE = 5.f;
 
-	float NEIGHBOR_RADIUS = 320.f;
+	float NEIGHBOR_RADIUS = 120.f;
 
-	float wanderAngle = 5.0f;
+	float WANDER_ANGLE = 5.0f;
 
 
 	glm::vec2 DoSeek(glm::vec2 a_target, float a_slowRadius);

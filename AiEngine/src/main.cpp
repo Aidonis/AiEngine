@@ -29,13 +29,22 @@ int main(){
 	unsigned int white = fk.CreateSprite("./assets/pieceWhite.xml", "white");
 	unsigned int rPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
 	std::vector<NonPlayer*> purpList;
+	std::vector<NonPlayer*> whiteList;
 	
-	for (int i = 0; i < 10; i++){
+	for (int i = 0; i < 20; i++){
 		NonPlayer* np = new NonPlayer();
 		np->Initialize();
 		np->spriteID = purple;
 		np->pos = glm::vec2(rand() % 600 + 1, rand() % 600 + 1);
 		purpList.push_back(np);
+	}
+
+	for (int i = 0; i < 20; i++){
+		NonPlayer* np = new NonPlayer();
+		np->Initialize();
+		np->spriteID = white;
+		np->pos = glm::vec2(rand() % 600 + 1, rand() % 600 + 1);
+		whiteList.push_back(np);
 	}
 
 	Graph graph(10, dTile, "dirt", false);
@@ -132,6 +141,7 @@ int main(){
 			graph.AStarSearch(startNode, endNode, false);
 		}
 
+		//Purple List
 		float rad = PI / 2;
 		for (int i = 0; i < purpList.size(); i++)
 		{
@@ -143,6 +153,19 @@ int main(){
 			purpList[i]->Update(dt, purpList);
 			fk.DrawSprite(purpList[i]->spriteID);
 		}
+
+		//White List
+		for (int i = 0; i < whiteList.size(); i++)
+		{
+			rad += PI / 2;
+			whiteList[i]->SetFleeTarget(glm::vec2(mouseX, g_HEIGHT - mouseY));
+			whiteList[i]->SetGraph(&graph);
+			fk.MoveSprite(whiteList[i]->spriteID, whiteList[i]->pos);
+			fk.RotateSprite(whiteList[i]->spriteID, whiteList[i]->rotateAngle);
+			whiteList[i]->Update(dt, whiteList);
+			fk.DrawSprite(whiteList[i]->spriteID);
+		}
+
 		purpList[0]->spriteID = white;
 		purpList[0]->Update(dt);
 		red.Update(dt);

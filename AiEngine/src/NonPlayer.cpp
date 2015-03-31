@@ -13,6 +13,7 @@ NonPlayer::NonPlayer(unsigned int a_sprite, glm::vec2 a_position) : Player(a_spr
 	velocity = glm::vec2(10, 10);
 	maxVelocity = 5;
 	size = glm::vec2(64.f, 64.f);
+	seekTarget = glm::vec2(NULL, NULL);
 }
 
 void NonPlayer::Initialize(){
@@ -76,9 +77,9 @@ void NonPlayer::Update(float a_deltaTime, std::vector<NonPlayer*> a_list){
 		steering->Seek(seekTarget, 10);
 	}
 	//steering->Wander();
-	//if (fleeTarget != glm::vec2(NULL, NULL)){
-	//	steering->Flee(fleeTarget, 120.f);
-	//}
+	if (fleeTarget != glm::vec2(NULL, NULL)){
+		steering->Flee(fleeTarget, 120.f);
+	}
 	steering->Avoid(collisionGraph);
 	steering->Cohesion(a_list);
 	steering->Align(a_list);
