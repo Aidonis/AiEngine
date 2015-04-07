@@ -28,6 +28,8 @@ int main(){
 	unsigned int purple = fk.CreateSprite("./assets/piecePurple.xml", "purple");
 	unsigned int white = fk.CreateSprite("./assets/pieceWhite.xml", "white");
 	unsigned int rPlayer = fk.CreateSprite("./assets/pieceRed.xml", "red");
+	unsigned int green = fk.CreateSprite("./assets/pieceGreen.xml", "green");
+
 	std::vector<NonPlayer*> purpList;
 	std::vector<NonPlayer*> whiteList;
 	
@@ -47,7 +49,7 @@ int main(){
 		whiteList.push_back(np);
 	}
 
-	Graph graph(10, dTile, "dirt", false);
+	Graph graph(10, dTile, "dirt", true);
 
 	//dt variable
 	float timer = 0;
@@ -101,10 +103,12 @@ int main(){
 			graph.GetNearestNode(mousePos1)->spriteID = sTile;
 			startNode = graph.GetNearestNode(mousePos1);
 		}
-		//Run AStar Search
+		//Run Dijkstra Search
 		if (fk.IsKeyDown(GLFW_KEY_SPACE)){
-			red.pathList = graph.AStarSearch(startNode, endNode, false);
-			purpList[0]->pathList = graph.AStarSearch(startNode, endNode, false);
+		
+			red.pathList = graph.AStarSearch(startNode, endNode, false, false);
+			purpList[0]->pathList = graph.AStarSearch(startNode, endNode, false, false);
+
 			for (NodeList::iterator i = graph.nodes.begin(); i != graph.nodes.end(); i++){
 				if (!(*i)->visited && !(*i)->walked && (*i)->weight != INT_MAX){
 					(*i)->spriteID = dTile;
@@ -120,9 +124,27 @@ int main(){
 				}
 			}
 		}
-		//Reset Visited
-		if (fk.IsKeyDown(GLFW_KEY_R)){
-			graph.ResetVisited();
+
+		//Run AStar
+		if (fk.IsKeyDown(GLFW_KEY_A)){
+
+			red.pathList = graph.AStarSearch(startNode, endNode, false, true);
+			purpList[0]->pathList = graph.AStarSearch(startNode, endNode, false, true);
+
+			for (NodeList::iterator i = graph.nodes.begin(); i != graph.nodes.end(); i++){
+				if (!(*i)->visited && !(*i)->walked && (*i)->weight != INT_MAX){
+					(*i)->spriteID = dTile;
+				}
+				if ((*i)->visited){
+					(*i)->spriteID = gTile;
+				}
+				if ((*i)->walked){
+					(*i)->spriteID = stoneTile;
+				}
+				if ((*i) == startNode || (*i) == endNode){
+					(*i)->spriteID = sTile;
+				}
+			}
 		}
 
 		if (fk.IsKeyDown(GLFW_KEY_W)){
@@ -138,7 +160,7 @@ int main(){
 			fk.DrawSprite(graph.nodes[i]->spriteID);
 		}
 		if (!endNode == NULL && !startNode == NULL){
-			graph.AStarSearch(startNode, endNode, false);
+			graph.AStarSearch(startNode, endNode, false, false);
 		}
 
 		//Purple List
@@ -166,7 +188,7 @@ int main(){
 			fk.DrawSprite(whiteList[i]->spriteID);
 		}
 
-		purpList[0]->spriteID = white;
+		purpList[0]->spriteID = green;
 		purpList[0]->Update(dt);
 		red.Update(dt);
 		fk.MoveSprite(red.spriteID, red.pos);

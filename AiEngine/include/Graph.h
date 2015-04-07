@@ -111,7 +111,7 @@ public:
 	
 	GraphNode* GetNearestNode(glm::vec2 a_position);
 
-	std::vector<GraphNode*> AStarSearch(GraphNode* a_Start, GraphNode* a_End, bool a_smoothPath);
+	std::vector<GraphNode*> AStarSearch(GraphNode* a_Start, GraphNode* a_End, bool a_smoothPath, bool a_star);
 	std::vector<GraphNode*> pathList;
 
 	//

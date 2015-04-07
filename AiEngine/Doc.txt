@@ -1,0 +1,31 @@
+Document of Steering Behaviours and the Like
+
+~~~Key Input~~~
+
+W - Set Walls
+A - AStar Search
+Space - Dijkstra Search
+Left Click - Set Start Point
+Right Click - Set End Point
+
+~~~Legend~~~
+
+Black Tile - Start or End Point of the Search
+Gray Tile - Path drawn between the Start and End Point
+Green Tile - Nodes visited by the Search that are not optimal
+Blue TIle - Boids and Pathing avoid these tiles
+
+Purple Boid - 1st Flock of Boids following a Flocking Behavior
+White Boid - 2nd Flock of Boids following a Flocking Behavior
+Orange Boid - Follows the Search Path
+Green Boid - Part of the Purple Flock. Follows the Search path when initiated
+
+The two flocks (Purple/White) have the following behaviours:
+	~Cohesion
+	~Alignment
+	~Seperation
+	~Flee (The Mouse/Pointer)
+	~Avoid (Blue Tiles)
+
+Green Boid has the added behavious of path follow.
+

@@ -261,7 +261,7 @@ bool Graph::SearchBFS(GraphNode* a_Start, GraphNode* a_End){
 	return false;
 }
 
-std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End, bool a_smoothPath){
+std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End, bool a_smoothPath, bool a_star){
 	//Reset Nodes/Weights - Set to Null and Infinity
 	ResetVisited();
 
@@ -273,7 +273,12 @@ std::vector<GraphNode*> Graph::AStarSearch(GraphNode* a_Start, GraphNode* a_End,
 	goal = a_End;
 
 	while (!priorityQ.empty()){
-		priorityQ.sort(Manhattan);
+		if (a_star){
+			priorityQ.sort(NodeCompare);
+		}
+		else{
+			priorityQ.sort(Manhattan);
+		}
 		GraphNode* current = priorityQ.front();
 		priorityQ.pop_front();
 
